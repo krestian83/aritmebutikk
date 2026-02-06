@@ -4,6 +4,7 @@ import '../../app/theme/app_colors.dart';
 import '../../game/models/ledger_entry.dart';
 import '../../game/models/store_item.dart';
 import '../../game/services/credit_service.dart';
+import '../../game/services/store_item_service.dart';
 import '../widgets/background/animated_background.dart';
 
 /// Store where players spend credits, plus a purchase ledger.
@@ -19,8 +20,10 @@ class StoreScreen extends StatefulWidget {
 class _StoreScreenState extends State<StoreScreen>
     with SingleTickerProviderStateMixin {
   final _creditService = CreditService();
+  final _storeItemService = StoreItemService();
   late final TabController _tabController;
   int _balance = 0;
+  List<StoreItem>? _items;
   List<LedgerEntry>? _ledger;
 
   @override
@@ -38,10 +41,12 @@ class _StoreScreenState extends State<StoreScreen>
 
   Future<void> _load() async {
     final balance = await _creditService.getBalance(widget.playerName);
+    final items = await _storeItemService.loadItems();
     final ledger = await _creditService.loadLedger();
     if (!mounted) return;
     setState(() {
       _balance = balance;
+      _items = items;
       _ledger = ledger;
     });
   }
@@ -174,10 +179,26 @@ class _StoreScreenState extends State<StoreScreen>
   }
 
   Widget _buildStore() {
+    if (_items == null) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.cardGradientStart),
+      );
+    }
+    if (_items!.isEmpty) {
+      return Center(
+        child: Text(
+          'Ingen varer i butikken.',
+          style: TextStyle(
+            fontSize: 18,
+            color: AppColors.cardGradientStart.withValues(alpha: 0.6),
+          ),
+        ),
+      );
+    }
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       children: [
-        for (final item in StoreItem.all)
+        for (final item in _items!)
           _StoreItemCard(
             item: item,
             canAfford: _balance >= item.cost,

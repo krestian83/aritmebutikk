@@ -1,9 +1,13 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_colors.dart';
 import '../../game/services/credit_service.dart';
 import '../widgets/background/animated_background.dart';
+import '../widgets/dialogs/pin_dialog.dart';
 import 'category_screen.dart';
+import 'store_editor_screen.dart';
 import 'store_screen.dart';
 
 /// Main menu with name entry, credit balance, and navigation.
@@ -16,15 +20,21 @@ class MainMenuScreen extends StatefulWidget {
   State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
 
-class _MainMenuScreenState extends State<MainMenuScreen> {
+class _MainMenuScreenState extends State<MainMenuScreen>
+    with SingleTickerProviderStateMixin {
   final _nameController = TextEditingController();
   final _focusNode = FocusNode();
   final _creditService = CreditService();
+  late final AnimationController _wiggleCtrl;
   int? _balance;
 
   @override
   void initState() {
     super.initState();
+    _wiggleCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2500),
+    )..repeat();
     if (widget.initialName != null) {
       _nameController.text = widget.initialName!;
       _loadBalance(widget.initialName!);
@@ -34,6 +44,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   @override
   void dispose() {
+    _wiggleCtrl.dispose();
     _nameController.removeListener(_onNameChanged);
     _nameController.dispose();
     _focusNode.dispose();
@@ -79,6 +90,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         .then((_) => _loadBalance(name));
   }
 
+  Future<void> _openParentMenu() async {
+    final ok = await PinDialog.show(context);
+    if (!ok || !mounted) return;
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const StoreEditorScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,12 +114,46 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     style: TextStyle(fontSize: 48),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'Aritme(bu)tikk',
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.cardGradientStart,
+                  Text.rich(
+                    TextSpan(
+                      style: const TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.cardGradientStart,
+                      ),
+                      children: [
+                        const TextSpan(text: 'Aritme'),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: AnimatedBuilder(
+                            animation: _wiggleCtrl,
+                            builder: (_, child) {
+                              final t = _wiggleCtrl.value;
+                              final dy =
+                                  math.sin(t * 2 * math.pi) * 3;
+                              final angle =
+                                  math.sin(t * 2 * math.pi) * 0.06;
+                              return Transform.translate(
+                                offset: Offset(0, dy),
+                                child: Transform.rotate(
+                                  angle: angle,
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: Text(
+                              '(bu)',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.cardGradientEnd
+                                    .withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const TextSpan(text: 'tikk'),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 40),
@@ -113,6 +166,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   _buildPlayButton(),
                   const SizedBox(height: 16),
                   _buildStoreButton(),
+                  const SizedBox(height: 16),
+                  _buildParentButton(),
                 ],
               ),
             ),
@@ -215,19 +270,42 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   Widget _buildStoreButton() {
     return SizedBox(
       width: double.infinity,
-      child: OutlinedButton(
+      child: ElevatedButton(
         onPressed: _openStore,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.cardGradientStart,
-          side: const BorderSide(color: AppColors.cardGradientStart, width: 2),
-          padding: const EdgeInsets.symmetric(vertical: 14),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.cardGradientStart,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+          elevation: 4,
         ),
         child: const Text(
           'Butikk',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildParentButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: _openParentMenu,
+        icon: const Icon(Icons.lock_outline, size: 18),
+        label: const Text(
+          'Foreldremeny',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.grey.shade600,
+          side: BorderSide(color: Colors.grey.shade400),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
       ),
     );
