@@ -21,16 +21,49 @@ Et morsomt og fargerikt aritmetikk-spill for barn, bygget med Flutter. Svar rikt
 
 ### Forutsetninger
 
-- [Flutter SDK](https://flutter.dev/docs/get-started/install) (3.10.8+)
-- En editor som VS Code eller Android Studio
+- [Git](https://git-scm.com/downloads) -- for a klone prosjektet
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (3.10.8+) -- inkluderer Dart
+- En editor som [VS Code](https://code.visualstudio.com/) eller [Android Studio](https://developer.android.com/studio)
+
+**Plattform-spesifikke krav:**
+
+| Plattform | Krav |
+|-----------|------|
+| Android   | Android Studio med Android SDK |
+| iOS       | macOS med Xcode |
+| Web       | Chrome eller annen nettleser |
+| Windows   | Visual Studio med C++ desktop-utvikling |
 
 ### Installasjon
 
 ```bash
+# Klon prosjektet fra GitHub
 git clone https://github.com/krestian83/aritmebutikk.git
+
+# Ga inn i prosjektmappen
 cd aritmebutikk
+
+# Last ned alle avhengigheter (audioplayers, shared_preferences osv.)
 flutter pub get
+
+# Kjor appen (velger automatisk en tilkoblet enhet eller emulator)
 flutter run
+```
+
+For a kjore pa en spesifikk plattform:
+
+```bash
+# Kjor i Chrome
+flutter run -d chrome
+
+# Kjor pa Windows
+flutter run -d windows
+
+# Kjor pa en tilkoblet Android-enhet
+flutter run -d android
+
+# Se alle tilgjengelige enheter
+flutter devices
 ```
 
 ## Prosjektstruktur
