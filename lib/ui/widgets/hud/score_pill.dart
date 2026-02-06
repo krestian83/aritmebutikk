@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+
+import '../../../app/theme/app_colors.dart';
+import '../../../app/theme/app_theme.dart';
+
+/// Displays the current score in a rounded purple pill.
+class ScorePill extends StatelessWidget {
+  final ValueNotifier<int> score;
+
+  const ScorePill({super.key, required this.score});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<int>(
+      valueListenable: score,
+      builder: (context, value, _) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppColors.pillPurple, Color(0xFF9B7FE8)],
+            ),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.pillPurple.withValues(alpha: 0.4),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('\u2B50', style: TextStyle(fontSize: 20)),
+              const SizedBox(width: 8),
+              TweenAnimationBuilder<int>(
+                tween: IntTween(begin: value, end: value),
+                duration: const Duration(milliseconds: 300),
+                builder: (context, val, _) {
+                  return Text('Poeng: $val', style: AppTheme.pillStyle);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
