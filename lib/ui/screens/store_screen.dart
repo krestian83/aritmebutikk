@@ -4,6 +4,7 @@ import '../../app/theme/app_colors.dart';
 import '../../game/models/ledger_entry.dart';
 import '../../game/models/store_item.dart';
 import '../../game/services/credit_service.dart';
+import '../../game/services/sound_service.dart';
 import '../../game/services/store_item_service.dart';
 import '../widgets/background/animated_background.dart';
 
@@ -52,6 +53,7 @@ class _StoreScreenState extends State<StoreScreen>
   }
 
   Future<void> _buy(StoreItem item) async {
+    SoundService.instance.play('press');
     if (_balance < item.cost) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -120,7 +122,10 @@ class _StoreScreenState extends State<StoreScreen>
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              SoundService.instance.play('press');
+              Navigator.of(context).pop();
+            },
             icon: const Icon(
               Icons.arrow_back_rounded,
               color: AppColors.cardGradientStart,
@@ -152,6 +157,10 @@ class _StoreScreenState extends State<StoreScreen>
           colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
         ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.outline,
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
             color: AppColors.cardGradientStart.withValues(alpha: 0.3),
@@ -255,6 +264,7 @@ class _StoreItemCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: canAfford ? 0.95 : 0.6),
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.outline),
         boxShadow: [
           BoxShadow(
             color: AppColors.cardGradientStart.withValues(alpha: 0.08),
@@ -298,6 +308,10 @@ class _StoreItemCard extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
+              side: BorderSide(
+                color: AppColors.outline,
+                width: 1,
+              ),
             ),
             child: const Text(
               'Kj\u00F8p',
@@ -323,6 +337,7 @@ class _LedgerRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.outline),
       ),
       child: Row(
         children: [

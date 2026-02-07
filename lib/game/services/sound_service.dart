@@ -2,33 +2,43 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 
+import 'audio_state.dart';
+
 /// Service for playing game sound effects.
 ///
 /// Uses bundled MP3 assets via [AssetSource] for offline playback.
 /// Each sound type has its own [AudioPlayer] for overlap-free
 /// re-triggering.
 class SoundService {
+  SoundService._();
+  static final instance = SoundService._();
+
   final AudioPlayer _correctPlayer = AudioPlayer();
   final AudioPlayer _wrongPlayer = AudioPlayer();
   final AudioPlayer _tapPlayer = AudioPlayer();
   final AudioPlayer _levelUpPlayer = AudioPlayer();
   final AudioPlayer _warningPlayer = AudioPlayer();
+  final AudioPlayer _pressPlayer = AudioPlayer();
+  final AudioPlayer _successPlayer = AudioPlayer();
   bool _initialized = false;
 
-  Future<void> _init() async {
+  void _init() {
     if (_initialized) return;
     _initialized = true;
 
-    await _correctPlayer.setReleaseMode(ReleaseMode.stop);
-    await _wrongPlayer.setReleaseMode(ReleaseMode.stop);
-    await _tapPlayer.setReleaseMode(ReleaseMode.stop);
-    await _levelUpPlayer.setReleaseMode(ReleaseMode.stop);
-    await _warningPlayer.setReleaseMode(ReleaseMode.stop);
+    _correctPlayer.setReleaseMode(ReleaseMode.stop);
+    _wrongPlayer.setReleaseMode(ReleaseMode.stop);
+    _tapPlayer.setReleaseMode(ReleaseMode.stop);
+    _levelUpPlayer.setReleaseMode(ReleaseMode.stop);
+    _warningPlayer.setReleaseMode(ReleaseMode.stop);
+    _pressPlayer.setReleaseMode(ReleaseMode.stop);
+    _successPlayer.setReleaseMode(ReleaseMode.stop);
   }
 
   /// Plays a named sound effect with optional haptic feedback.
   Future<void> play(String name) async {
-    await _init();
+    if (!AudioState.instance.soundEnabled) return;
+    _init();
     switch (name) {
       case 'correct':
         await _playCorrect();
@@ -40,6 +50,10 @@ class SoundService {
         await _playLevelUp();
       case 'warning':
         await _playWarning();
+      case 'press':
+        await _playPress();
+      case 'success':
+        await _playSuccess();
     }
   }
 
@@ -107,11 +121,35 @@ class SoundService {
     } catch (_) {}
   }
 
+  Future<void> _playPress() async {
+    if (!kIsWeb) HapticFeedback.lightImpact();
+    try {
+      _pressPlayer.stop();
+      _pressPlayer.play(
+        AssetSource('audio/press.mp3'),
+        volume: 0.5,
+      );
+    } catch (_) {}
+  }
+
+  Future<void> _playSuccess() async {
+    if (!kIsWeb) HapticFeedback.mediumImpact();
+    try {
+      _successPlayer.stop();
+      _successPlayer.play(
+        AssetSource('audio/success.mp3'),
+        volume: 0.7,
+      );
+    } catch (_) {}
+  }
+
   void dispose() {
     _correctPlayer.dispose();
     _wrongPlayer.dispose();
     _tapPlayer.dispose();
     _levelUpPlayer.dispose();
     _warningPlayer.dispose();
+    _pressPlayer.dispose();
+    _successPlayer.dispose();
   }
 }

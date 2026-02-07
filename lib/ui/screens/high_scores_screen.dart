@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/models/high_score_entry.dart';
 import '../../game/services/high_score_service.dart';
+import '../../game/services/sound_service.dart';
 import '../widgets/background/animated_background.dart';
 
 /// Displays the local high score table.
@@ -51,7 +52,10 @@ class _HighScoresScreenState extends State<HighScoresScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              SoundService.instance.play('press');
+              Navigator.of(context).pop();
+            },
             icon: const Icon(
               Icons.arrow_back_rounded,
               color: AppColors.cardGradientStart,
@@ -122,6 +126,9 @@ class _ScoreRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: isTop3 ? 0.95 : 0.8),
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.outline,
+        ),
         boxShadow: isTop3
             ? [
                 BoxShadow(

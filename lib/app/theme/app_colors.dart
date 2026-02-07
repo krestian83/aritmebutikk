@@ -1,37 +1,40 @@
 import 'package:flutter/material.dart';
 
-/// Pastel color palette matching the screenshot design.
+/// Color palette – bold Big Sur–inspired waves.
 abstract final class AppColors {
-  // Background gradient.
-  static const bgTop = Color(0xFFB8D4F0);
-  static const bgMiddle = Color(0xFFD4CEED);
-  static const bgBottom = Color(0xFFF0D0E0);
+  // Background gradient (cyan → light wash → warm orange).
+  static const bgTop = Color(0xFF00D0FF);
+  static const bgMiddle = Color(0xFFC0D8F8);
+  static const bgBottom = Color(0xFFFF8020);
 
   // Question card.
-  static const cardGradientStart = Color(0xFF7B6BDB);
-  static const cardGradientEnd = Color(0xFF5B7FE8);
-  static const neonCyan = Color(0xFF00E5FF);
+  static const cardGradientStart = Color(0xFF0050D0);
+  static const cardGradientEnd = Color(0xFF0070E8);
+  static const neonCyan = Color(0xFFFFAA00);
 
   // HUD pills.
-  static const pillPurple = Color(0xFF7B6BDB);
+  static const pillBlue = Color(0xFF0050D0);
   static const pillText = Colors.white;
 
   // Answer button colors.
-  static const coral = Color(0xFFF07A6E);
-  static const green = Color(0xFF6BC88A);
-  static const cyan = Color(0xFF6EC6E8);
-  static const purple = Color(0xFFC07ADB);
+  static const coral = Color(0xFFFF2A10);
+  static const green = Color(0xFF30A860);
+  static const cyan = Color(0xFF00B8E0);
+  static const orange = Color(0xFFFF9800);
 
   // Bot avatar.
-  static const botBlue = Color(0xFF5B7FE8);
+  static const botBlue = Color(0xFF0060E0);
 
   // Floating shapes.
-  static const shapeTeal = Color(0xFF4ECDC4);
-  static const shapePink = Color(0xFFF0A0C0);
-  static const shapeBlue = Color(0xFF80B0E8);
+  static const shapeCyan = Color(0xFF00D0FF);
+  static const shapeOrange = Color(0xFFFF8020);
+  static const shapeBlue = Color(0xFF2060D8);
+
+  // Outlines – black for thin border contrast.
+  static const outline = Color(0xFF000000);
 
   // Misc.
-  static const starGold = Color(0xFFFFCA28);
-  static const timerRed = Color(0xFFFF5252);
+  static const starGold = Color(0xFFFFAA00);
+  static const timerRed = Color(0xFFFF2A10);
   static const white = Colors.white;
 }

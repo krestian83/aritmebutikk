@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/models/game_category.dart';
 import '../../game/services/credit_service.dart';
+import '../../game/services/sound_service.dart';
 import '../widgets/background/animated_background.dart';
+import '../widgets/hud/mute_button.dart';
 import 'game_screen.dart';
 
 /// Screen where the player picks a category and difficulty.
@@ -33,12 +35,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _play(GameCategory category) {
+    SoundService.instance.play('press');
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => GameScreen(
-          playerName: widget.playerName,
-          category: category,
-        ),
+        builder: (_) =>
+            GameScreen(playerName: widget.playerName, category: category),
       ),
     );
   }
@@ -48,10 +49,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Scaffold(
       body: AnimatedBackground(
         child: SafeArea(
-          child: Column(
+          child: Stack(
             children: [
-              _buildHeader(),
-              Expanded(
+              Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(
                 child: _earned == null
                     ? const Center(
                         child: CircularProgressIndicator(
@@ -75,6 +78,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
               ),
             ],
           ),
+              const MuteButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -86,7 +92,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              SoundService.instance.play('press');
+              Navigator.of(context).pop();
+            },
             icon: const Icon(
               Icons.arrow_back_rounded,
               color: AppColors.cardGradientStart,
@@ -133,10 +142,10 @@ class _CategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.92),
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.outline),
           boxShadow: [
             BoxShadow(
-              color: AppColors.cardGradientStart
-                  .withValues(alpha: 0.1),
+              color: AppColors.cardGradientStart.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 3),
             ),
@@ -147,10 +156,7 @@ class _CategoryCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
-                  category.icon,
-                  style: const TextStyle(fontSize: 28),
-                ),
+                Text(category.icon, style: const TextStyle(fontSize: 28)),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -167,9 +173,7 @@ class _CategoryCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: maxedOut
-                        ? AppColors.green
-                        : Colors.grey.shade600,
+                    color: maxedOut ? AppColors.green : Colors.grey.shade600,
                   ),
                 ),
               ],
@@ -181,9 +185,7 @@ class _CategoryCard extends StatelessWidget {
                 value: earned / category.maxCredits,
                 minHeight: 6,
                 backgroundColor: Colors.grey.shade200,
-                color: maxedOut
-                    ? AppColors.green
-                    : AppColors.cardGradientStart,
+                color: maxedOut ? AppColors.green : AppColors.cardGradientStart,
               ),
             ),
             if (maxedOut)
@@ -209,8 +211,7 @@ class _CategoryCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.cardGradientStart
-                          .withValues(alpha: 0.6),
+                      color: AppColors.cardGradientStart.withValues(alpha: 0.6),
                     ),
                   ),
                 ),

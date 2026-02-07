@@ -20,7 +20,7 @@ class AnswerGrid extends StatelessWidget {
     AppColors.coral,
     AppColors.green,
     AppColors.cyan,
-    AppColors.purple,
+    AppColors.orange,
   ];
 
   @override

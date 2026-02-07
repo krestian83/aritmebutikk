@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/app_colors.dart';
 import '../../game/services/credit_service.dart';
+import '../../game/services/sound_service.dart';
 import '../widgets/background/animated_background.dart';
+import '../widgets/hud/mute_button.dart';
 import '../widgets/dialogs/pin_dialog.dart';
 import 'category_screen.dart';
 import 'store_editor_screen.dart';
@@ -67,6 +69,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
   }
 
   void _startGame() {
+    SoundService.instance.play('press');
     final name = _nameController.text.trim();
     if (name.isEmpty) {
       _focusNode.requestFocus();
@@ -80,6 +83,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
   }
 
   void _openStore() {
+    SoundService.instance.play('press');
     final name = _nameController.text.trim();
     if (name.isEmpty) {
       _focusNode.requestFocus();
@@ -91,6 +95,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
   }
 
   Future<void> _openParentMenu() async {
+    SoundService.instance.play('press');
     final ok = await PinDialog.show(context);
     if (!ok || !mounted) return;
     await Navigator.of(
@@ -103,74 +108,81 @@ class _MainMenuScreenState extends State<MainMenuScreen>
     return Scaffold(
       body: AnimatedBackground(
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    '\u2795\u2796\u2716\u2797',
-                    style: TextStyle(fontSize: 48),
-                  ),
-                  const SizedBox(height: 12),
-                  Text.rich(
-                    TextSpan(
-                      style: const TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.cardGradientStart,
+          child: Stack(
+            children: [
+              Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        '\u2795\u2796\u2716\u2797',
+                        style: TextStyle(fontSize: 48),
                       ),
-                      children: [
-                        const TextSpan(text: 'Aritme'),
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: AnimatedBuilder(
-                            animation: _wiggleCtrl,
-                            builder: (_, child) {
-                              final t = _wiggleCtrl.value;
-                              final dy =
-                                  math.sin(t * 2 * math.pi) * 3;
-                              final angle =
-                                  math.sin(t * 2 * math.pi) * 0.06;
-                              return Transform.translate(
-                                offset: Offset(0, dy),
-                                child: Transform.rotate(
-                                  angle: angle,
-                                  child: child,
+                      const SizedBox(height: 12),
+                      Text.rich(
+                        TextSpan(
+                          style: const TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.cardGradientStart,
+                          ),
+                          children: [
+                            const TextSpan(text: 'Aritme'),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.middle,
+                              child: AnimatedBuilder(
+                                animation: _wiggleCtrl,
+                                builder: (_, child) {
+                                  final t = _wiggleCtrl.value;
+                                  final dy =
+                                      math.sin(t * 2 * math.pi) * 3;
+                                  final angle =
+                                      math.sin(t * 2 * math.pi) * 0.06;
+                                  return Transform.translate(
+                                    offset: Offset(0, dy),
+                                    child: Transform.rotate(
+                                      angle: angle,
+                                      child: child,
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  '(bu)',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500,
+                                    color:
+                                        AppColors.cardGradientEnd.withValues(
+                                      alpha: 0.7,
+                                    ),
+                                  ),
                                 ),
-                              );
-                            },
-                            child: Text(
-                              '(bu)',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.cardGradientEnd
-                                    .withValues(alpha: 0.7),
                               ),
                             ),
-                          ),
+                            const TextSpan(text: 'tikk'),
+                          ],
                         ),
-                        const TextSpan(text: 'tikk'),
+                      ),
+                      const SizedBox(height: 40),
+                      _buildNameField(),
+                      if (_balance != null) ...[
+                        const SizedBox(height: 16),
+                        _buildBalanceChip(),
                       ],
-                    ),
+                      const SizedBox(height: 24),
+                      _buildPlayButton(),
+                      const SizedBox(height: 16),
+                      _buildStoreButton(),
+                      const SizedBox(height: 16),
+                      _buildParentButton(),
+                    ],
                   ),
-                  const SizedBox(height: 40),
-                  _buildNameField(),
-                  if (_balance != null) ...[
-                    const SizedBox(height: 16),
-                    _buildBalanceChip(),
-                  ],
-                  const SizedBox(height: 24),
-                  _buildPlayButton(),
-                  const SizedBox(height: 16),
-                  _buildStoreButton(),
-                  const SizedBox(height: 16),
-                  _buildParentButton(),
-                ],
+                ),
               ),
-            ),
+              const MuteButton(),
+            ],
           ),
         ),
       ),
@@ -182,6 +194,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.outline),
         boxShadow: [
           BoxShadow(
             color: AppColors.cardGradientStart.withValues(alpha: 0.15),
@@ -226,6 +239,9 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
         ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.outline,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -257,11 +273,19 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+          side: BorderSide(
+            color: AppColors.outline,
+            width: 1,
+          ),
           elevation: 4,
         ),
         child: const Text(
           'Spill',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1,
+          ),
         ),
       ),
     );
@@ -279,11 +303,19 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+          side: BorderSide(
+            color: AppColors.outline,
+            width: 1,
+          ),
           elevation: 4,
         ),
         child: const Text(
           'Butikk',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1,
+          ),
         ),
       ),
     );
@@ -301,7 +333,10 @@ class _MainMenuScreenState extends State<MainMenuScreen>
         ),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.grey.shade600,
-          side: BorderSide(color: Colors.grey.shade400),
+          side: BorderSide(
+            color: AppColors.outline,
+            width: 1,
+          ),
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

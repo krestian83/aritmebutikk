@@ -13,6 +13,7 @@ import '../widgets/background/animated_background.dart';
 import '../widgets/effects/confetti_overlay.dart';
 import '../widgets/effects/score_popup.dart';
 import '../widgets/effects/shake_widget.dart';
+import '../widgets/hud/mute_button.dart';
 import '../widgets/hud/score_pill.dart';
 import '../widgets/question/question_card.dart';
 
@@ -35,14 +36,13 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   final _questionGenerator = QuestionGenerator();
   final _scoring = ScoringSystem();
-  final _sound = SoundService();
+  final _sound = SoundService.instance;
   final _creditService = CreditService();
 
   final _questionCardKey = GlobalKey<ShakeWidgetState>();
 
   late Difficulty _difficulty = Difficulty.easy;
-  late LevelConfig _config =
-      configFor(widget.category, _difficulty);
+  late LevelConfig _config = configFor(widget.category, _difficulty);
 
   Question? _currentQuestion;
   bool _buttonsEnabled = true;
@@ -65,11 +65,10 @@ class _GameScreenState extends State<GameScreen> {
   void _onAnswerSelected(int answer) {
     if (!_buttonsEnabled || _currentQuestion == null) return;
 
-    final correct =
-        answer == _currentQuestion!.correctAnswer;
+    final correct = answer == _currentQuestion!.correctAnswer;
 
     // Play sound immediately on tap.
-    _sound.play(correct ? 'correct' : 'wrong');
+    _sound.play(correct ? 'success' : 'wrong');
 
     if (correct) {
       _onCorrectAnswer();
@@ -97,9 +96,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void _onWrongAnswer() {
     _buttonsEnabled = false;
-    _scoring.recordWrong(
-      difficultyMultiplier: _difficulty.pointsMultiplier,
-    );
+    _scoring.recordWrong(difficultyMultiplier: _difficulty.pointsMultiplier);
     _questionCardKey.currentState?.shake();
 
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -111,6 +108,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void _changeDifficulty(Difficulty d) {
     if (d == _difficulty) return;
+    _sound.play('press');
     setState(() {
       _difficulty = d;
       _config = configFor(widget.category, d);
@@ -119,6 +117,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Future<void> _quitToMenu() async {
+    _sound.play('press');
     final earned = _scoring.score.value;
     if (earned > 0) {
       await _creditService.addCredits(
@@ -134,7 +133,6 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void dispose() {
     _scoring.dispose();
-    _sound.dispose();
     super.dispose();
   }
 
@@ -151,9 +149,7 @@ class _GameScreenState extends State<GameScreen> {
                   child: RepaintBoundary(
                     child: ConfettiOverlay(
                       onComplete: () {
-                        setState(
-                          () => _showConfetti = false,
-                        );
+                        setState(() => _showConfetti = false);
                       },
                     ),
                   ),
@@ -172,6 +168,7 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                   ),
                 ),
+              const MuteButton(),
             ],
           ),
         ),
@@ -195,9 +192,7 @@ class _GameScreenState extends State<GameScreen> {
                 ),
                 tooltip: 'Avslutt og lagre poeng',
               ),
-              Expanded(
-                child: ScorePill(score: _scoring.score),
-              ),
+              Expanded(child: ScorePill(score: _scoring.score)),
               const SizedBox(width: 48),
             ],
           ),
@@ -227,7 +222,7 @@ class _GameScreenState extends State<GameScreen> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF5B7FE8),
+                color: AppColors.cardGradientEnd,
               ),
             ),
           ),
@@ -273,19 +268,13 @@ class _DifficultyChip extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 6,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: selected
               ? AppColors.cardGradientStart
               : Colors.white.withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: AppColors.cardGradientStart,
-            width: selected ? 2 : 1,
-          ),
+          border: Border.all(color: AppColors.outline),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -295,9 +284,7 @@ class _DifficultyChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: selected
-                    ? Colors.white
-                    : AppColors.cardGradientStart,
+                color: selected ? Colors.white : AppColors.cardGradientStart,
               ),
             ),
             Text(
@@ -307,8 +294,7 @@ class _DifficultyChip extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: selected
                     ? Colors.white70
-                    : AppColors.cardGradientStart
-                        .withValues(alpha: 0.6),
+                    : AppColors.cardGradientStart.withValues(alpha: 0.6),
               ),
             ),
           ],

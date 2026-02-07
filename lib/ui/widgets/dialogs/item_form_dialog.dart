@@ -162,6 +162,10 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
+            side: BorderSide(
+              color: AppColors.outline,
+              width: 1,
+            ),
           ),
           child: Text(_isEditing ? 'Lagre' : 'Legg til'),
         ),

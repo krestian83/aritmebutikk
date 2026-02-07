@@ -18,12 +18,13 @@ class ScorePill extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [AppColors.pillPurple, Color(0xFF9B7FE8)],
+              colors: [AppColors.pillBlue, Color(0xFF2070E8)],
             ),
             borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppColors.outline, width: 1),
             boxShadow: [
               BoxShadow(
-                color: AppColors.pillPurple.withValues(alpha: 0.4),
+                color: AppColors.pillBlue.withValues(alpha: 0.4),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),

@@ -153,6 +153,10 @@ class _PinDialogState extends State<PinDialog> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
+            side: BorderSide(
+              color: AppColors.outline,
+              width: 1,
+            ),
           ),
           child: Text(_isNewPin ? 'Lagre' : 'OK'),
         ),

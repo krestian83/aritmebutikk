@@ -5,7 +5,7 @@ abstract final class AppTheme {
   static ThemeData get theme => ThemeData(
     useMaterial3: true,
     fontFamily: 'sans-serif',
-    colorSchemeSeed: const Color(0xFF7B6BDB),
+    colorSchemeSeed: const Color(0xFF0050D0),
     brightness: Brightness.light,
   );
 
@@ -34,6 +34,6 @@ abstract final class AppTheme {
   static const levelStyle = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w700,
-    color: Color(0xFF5B7FE8),
+    color: Color(0xFF0060E0),
   );
 }

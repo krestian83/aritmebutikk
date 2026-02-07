@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/models/store_item.dart';
 import '../../game/models/store_suggestion.dart';
+import '../../game/services/sound_service.dart';
 import '../../game/services/store_item_service.dart';
 import '../widgets/background/animated_background.dart';
 import '../widgets/dialogs/item_form_dialog.dart';
@@ -46,6 +47,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
   }
 
   Future<void> _addItem({StoreSuggestion? suggestion}) async {
+    SoundService.instance.play('press');
     final result = await ItemFormDialog.show(
       context,
       suggestion: suggestion,
@@ -62,6 +64,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
   }
 
   Future<void> _editItem(StoreItem item) async {
+    SoundService.instance.play('press');
     final result = await ItemFormDialog.show(
       context,
       item: item,
@@ -73,6 +76,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
   }
 
   Future<void> _deleteItem(StoreItem item) async {
+    SoundService.instance.play('press');
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -104,6 +108,10 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
+              side: BorderSide(
+                color: AppColors.outline,
+                width: 1,
+              ),
             ),
             child: const Text('Slett'),
           ),
@@ -116,6 +124,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
   }
 
   Future<void> _resetDefaults() async {
+    SoundService.instance.play('press');
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -147,6 +156,10 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
+              side: BorderSide(
+                color: AppColors.outline,
+                width: 1,
+              ),
             ),
             child: const Text('Tilbakestill'),
           ),
@@ -175,6 +188,13 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
         onPressed: () => _addItem(),
         backgroundColor: AppColors.cardGradientStart,
         foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: AppColors.outline,
+            width: 1,
+          ),
+        ),
         icon: const Icon(Icons.add),
         label: const Text(
           'Legg til vare',
@@ -190,7 +210,10 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              SoundService.instance.play('press');
+              Navigator.of(context).pop();
+            },
             icon: const Icon(
               Icons.arrow_back_rounded,
               color: AppColors.cardGradientStart,
@@ -341,7 +364,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
                   labelStyle: const TextStyle(fontSize: 13),
                   backgroundColor: Colors.white.withValues(alpha: 0.85),
                   side: BorderSide(
-                    color: AppColors.cardGradientStart.withValues(alpha: 0.2),
+                    color: AppColors.outline,
                   ),
                   onPressed: () => _addItem(suggestion: s),
                 ),
@@ -372,6 +395,7 @@ class _EditorItemCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.outline),
         boxShadow: [
           BoxShadow(
             color: AppColors.cardGradientStart.withValues(alpha: 0.08),

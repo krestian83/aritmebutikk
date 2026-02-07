@@ -44,6 +44,9 @@ class LevelIndicator extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.outline,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),

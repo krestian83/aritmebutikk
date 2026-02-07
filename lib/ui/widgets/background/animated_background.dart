@@ -58,11 +58,11 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
 
   _FloatingShape _createShape() {
     final colors = [
-      AppColors.shapeTeal.withValues(alpha: 0.4),
-      AppColors.shapePink.withValues(alpha: 0.3),
+      AppColors.shapeCyan.withValues(alpha: 0.4),
+      AppColors.shapeOrange.withValues(alpha: 0.3),
       AppColors.shapeBlue.withValues(alpha: 0.35),
       AppColors.neonCyan.withValues(alpha: 0.2),
-      AppColors.purple.withValues(alpha: 0.25),
+      AppColors.orange.withValues(alpha: 0.25),
     ];
     return _FloatingShape(
       x: _random.nextDouble(),
