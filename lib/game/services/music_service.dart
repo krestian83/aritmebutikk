@@ -25,8 +25,9 @@ class MusicService {
       await _player!.play(
         AssetSource('music/Study_Time_Fun_2026-02-07T220130.mp3'),
       );
-      await _player!.setVolume(0.15);
-      debugPrint('[Music] playing at volume 0.15');
+      final vol = 0.15 * AudioState.masterVolume;
+      await _player!.setVolume(vol);
+      debugPrint('[Music] playing at volume $vol');
     } catch (e) {
       _playing = false;
       debugPrint('[Music] error: $e');

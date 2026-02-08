@@ -8,19 +8,22 @@ class AudioState {
   AudioState._();
   static final instance = AudioState._();
 
-  final notifier = ValueNotifier<MuteMode>(MuteMode.allOn);
+  /// Master volume multiplier applied to all audio (0.0 – 1.0).
+  static const double masterVolume = 0.49;
+
+  final notifier = ValueNotifier<MuteMode>(MuteMode.musicOff);
 
   MuteMode get mode => notifier.value;
 
   bool get musicEnabled => mode == MuteMode.allOn;
   bool get soundEnabled => mode != MuteMode.allOff;
 
-  /// Cycles to the next mute mode.
+  /// Cycles: musicOff → allOn → allOff → musicOff.
   void cycle() {
     notifier.value = switch (mode) {
-      MuteMode.allOn => MuteMode.musicOff,
-      MuteMode.musicOff => MuteMode.allOff,
-      MuteMode.allOff => MuteMode.allOn,
+      MuteMode.musicOff => MuteMode.allOn,
+      MuteMode.allOn => MuteMode.allOff,
+      MuteMode.allOff => MuteMode.musicOff,
     };
   }
 }

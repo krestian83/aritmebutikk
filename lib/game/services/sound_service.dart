@@ -63,7 +63,7 @@ class SoundService {
       _correctPlayer.stop();
       _correctPlayer.play(
         AssetSource('audio/correct.mp3'),
-        volume: 0.7,
+        volume: 0.7 * AudioState.masterVolume,
       );
     } catch (_) {}
   }
@@ -74,7 +74,7 @@ class SoundService {
       _wrongPlayer.stop();
       _wrongPlayer.play(
         AssetSource('audio/wrong.mp3'),
-        volume: 0.3,
+        volume: 0.3 * AudioState.masterVolume,
       );
     } catch (_) {}
   }
@@ -85,7 +85,7 @@ class SoundService {
       _tapPlayer.stop();
       _tapPlayer.play(
         AssetSource('audio/tap.mp3'),
-        volume: 0.5,
+        volume: 0.5 * AudioState.masterVolume,
       );
     } catch (_) {}
   }
@@ -106,7 +106,7 @@ class SoundService {
       _levelUpPlayer.stop();
       _levelUpPlayer.play(
         AssetSource('audio/levelup.mp3'),
-        volume: 0.6,
+        volume: 0.6 * AudioState.masterVolume,
       );
     } catch (_) {}
   }
@@ -116,7 +116,7 @@ class SoundService {
       _warningPlayer.stop();
       _warningPlayer.play(
         AssetSource('audio/warning.mp3'),
-        volume: 0.3,
+        volume: 0.3 * AudioState.masterVolume,
       );
     } catch (_) {}
   }
@@ -127,7 +127,7 @@ class SoundService {
       _pressPlayer.stop();
       _pressPlayer.play(
         AssetSource('audio/press.mp3'),
-        volume: 0.5,
+        volume: 0.5 * AudioState.masterVolume,
       );
     } catch (_) {}
   }
@@ -138,7 +138,7 @@ class SoundService {
       _successPlayer.stop();
       _successPlayer.play(
         AssetSource('audio/success.mp3'),
-        volume: 0.7,
+        volume: 0.7 * AudioState.masterVolume,
       );
     } catch (_) {}
   }

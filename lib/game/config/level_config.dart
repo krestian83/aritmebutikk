@@ -7,6 +7,7 @@ class LevelConfig {
   final int maxOperand;
   final int timeLimitSeconds;
   final int questionsToAdvance;
+  final int maxDividend;
 
   const LevelConfig({
     required this.level,
@@ -16,5 +17,6 @@ class LevelConfig {
     required this.maxOperand,
     required this.timeLimitSeconds,
     required this.questionsToAdvance,
+    this.maxDividend = 0,
   });
 }
