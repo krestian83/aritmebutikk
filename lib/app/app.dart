@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../game/services/music_service.dart';
@@ -32,9 +34,9 @@ class _ArithmeticAppState extends State<ArithmeticApp>
     switch (state) {
       case AppLifecycleState.paused:
       case AppLifecycleState.inactive:
-        MusicService.instance.stop();
+        unawaited(MusicService.instance.stop());
       case AppLifecycleState.resumed:
-        MusicService.instance.start();
+        unawaited(MusicService.instance.start());
       case _:
         break;
     }
@@ -44,7 +46,7 @@ class _ArithmeticAppState extends State<ArithmeticApp>
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTapDown: (_) => MusicService.instance.start(),
+      onTapDown: (_) => unawaited(MusicService.instance.start()),
       child: MaterialApp(
         title: 'Aritme(bu)tikk',
         debugShowCheckedModeBanner: false,

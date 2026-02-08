@@ -189,7 +189,8 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
       textAlign: TextAlign.center,
       style: const TextStyle(fontSize: 24),
       decoration: _inputDecoration('Ikon'),
-      validator: (v) => (v == null || v.trim().isEmpty) ? '' : null,
+      validator: (v) =>
+          (v == null || v.trim().isEmpty) ? 'Ikon er pakrevd' : null,
     );
   }
 

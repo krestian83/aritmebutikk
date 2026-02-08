@@ -46,12 +46,14 @@ class QuestionGenerator {
         // avoid trivial ÷1 and x÷x=1 patterns. Re-roll if the
         // dividend exceeds the configured cap.
         final cap = config.maxDividend;
+        final lo = max(2, config.minOperand);
         int b, answer;
+        var rolls = 0;
         do {
-          b = _randRange(max(2, config.minOperand), config.maxOperand);
-          answer =
-              _randRange(max(2, config.minOperand), config.maxOperand);
-        } while (cap > 0 && b * answer > cap);
+          b = _randRange(lo, config.maxOperand);
+          answer = _randRange(lo, config.maxOperand);
+          rolls++;
+        } while (cap > 0 && b * answer > cap && rolls < 100);
         return (b * answer, b, answer);
       default:
         return (1, 1, 2);

@@ -3,19 +3,38 @@ import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_theme.dart';
 
-/// Displays the current score in a rounded purple pill.
-class ScorePill extends StatelessWidget {
+/// Displays the current score in a rounded purple pill with a
+/// count-up animation when the value changes.
+class ScorePill extends StatefulWidget {
   final ValueNotifier<int> score;
 
   const ScorePill({super.key, required this.score});
 
   @override
+  State<ScorePill> createState() => _ScorePillState();
+}
+
+class _ScorePillState extends State<ScorePill> {
+  int _previous = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _previous = widget.score.value;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<int>(
-      valueListenable: score,
+      valueListenable: widget.score,
       builder: (context, value, _) {
+        final from = _previous;
+        _previous = value;
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 10,
+          ),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [AppColors.pillBlue, Color(0xFF2070E8)],
@@ -36,10 +55,14 @@ class ScorePill extends StatelessWidget {
               const Text('\u2B50', style: TextStyle(fontSize: 20)),
               const SizedBox(width: 8),
               TweenAnimationBuilder<int>(
-                tween: IntTween(begin: value, end: value),
+                key: ValueKey(value),
+                tween: IntTween(begin: from, end: value),
                 duration: const Duration(milliseconds: 300),
                 builder: (context, val, _) {
-                  return Text('Poeng: $val', style: AppTheme.pillStyle);
+                  return Text(
+                    'Poeng: $val',
+                    style: AppTheme.pillStyle,
+                  );
                 },
               ),
             ],
