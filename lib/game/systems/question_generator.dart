@@ -42,9 +42,10 @@ class QuestionGenerator {
         final b = _randRange(config.minOperand, config.maxOperand);
         return (a, b, a * b);
       case '÷':
-        // Generate a valid division: pick b and answer, then a = b * answer.
+        // Generate a valid division: a ÷ b = answer.
+        // Cap answer so the dividend (b * answer) stays within maxOperand.
         final b = _randRange(max(1, config.minOperand), config.maxOperand);
-        final answer = _randRange(1, config.maxOperand);
+        final answer = _randRange(1, max(1, config.maxOperand ~/ b));
         return (b * answer, b, answer);
       default:
         return (1, 1, 2);

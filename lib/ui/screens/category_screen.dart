@@ -34,14 +34,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
     setState(() => _earned = earned);
   }
 
-  void _play(GameCategory category) {
+  Future<void> _play(GameCategory category) async {
     SoundService.instance.play('press');
-    Navigator.of(context).push(
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) =>
             GameScreen(playerName: widget.playerName, category: category),
       ),
     );
+    if (mounted) _load();
   }
 
   @override
