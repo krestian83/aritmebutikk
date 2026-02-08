@@ -22,11 +22,11 @@ class MusicService {
     try {
       _player ??= AudioPlayer();
       await _player!.setReleaseMode(ReleaseMode.loop);
-      await _player!.setVolume(0.25);
       await _player!.play(
         AssetSource('music/Study_Time_Fun_2026-02-07T220130.mp3'),
       );
-      debugPrint('[Music] playing');
+      await _player!.setVolume(0.15);
+      debugPrint('[Music] playing at volume 0.15');
     } catch (e) {
       _playing = false;
       debugPrint('[Music] error: $e');

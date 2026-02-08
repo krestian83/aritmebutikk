@@ -121,49 +121,64 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                         style: TextStyle(fontSize: 48),
                       ),
                       const SizedBox(height: 12),
-                      Text.rich(
-                        TextSpan(
-                          style: const TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.cardGradientStart,
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const Text(
+                            'Aritmetikk',
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.cardGradientStart,
+                            ),
                           ),
-                          children: [
-                            const TextSpan(text: 'Aritme'),
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.middle,
-                              child: AnimatedBuilder(
-                                animation: _wiggleCtrl,
-                                builder: (_, child) {
-                                  final t = _wiggleCtrl.value;
-                                  final dy =
-                                      math.sin(t * 2 * math.pi) * 3;
-                                  final angle =
-                                      math.sin(t * 2 * math.pi) * 0.06;
-                                  return Transform.translate(
-                                    offset: Offset(0, dy),
-                                    child: Transform.rotate(
-                                      angle: angle,
-                                      child: child,
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  '(bu)',
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w500,
-                                    color:
-                                        AppColors.cardGradientEnd.withValues(
-                                      alpha: 0.7,
+                          Positioned(
+                            top: -22,
+                            left: 0,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Opacity(
+                                  opacity: 0,
+                                  child: Text(
+                                    'Aritm',
+                                    style: TextStyle(
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.w800,
                                     ),
                                   ),
                                 ),
-                              ),
+                                AnimatedBuilder(
+                                  animation: _wiggleCtrl,
+                                  builder: (_, child) {
+                                    final t = _wiggleCtrl.value;
+                                    final dy =
+                                        math.sin(t * 2 * math.pi) * 3;
+                                    final angle =
+                                        math.sin(t * 2 * math.pi) *
+                                            0.06;
+                                    return Transform.translate(
+                                      offset: Offset(0, dy),
+                                      child: Transform.rotate(
+                                        angle: angle,
+                                        child: child,
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    '(bu)',
+                                    style: TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.cardGradientEnd
+                                          .withValues(alpha: 0.7),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const TextSpan(text: 'tikk'),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 40),
                       _buildNameField(),
