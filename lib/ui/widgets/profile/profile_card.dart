@@ -1,0 +1,143 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../app/theme/app_colors.dart';
+
+/// A card displaying a player profile with avatar, name,
+/// balance, and action icons.
+class ProfileCard extends StatelessWidget {
+  final String name;
+  final int balance;
+  final String? avatarSvg;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const ProfileCard({
+    super.key,
+    required this.name,
+    required this.balance,
+    required this.avatarSvg,
+    required this.onTap,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.outline),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.cardGradientStart.withValues(alpha: 0.15),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            _buildAvatar(),
+            const SizedBox(width: 14),
+            Expanded(child: _buildNameAndBalance()),
+            _buildActions(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAvatar() {
+    return Container(
+      width: 56,
+      height: 56,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200,
+        shape: BoxShape.circle,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: avatarSvg != null
+          ? SvgPicture.string(avatarSvg!, fit: BoxFit.cover)
+          : const Icon(Icons.person, size: 32, color: Colors.grey),
+    );
+  }
+
+  Widget _buildNameAndBalance() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          name,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: AppColors.cardGradientStart,
+          ),
+          overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 4),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('\u2B50', style: TextStyle(fontSize: 13)),
+            const SizedBox(width: 4),
+            Text(
+              '$balance poeng',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActions() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _ActionIcon(icon: Icons.edit_outlined, onTap: onEdit),
+        const SizedBox(width: 4),
+        _ActionIcon(
+          icon: Icons.delete_outline,
+          onTap: onDelete,
+          color: AppColors.coral,
+        ),
+      ],
+    );
+  }
+}
+
+class _ActionIcon extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  final Color color;
+
+  const _ActionIcon({
+    required this.icon,
+    required this.onTap,
+    this.color = AppColors.cardGradientStart,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Icon(icon, size: 22, color: color),
+      ),
+    );
+  }
+}

@@ -30,6 +30,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   Future<void> _load() async {
+    await _creditService.resetCategoriesIfNeeded();
     final earned = await _creditService.getAllCategoryEarned(widget.playerName);
     if (!mounted) return;
     setState(() => _earned = earned);

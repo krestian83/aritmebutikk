@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../game/services/music_service.dart';
-import '../ui/screens/main_menu_screen.dart';
+import '../ui/screens/profile_screen.dart';
 import 'theme/app_theme.dart';
 
 /// Root application widget.
@@ -51,7 +51,7 @@ class _ArithmeticAppState extends State<ArithmeticApp>
         title: 'Aritme(bu)tikk',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.theme,
-        home: const MainMenuScreen(),
+        home: const ProfileScreen(),
       ),
     );
   }

@@ -11,6 +11,7 @@ import '../../game/systems/scoring_system.dart';
 import '../widgets/answer/answer_grid.dart';
 import '../widgets/avatar/avatar_icon.dart';
 import '../widgets/background/animated_background.dart';
+import '../widgets/effects/category_max_celebration.dart';
 import '../widgets/effects/confetti_overlay.dart';
 import '../widgets/effects/score_popup.dart';
 import '../widgets/effects/shake_widget.dart';
@@ -48,13 +49,25 @@ class _GameScreenState extends State<GameScreen> {
   Question? _currentQuestion;
   bool _buttonsEnabled = true;
   bool _showConfetti = false;
+  bool _showMaxCelebration = false;
   int? _popupPoints;
+
+  /// Credits already banked for this category before the session.
+  int _previouslyEarned = 0;
 
   @override
   void initState() {
     super.initState();
     _scoring.reset();
+    _loadPreviousEarned();
     _nextQuestion();
+  }
+
+  Future<void> _loadPreviousEarned() async {
+    _previouslyEarned = await _creditService.getCategoryEarned(
+      widget.playerName,
+      widget.category,
+    );
   }
 
   void _nextQuestion() {
@@ -89,10 +102,31 @@ class _GameScreenState extends State<GameScreen> {
       _popupPoints = points;
     });
 
+    // Check if session score has reached the category cap.
+    final totalProjected = _previouslyEarned + _scoring.score.value;
+    if (totalProjected >= widget.category.maxCredits) {
+      _triggerMaxCelebration();
+      return;
+    }
+
     Future.delayed(const Duration(milliseconds: 600), () {
       if (!mounted) return;
       _nextQuestion();
     });
+  }
+
+  Future<void> _triggerMaxCelebration() async {
+    final earned = _scoring.score.value;
+    if (earned > 0) {
+      await _creditService.addCredits(
+        widget.playerName,
+        earned,
+        widget.category,
+      );
+    }
+    if (!mounted) return;
+    _sound.play('levelup');
+    setState(() => _showMaxCelebration = true);
   }
 
   void _onWrongAnswer() {
@@ -170,6 +204,15 @@ class _GameScreenState extends State<GameScreen> {
                   ),
                 ),
               const MuteButton(),
+              if (_showMaxCelebration)
+                Positioned.fill(
+                  child: CategoryMaxCelebration(
+                    category: widget.category,
+                    onComplete: () {
+                      if (mounted) Navigator.of(context).pop();
+                    },
+                  ),
+                ),
             ],
           ),
         ),

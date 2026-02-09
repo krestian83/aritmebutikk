@@ -6,20 +6,19 @@ import '../../app/theme/app_colors.dart';
 import '../../game/services/avatar_service.dart';
 import '../../game/services/credit_service.dart';
 import '../../game/services/sound_service.dart';
-import '../widgets/avatar/avatar_editor_panel.dart';
 import '../widgets/avatar/avatar_icon.dart';
 import '../widgets/background/animated_background.dart';
-import '../widgets/hud/mute_button.dart';
 import '../widgets/dialogs/pin_dialog.dart';
+import '../widgets/hud/mute_button.dart';
 import 'category_screen.dart';
 import 'store_editor_screen.dart';
 import 'store_screen.dart';
 
-/// Main menu with name entry, credit balance, and navigation.
+/// Main menu with credit balance and navigation.
 class MainMenuScreen extends StatefulWidget {
-  final String? initialName;
+  final String playerName;
 
-  const MainMenuScreen({super.key, this.initialName});
+  const MainMenuScreen({super.key, required this.playerName});
 
   @override
   State<MainMenuScreen> createState() => _MainMenuScreenState();
@@ -27,11 +26,11 @@ class MainMenuScreen extends StatefulWidget {
 
 class _MainMenuScreenState extends State<MainMenuScreen>
     with SingleTickerProviderStateMixin {
-  final _nameController = TextEditingController();
-  final _focusNode = FocusNode();
   final _creditService = CreditService();
+  final _avatarService = AvatarService();
   late final AnimationController _wiggleCtrl;
   int? _balance;
+  bool _hasAvatar = false;
 
   @override
   void initState() {
@@ -40,79 +39,45 @@ class _MainMenuScreenState extends State<MainMenuScreen>
       vsync: this,
       duration: const Duration(milliseconds: 2500),
     )..repeat();
-    if (widget.initialName != null) {
-      _nameController.text = widget.initialName!;
-      _loadBalance(widget.initialName!);
-    }
-    _nameController.addListener(_onNameChanged);
+    _loadData();
   }
 
   @override
   void dispose() {
     _wiggleCtrl.dispose();
-    _nameController.removeListener(_onNameChanged);
-    _nameController.dispose();
-    _focusNode.dispose();
     super.dispose();
   }
 
-  void _onNameChanged() {
-    final name = _nameController.text.trim();
-    if (name.isNotEmpty) {
-      _loadBalance(name);
-    } else {
-      setState(() => _balance = null);
-    }
-  }
-
-  Future<void> _loadBalance(String name) async {
-    final balance = await _creditService.getBalance(name);
+  Future<void> _loadData() async {
+    final balance = await _creditService.getBalance(widget.playerName);
+    final hasAvatar = await _avatarService.hasAvatar(widget.playerName);
     if (!mounted) return;
-    setState(() => _balance = balance);
+    setState(() {
+      _balance = balance;
+      _hasAvatar = hasAvatar;
+    });
   }
 
   void _startGame() {
     SoundService.instance.play('press');
-    final name = _nameController.text.trim();
-    if (name.isEmpty) {
-      _focusNode.requestFocus();
-      return;
-    }
     Navigator.of(context)
         .push(
-          MaterialPageRoute(builder: (_) => CategoryScreen(playerName: name)),
+          MaterialPageRoute(
+            builder: (_) => CategoryScreen(playerName: widget.playerName),
+          ),
         )
-        .then((_) => _loadBalance(name));
+        .then((_) => _loadData());
   }
 
   void _openStore() {
     SoundService.instance.play('press');
-    final name = _nameController.text.trim();
-    if (name.isEmpty) {
-      _focusNode.requestFocus();
-      return;
-    }
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => StoreScreen(playerName: name)))
-        .then((_) => _loadBalance(name));
-  }
-
-  void _openAvatarEditor() {
-    final name = _nameController.text.trim();
-    if (name.isEmpty) return;
-    SoundService.instance.play('press');
-    showDialog<void>(
-      context: context,
-      builder: (dialogContext) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: AvatarEditorPanel(
-          playerName: name,
-          onClose: () => Navigator.of(dialogContext).pop(),
-        ),
-      ),
-    ).then((_) {
-      AvatarService().savePlayer(name);
-    });
+        .push(
+          MaterialPageRoute(
+            builder: (_) => StoreScreen(playerName: widget.playerName),
+          ),
+        )
+        .then((_) => _loadData());
   }
 
   Future<void> _openParentMenu() async {
@@ -131,103 +96,34 @@ class _MainMenuScreenState extends State<MainMenuScreen>
         child: SafeArea(
           child: Stack(
             children: [
-              Center(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        '\u2795\u2796\u2716\u2797',
-                        style: TextStyle(fontSize: 48),
-                      ),
-                      const SizedBox(height: 12),
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          const Text(
-                            'Aritmetikk',
-                            style: TextStyle(
-                              fontSize: 36,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.cardGradientStart,
-                            ),
-                          ),
-                          Positioned(
-                            top: -22,
-                            left: 0,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Opacity(
-                                  opacity: 0,
-                                  child: Text(
-                                    'Aritm',
-                                    style: TextStyle(
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ),
-                                AnimatedBuilder(
-                                  animation: _wiggleCtrl,
-                                  builder: (_, child) {
-                                    final t = _wiggleCtrl.value;
-                                    final dy = math.sin(t * 2 * math.pi) * 3;
-                                    final angle =
-                                        math.sin(t * 2 * math.pi) * 0.06;
-                                    return Transform.translate(
-                                      offset: Offset(0, dy),
-                                      child: Transform.rotate(
-                                        angle: angle,
-                                        child: child,
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    '(bu)',
-                                    style: TextStyle(
-                                      fontSize: 16.5,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.cardGradientEnd
-                                          .withValues(alpha: 0.7),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 40),
-                      _buildNameField(),
-                      if (_balance != null) ...[
-                        const SizedBox(height: 16),
-                        _buildBalanceChip(),
-                      ],
-                      const SizedBox(height: 24),
-                      _buildPlayButton(),
-                      const SizedBox(height: 16),
-                      _buildStoreButton(),
-                      const SizedBox(height: 16),
-                      _buildParentButton(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 48),
+                    const Text(
+                      '\u2795\u2796\u2716\u2797',
+                      style: TextStyle(fontSize: 48),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildTitle(),
+                    const Spacer(flex: 2),
+                    _buildPlayerHeader(),
+                    if (_balance != null) ...[
+                      const SizedBox(height: 10),
+                      _buildBalanceChip(),
                     ],
-                  ),
+                    const Spacer(),
+                    _buildPlayButton(),
+                    const SizedBox(height: 14),
+                    _buildStoreButton(),
+                    const SizedBox(height: 14),
+                    _buildParentButton(),
+                    const SizedBox(height: 56),
+                  ],
                 ),
               ),
               const MuteButton(),
-              if (_nameController.text.trim().isNotEmpty)
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: GestureDetector(
-                    onTap: _openAvatarEditor,
-                    child: AvatarIcon(
-                      playerName: _nameController.text.trim(),
-                      size: 48,
-                    ),
-                  ),
-                ),
             ],
           ),
         ),
@@ -235,67 +131,109 @@ class _MainMenuScreenState extends State<MainMenuScreen>
     );
   }
 
-  Widget _buildNameField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.outline),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.cardGradientStart.withValues(alpha: 0.15),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+  Widget _buildTitle() {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        const Text(
+          'Aritmetikk',
+          style: TextStyle(
+            fontSize: 36,
+            fontWeight: FontWeight.w800,
+            color: AppColors.cardGradientStart,
+          ),
+        ),
+        Positioned(
+          top: -22,
+          left: 0,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Opacity(
+                opacity: 0,
+                child: Text(
+                  'Aritm',
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800),
+                ),
+              ),
+              AnimatedBuilder(
+                animation: _wiggleCtrl,
+                builder: (_, child) {
+                  final t = _wiggleCtrl.value;
+                  final dy = math.sin(t * 2 * math.pi) * 3;
+                  final angle = math.sin(t * 2 * math.pi) * 0.06;
+                  return Transform.translate(
+                    offset: Offset(0, dy),
+                    child: Transform.rotate(angle: angle, child: child),
+                  );
+                },
+                child: Text(
+                  '(bu)',
+                  style: TextStyle(
+                    fontSize: 16.5,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.cardGradientEnd.withValues(alpha: 0.7),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlayerHeader() {
+    return GestureDetector(
+      onTap: () {
+        SoundService.instance.play('press');
+        Navigator.of(context).pop();
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (_hasAvatar) ...[
+            AvatarIcon(playerName: widget.playerName, size: 48),
+            const SizedBox(width: 12),
+          ],
+          Text(
+            widget.playerName,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: AppColors.cardGradientStart,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Icon(
+            Icons.swap_horiz,
+            size: 20,
+            color: AppColors.cardGradientStart.withValues(alpha: 0.5),
           ),
         ],
-      ),
-      child: TextField(
-        controller: _nameController,
-        focusNode: _focusNode,
-        textAlign: TextAlign.center,
-        textCapitalization: TextCapitalization.words,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: AppColors.cardGradientStart,
-        ),
-        decoration: InputDecoration(
-          hintText: 'Skriv inn navnet ditt',
-          hintStyle: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
-            color: AppColors.cardGradientStart.withValues(alpha: 0.4),
-          ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 16,
-          ),
-        ),
-        onSubmitted: (_) => _startGame(),
       ),
     );
   }
 
   Widget _buildBalanceChip() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.outline),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('\u2B50', style: TextStyle(fontSize: 16)),
-          const SizedBox(width: 8),
+          const Text('\u2B50', style: TextStyle(fontSize: 13)),
+          const SizedBox(width: 6),
           Text(
             '$_balance poeng',
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w700,
               color: Colors.white,
             ),
@@ -317,7 +255,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          side: BorderSide(color: AppColors.outline, width: 1),
+          side: const BorderSide(color: AppColors.outline),
           elevation: 4,
         ),
         child: const Text(
@@ -344,7 +282,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          side: BorderSide(color: AppColors.outline, width: 1),
+          side: const BorderSide(color: AppColors.outline),
           elevation: 4,
         ),
         child: const Text(
@@ -371,7 +309,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
         ),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.grey.shade600,
-          side: BorderSide(color: AppColors.outline, width: 1),
+          side: const BorderSide(color: AppColors.outline),
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

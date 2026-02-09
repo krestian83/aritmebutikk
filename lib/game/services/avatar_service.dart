@@ -11,6 +11,15 @@ class AvatarService {
   static const _keyPrefix = 'fluttermoji_player_';
   static String? _currentPlayer;
 
+  /// The currently loaded player name, if any.
+  static String? get currentPlayer => _currentPlayer;
+
+  /// Returns `true` if [playerName] has a saved avatar.
+  Future<bool> hasAvatar(String playerName) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey('$_keyPrefix$playerName');
+  }
+
   /// Load [playerName]'s avatar into the global fluttermoji
   /// controller. No-op if already loaded for this player.
   Future<void> loadPlayer(String playerName) async {
@@ -56,5 +65,45 @@ class AvatarService {
   Future<void> refreshPlayer(String playerName) async {
     _currentPlayer = null;
     await loadPlayer(playerName);
+  }
+
+  /// Removes stored avatar data for [playerName].
+  Future<void> deletePlayerData(String playerName) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('$_keyPrefix$playerName');
+
+    if (_currentPlayer == playerName) {
+      _currentPlayer = null;
+    }
+  }
+
+  /// Returns the SVG string for [playerName]'s avatar without
+  /// switching the global controller. Returns `null` if no
+  /// saved data exists.
+  Future<String?> getAvatarSvg(String playerName) async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString('$_keyPrefix$playerName');
+    if (saved == null) return null;
+
+    // Temporarily set global options to render this player's SVG.
+    final original = prefs.getString('fluttermojiSelectedOptions');
+    await prefs.setString('fluttermojiSelectedOptions', saved);
+
+    if (!Get.isRegistered<FluttermojiController>()) {
+      Get.put(FluttermojiController());
+    }
+    final controller = Get.find<FluttermojiController>();
+    final options = await controller.getFluttermojiOptions();
+    controller.selectedOptions = Map<String, dynamic>.from(options);
+    final svg = controller.getFluttermojiFromOptions();
+
+    // Restore original options.
+    if (original != null) {
+      await prefs.setString('fluttermojiSelectedOptions', original);
+    } else {
+      await prefs.remove('fluttermojiSelectedOptions');
+    }
+
+    return svg;
   }
 }

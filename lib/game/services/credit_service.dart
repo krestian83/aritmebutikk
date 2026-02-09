@@ -11,6 +11,38 @@ class CreditService {
   static const _balancesKey = 'credit_balances';
   static const _ledgerKey = 'credit_ledger';
   static const _categoryKey = 'category_earned';
+  static const _lastResetKey = 'category_last_reset';
+
+  /// Hour of the day (0-23) when category progress resets.
+  static const resetHour = 22; // TODO: change to 0 for midnight
+
+  // ── Daily reset ──────────────────────────────────────────
+
+  /// Resets all category earned totals if the reset hour has
+  /// passed since the last reset. Call once on app/screen load.
+  Future<void> resetCategoriesIfNeeded() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastReset = prefs.getString(_lastResetKey);
+
+    final now = DateTime.now();
+    // The most recent reset boundary: today at resetHour,
+    // or yesterday at resetHour if we haven't reached it yet.
+    var boundary = DateTime(now.year, now.month, now.day, resetHour);
+    if (now.isBefore(boundary)) {
+      boundary = boundary.subtract(const Duration(days: 1));
+    }
+
+    if (lastReset != null) {
+      final lastResetDate = DateTime.tryParse(lastReset);
+      if (lastResetDate != null && !lastResetDate.isBefore(boundary)) {
+        return; // Already reset for this period.
+      }
+    }
+
+    // Clear all category progress.
+    await prefs.remove(_categoryKey);
+    await prefs.setString(_lastResetKey, now.toIso8601String());
+  }
 
   // ── Balance ───────────────────────────────────────────────
 
@@ -154,5 +186,23 @@ class CreditService {
   Future<void> _saveCategoryMap(Map<String, Map<String, int>> map) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_categoryKey, jsonEncode(map));
+  }
+
+  // ── Cleanup ────────────────────────────────────────────────
+
+  /// Removes all stored data for [playerName]: balance,
+  /// category earned totals, and ledger entries.
+  Future<void> deletePlayerData(String playerName) async {
+    final balances = await _loadMap(_balancesKey);
+    balances.remove(playerName);
+    await _saveMap(_balancesKey, balances);
+
+    final catMap = await _loadCategoryMap();
+    catMap.remove(playerName);
+    await _saveCategoryMap(catMap);
+
+    final ledger = await loadLedger();
+    ledger.removeWhere((e) => e.playerName == playerName);
+    await _saveLedger(ledger);
   }
 }
