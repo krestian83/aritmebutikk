@@ -3,8 +3,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_colors.dart';
+import '../../game/services/avatar_service.dart';
 import '../../game/services/credit_service.dart';
 import '../../game/services/sound_service.dart';
+import '../widgets/avatar/avatar_editor_panel.dart';
+import '../widgets/avatar/avatar_icon.dart';
 import '../widgets/background/animated_background.dart';
 import '../widgets/hud/mute_button.dart';
 import '../widgets/dialogs/pin_dialog.dart';
@@ -94,6 +97,24 @@ class _MainMenuScreenState extends State<MainMenuScreen>
         .then((_) => _loadBalance(name));
   }
 
+  void _openAvatarEditor() {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) return;
+    SoundService.instance.play('press');
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: AvatarEditorPanel(
+          playerName: name,
+          onClose: () => Navigator.of(dialogContext).pop(),
+        ),
+      ),
+    ).then((_) {
+      AvatarService().savePlayer(name);
+    });
+  }
+
   Future<void> _openParentMenu() async {
     SoundService.instance.play('press');
     final ok = await PinDialog.show(context);
@@ -152,11 +173,9 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                                   animation: _wiggleCtrl,
                                   builder: (_, child) {
                                     final t = _wiggleCtrl.value;
-                                    final dy =
-                                        math.sin(t * 2 * math.pi) * 3;
+                                    final dy = math.sin(t * 2 * math.pi) * 3;
                                     final angle =
-                                        math.sin(t * 2 * math.pi) *
-                                            0.06;
+                                        math.sin(t * 2 * math.pi) * 0.06;
                                     return Transform.translate(
                                       offset: Offset(0, dy),
                                       child: Transform.rotate(
@@ -197,6 +216,18 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                 ),
               ),
               const MuteButton(),
+              if (_nameController.text.trim().isNotEmpty)
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: GestureDetector(
+                    onTap: _openAvatarEditor,
+                    child: AvatarIcon(
+                      playerName: _nameController.text.trim(),
+                      size: 48,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -254,9 +285,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.outline,
-        ),
+        border: Border.all(color: AppColors.outline),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -288,10 +317,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          side: BorderSide(
-            color: AppColors.outline,
-            width: 1,
-          ),
+          side: BorderSide(color: AppColors.outline, width: 1),
           elevation: 4,
         ),
         child: const Text(
@@ -318,10 +344,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          side: BorderSide(
-            color: AppColors.outline,
-            width: 1,
-          ),
+          side: BorderSide(color: AppColors.outline, width: 1),
           elevation: 4,
         ),
         child: const Text(
@@ -348,10 +371,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
         ),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.grey.shade600,
-          side: BorderSide(
-            color: AppColors.outline,
-            width: 1,
-          ),
+          side: BorderSide(color: AppColors.outline, width: 1),
           padding: const EdgeInsets.symmetric(vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

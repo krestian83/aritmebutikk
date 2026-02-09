@@ -4,6 +4,7 @@ import '../../app/theme/app_colors.dart';
 import '../../game/models/game_category.dart';
 import '../../game/services/credit_service.dart';
 import '../../game/services/sound_service.dart';
+import '../widgets/avatar/avatar_icon.dart';
 import '../widgets/background/animated_background.dart';
 import '../widgets/hud/mute_button.dart';
 import 'game_screen.dart';
@@ -56,29 +57,29 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 children: [
                   _buildHeader(),
                   Expanded(
-                child: _earned == null
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.cardGradientStart,
-                        ),
-                      )
-                    : ListView(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 8,
-                        ),
-                        children: [
-                          for (final cat in GameCategory.values)
-                            _CategoryCard(
-                              category: cat,
-                              earned: _earned![cat] ?? 0,
-                              onTap: () => _play(cat),
+                    child: _earned == null
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.cardGradientStart,
                             ),
-                        ],
-                      ),
+                          )
+                        : ListView(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 8,
+                            ),
+                            children: [
+                              for (final cat in GameCategory.values)
+                                _CategoryCard(
+                                  category: cat,
+                                  earned: _earned![cat] ?? 0,
+                                  onTap: () => _play(cat),
+                                ),
+                            ],
+                          ),
+                  ),
+                ],
               ),
-            ],
-          ),
               const MuteButton(),
             ],
           ),
@@ -102,6 +103,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
               color: AppColors.cardGradientStart,
             ),
           ),
+          AvatarIcon(playerName: widget.playerName, size: 32),
+          const SizedBox(width: 8),
           const Expanded(
             child: Text(
               'Velg kategori',

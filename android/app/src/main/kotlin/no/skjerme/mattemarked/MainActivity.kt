@@ -1,4 +1,4 @@
-package com.example.arithmetic
+package no.skjerme.mattemarked
 
 import io.flutter.embedding.android.FlutterActivity
 

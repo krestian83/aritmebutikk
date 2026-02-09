@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter analyze:*)",
+      "Bash(del \"C:\\\\Users\\\\krest\\\\skjerme\\\\spill\\\\arithmetic\\\\temp_palette.jpg\")",
+      "mcp__plugin_context7_context7__query-docs",
+      "Bash(taskkill:*)",
+      "Bash(flutter run:*)",
+      "Bash(netstat:*)",
+      "Bash(git add:*)",
+      "Bash(del \"C:\\\\Users\\\\krest\\\\skjerme\\\\spill\\\\arithmetic\\\\lib\\\\game\\\\services\\\\grayscale_state.dart\")",
+      "Bash(del \"C:\\\\Users\\\\krest\\\\skjerme\\\\spill\\\\arithmetic\\\\lib\\\\ui\\\\widgets\\\\hud\\\\grayscale_button.dart\")"
+    ]
+  }
+}
