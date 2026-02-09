@@ -26,7 +26,7 @@ class PinDialog extends StatefulWidget {
 }
 
 class _PinDialogState extends State<PinDialog> {
-  final _service = StoreItemService();
+  final _service = StoreItemService.instance;
   final _pinController = TextEditingController();
   final _confirmController = TextEditingController();
   bool _isNewPin = false;
@@ -153,10 +153,7 @@ class _PinDialogState extends State<PinDialog> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            side: BorderSide(
-              color: AppColors.outline,
-              width: 1,
-            ),
+            side: BorderSide(color: AppColors.outline, width: 1),
           ),
           child: Text(_isNewPin ? 'Lagre' : 'OK'),
         ),

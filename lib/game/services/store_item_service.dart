@@ -4,6 +4,9 @@ import '../models/store_item.dart';
 
 /// CRUD service for store items and parent PIN management.
 class StoreItemService {
+  StoreItemService._();
+  static final instance = StoreItemService._();
+
   static const _itemsKey = 'store_items';
   static const _pinKey = 'parent_pin';
 

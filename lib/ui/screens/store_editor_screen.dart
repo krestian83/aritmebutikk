@@ -17,7 +17,7 @@ class StoreEditorScreen extends StatefulWidget {
 }
 
 class _StoreEditorScreenState extends State<StoreEditorScreen> {
-  final _service = StoreItemService();
+  final _service = StoreItemService.instance;
   List<StoreItem>? _items;
 
   @override
@@ -108,10 +108,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              side: BorderSide(
-                color: AppColors.outline,
-                width: 1,
-              ),
+              side: BorderSide(color: AppColors.outline, width: 1),
             ),
             child: const Text('Slett'),
           ),
@@ -156,10 +153,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              side: BorderSide(
-                color: AppColors.outline,
-                width: 1,
-              ),
+              side: BorderSide(color: AppColors.outline, width: 1),
             ),
             child: const Text('Tilbakestill'),
           ),
@@ -190,10 +184,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: AppColors.outline,
-            width: 1,
-          ),
+          side: BorderSide(color: AppColors.outline, width: 1),
         ),
         icon: const Icon(Icons.add),
         label: const Text(
@@ -363,9 +354,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
                   label: Text(s.name),
                   labelStyle: const TextStyle(fontSize: 13),
                   backgroundColor: Colors.white.withValues(alpha: 0.85),
-                  side: BorderSide(
-                    color: AppColors.outline,
-                  ),
+                  side: BorderSide(color: AppColors.outline),
                   onPressed: () => _addItem(suggestion: s),
                 ),
             ],

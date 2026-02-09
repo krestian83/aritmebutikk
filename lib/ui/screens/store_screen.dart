@@ -20,8 +20,8 @@ class StoreScreen extends StatefulWidget {
 
 class _StoreScreenState extends State<StoreScreen>
     with SingleTickerProviderStateMixin {
-  final _creditService = CreditService();
-  final _storeItemService = StoreItemService();
+  final _creditService = CreditService.instance;
+  final _storeItemService = StoreItemService.instance;
   late final TabController _tabController;
   int _balance = 0;
   List<StoreItem>? _items;
@@ -157,10 +157,7 @@ class _StoreScreenState extends State<StoreScreen>
           colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.outline,
-          width: 1,
-        ),
+        border: Border.all(color: AppColors.outline, width: 1),
         boxShadow: [
           BoxShadow(
             color: AppColors.cardGradientStart.withValues(alpha: 0.3),
@@ -308,10 +305,7 @@ class _StoreItemCard extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
-              side: BorderSide(
-                color: AppColors.outline,
-                width: 1,
-              ),
+              side: BorderSide(color: AppColors.outline, width: 1),
             ),
             child: const Text(
               'Kj\u00F8p',

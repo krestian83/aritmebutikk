@@ -120,16 +120,14 @@ class _ConfettiPainter extends CustomPainter {
     for (final p in particles) {
       final t = progress;
       final x = (p.x + p.vx * t) * size.width;
-      final y =
-          (p.y + p.vy * t + 2.0 * t * t) * size.height;
+      final y = (p.y + p.vy * t + 2.0 * t * t) * size.height;
       final rot = p.rotation + p.rotationSpeed * t;
 
       canvas.save();
       canvas.translate(x, y);
       canvas.rotate(rot);
 
-      _reusablePaint.color =
-          p.color.withValues(alpha: opacity);
+      _reusablePaint.color = p.color.withValues(alpha: opacity);
       canvas.drawRect(
         Rect.fromCenter(
           center: Offset.zero,
@@ -144,5 +142,5 @@ class _ConfettiPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_ConfettiPainter old) => true;
+  bool shouldRepaint(_ConfettiPainter old) => old.progress != progress;
 }

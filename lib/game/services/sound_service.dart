@@ -127,7 +127,7 @@ class SoundService {
       _pressPlayer.stop();
       _pressPlayer.play(
         AssetSource('audio/press.mp3'),
-        volume: 0.5 * AudioState.masterVolume,
+        volume: 0.2 * AudioState.masterVolume,
       );
     } catch (_) {}
   }

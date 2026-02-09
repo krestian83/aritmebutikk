@@ -26,8 +26,8 @@ class MainMenuScreen extends StatefulWidget {
 
 class _MainMenuScreenState extends State<MainMenuScreen>
     with SingleTickerProviderStateMixin {
-  final _creditService = CreditService();
-  final _avatarService = AvatarService();
+  final _creditService = CreditService.instance;
+  final _avatarService = AvatarService.instance;
   late final AnimationController _wiggleCtrl;
   int? _balance;
   bool _hasAvatar = false;
@@ -108,11 +108,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                     const SizedBox(height: 8),
                     _buildTitle(),
                     const Spacer(flex: 2),
-                    _buildPlayerHeader(),
-                    if (_balance != null) ...[
-                      const SizedBox(height: 10),
-                      _buildBalanceChip(),
-                    ],
+                    _buildProfileCard(),
                     const Spacer(),
                     _buildPlayButton(),
                     const SizedBox(height: 14),
@@ -183,62 +179,100 @@ class _MainMenuScreenState extends State<MainMenuScreen>
     );
   }
 
-  Widget _buildPlayerHeader() {
+  Widget _buildProfileCard() {
     return GestureDetector(
       onTap: () {
         SoundService.instance.play('press');
         Navigator.of(context).pop();
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (_hasAvatar) ...[
-            AvatarIcon(playerName: widget.playerName, size: 48),
-            const SizedBox(width: 12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.30),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.6),
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.cardGradientStart.withValues(alpha: 0.10),
+              blurRadius: 20,
+              offset: const Offset(0, 6),
+            ),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
           ],
-          Text(
-            widget.playerName,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: AppColors.cardGradientStart,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Icon(
-            Icons.swap_horiz,
-            size: 20,
-            color: AppColors.cardGradientStart.withValues(alpha: 0.5),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBalanceChip() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
         ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outline),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text('\u2B50', style: TextStyle(fontSize: 13)),
-          const SizedBox(width: 6),
-          Text(
-            '$_balance poeng',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (_hasAvatar) ...[
+              AvatarIcon(playerName: widget.playerName, size: 67),
+              const SizedBox(height: 8),
+            ],
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  widget.playerName,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.cardGradientStart,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.swap_horiz,
+                  size: 20,
+                  color: AppColors.cardGradientStart
+                      .withValues(alpha: 0.5),
+                ),
+              ],
             ),
-          ),
-        ],
+            if (_balance != null) ...[
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      AppColors.cardGradientStart,
+                      AppColors.cardGradientEnd,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.outline),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      '\u2B50',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '$_balance poeng',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

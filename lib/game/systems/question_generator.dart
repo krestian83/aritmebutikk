@@ -47,7 +47,7 @@ class QuestionGenerator {
         // dividend exceeds the configured cap.
         final cap = config.maxDividend;
         final lo = max(2, config.minOperand);
-        int b, answer;
+        int b = lo, answer = lo;
         var rolls = 0;
         do {
           b = _randRange(lo, config.maxOperand);
@@ -84,5 +84,8 @@ class QuestionGenerator {
     return list;
   }
 
-  int _randRange(int min, int max) => min + _random.nextInt(max - min + 1);
+  int _randRange(int min, int max) {
+    assert(min <= max, '_randRange: min ($min) must be <= max ($max)');
+    return min + _random.nextInt(max - min + 1);
+  }
 }

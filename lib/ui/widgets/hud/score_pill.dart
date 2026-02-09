@@ -31,10 +31,7 @@ class _ScorePillState extends State<ScorePill> {
         final from = _previous;
         _previous = value;
         return Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [AppColors.pillBlue, Color(0xFF2070E8)],
@@ -59,10 +56,7 @@ class _ScorePillState extends State<ScorePill> {
                 tween: IntTween(begin: from, end: value),
                 duration: const Duration(milliseconds: 300),
                 builder: (context, val, _) {
-                  return Text(
-                    'Poeng: $val',
-                    style: AppTheme.pillStyle,
-                  );
+                  return Text('Poeng: $val', style: AppTheme.pillStyle);
                 },
               ),
             ],

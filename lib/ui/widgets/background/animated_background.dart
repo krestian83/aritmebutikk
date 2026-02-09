@@ -149,5 +149,5 @@ class _BackgroundPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_BackgroundPainter old) => true;
+  bool shouldRepaint(_BackgroundPainter old) => old.progress != progress;
 }

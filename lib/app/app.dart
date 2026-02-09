@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../game/services/music_service.dart';
+import '../game/services/sound_service.dart';
 import '../ui/screens/profile_screen.dart';
 import 'theme/app_theme.dart';
 
@@ -26,6 +27,7 @@ class _ArithmeticAppState extends State<ArithmeticApp>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     MusicService.instance.dispose();
+    SoundService.instance.dispose();
     super.dispose();
   }
 

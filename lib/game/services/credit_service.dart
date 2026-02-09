@@ -8,13 +8,16 @@ import '../models/ledger_entry.dart';
 /// Persists per-player credit balances, per-category earned
 /// totals, and the purchase ledger.
 class CreditService {
+  CreditService._();
+  static final instance = CreditService._();
+
   static const _balancesKey = 'credit_balances';
   static const _ledgerKey = 'credit_ledger';
   static const _categoryKey = 'category_earned';
   static const _lastResetKey = 'category_last_reset';
 
   /// Hour of the day (0-23) when category progress resets.
-  static const resetHour = 22; // TODO: change to 0 for midnight
+  static const resetHour = 0;
 
   // ── Daily reset ──────────────────────────────────────────
 

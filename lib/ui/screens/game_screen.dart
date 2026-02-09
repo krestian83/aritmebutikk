@@ -39,7 +39,7 @@ class _GameScreenState extends State<GameScreen> {
   final _questionGenerator = QuestionGenerator();
   final _scoring = ScoringSystem();
   final _sound = SoundService.instance;
-  final _creditService = CreditService();
+  final _creditService = CreditService.instance;
 
   final _questionCardKey = GlobalKey<ShakeWidgetState>();
 

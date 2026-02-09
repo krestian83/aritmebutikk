@@ -22,8 +22,8 @@ class NewPlayerScreen extends StatefulWidget {
 }
 
 class _NewPlayerScreenState extends State<NewPlayerScreen> {
-  final _profileService = ProfileService();
-  final _avatarService = AvatarService();
+  final _profileService = ProfileService.instance;
+  final _avatarService = AvatarService.instance;
   final _nameController = TextEditingController();
   final _focusNode = FocusNode();
 
@@ -174,8 +174,7 @@ class _NameStep extends StatelessWidget {
                 border: Border.all(color: AppColors.outline),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.cardGradientStart
-                        .withValues(alpha: 0.15),
+                    color: AppColors.cardGradientStart.withValues(alpha: 0.15),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -197,8 +196,7 @@ class _NameStep extends StatelessWidget {
                   hintStyle: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.cardGradientStart
-                        .withValues(alpha: 0.4),
+                    color: AppColors.cardGradientStart.withValues(alpha: 0.4),
                   ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
@@ -228,15 +226,11 @@ class _NameStep extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.green,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  side: const BorderSide(
-                    color: AppColors.outline,
-                  ),
+                  side: const BorderSide(color: AppColors.outline),
                   elevation: 4,
                 ),
                 child: const Text(
@@ -257,19 +251,12 @@ class _NameStep extends StatelessWidget {
                 icon: const Icon(Icons.face, size: 20),
                 label: const Text(
                   'Lag avatar',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.cardGradientStart,
-                  side: const BorderSide(
-                    color: AppColors.outline,
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                  ),
+                  side: const BorderSide(color: AppColors.outline),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -281,10 +268,7 @@ class _NameStep extends StatelessWidget {
               onPressed: onBack,
               child: Text(
                 'Tilbake',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
               ),
             ),
           ],

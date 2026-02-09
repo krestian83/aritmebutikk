@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluttermoji/fluttermojiController.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,8 +10,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// This service namespaces them per player name so each player
 /// keeps their own avatar.
 class AvatarService {
+  AvatarService._();
+  static final instance = AvatarService._();
+
   static const _keyPrefix = 'fluttermoji_player_';
   static String? _currentPlayer;
+
+  /// Serialises access to the global fluttermoji options so
+  /// concurrent [getAvatarSvg] calls don't corrupt state.
+  Future<void>? _svgLock;
 
   /// The currently loaded player name, if any.
   static String? get currentPlayer => _currentPlayer;
@@ -80,7 +89,27 @@ class AvatarService {
   /// Returns the SVG string for [playerName]'s avatar without
   /// switching the global controller. Returns `null` if no
   /// saved data exists.
+  ///
+  /// Uses a simple lock so concurrent calls don't corrupt the
+  /// shared global fluttermoji options.
   Future<String?> getAvatarSvg(String playerName) async {
+    // Wait for any in-flight call to finish first.
+    while (_svgLock != null) {
+      await _svgLock;
+    }
+
+    final completer = Completer<void>();
+    _svgLock = completer.future;
+
+    try {
+      return await _getAvatarSvgUnsafe(playerName);
+    } finally {
+      _svgLock = null;
+      completer.complete();
+    }
+  }
+
+  Future<String?> _getAvatarSvgUnsafe(String playerName) async {
     final prefs = await SharedPreferences.getInstance();
     final saved = prefs.getString('$_keyPrefix$playerName');
     if (saved == null) return null;

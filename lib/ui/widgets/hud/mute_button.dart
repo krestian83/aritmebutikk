@@ -23,10 +23,7 @@ class MuteButton extends StatelessWidget {
         builder: (context, mode, _) {
           final (icon, tooltip) = switch (mode) {
             MuteMode.allOn => (Icons.volume_up_rounded, 'Demp musikk'),
-            MuteMode.musicOff => (
-              Icons.music_off_rounded,
-              'Demp alt',
-            ),
+            MuteMode.musicOff => (Icons.music_off_rounded, 'Demp alt'),
             MuteMode.allOff => (
               Icons.volume_off_rounded,
               'Sl\u00E5 p\u00E5 lyd',

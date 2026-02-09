@@ -65,11 +65,7 @@ class _AnswerButtonState extends State<AnswerButton>
           final scale = 1.0 - t * 0.06;
           final blur = 8.0 - t * 3.0;
           final offset = 4.0 - t * 2.0;
-          final bright = Color.lerp(
-            widget.color,
-            Colors.white,
-            t * 0.12,
-          )!;
+          final bright = Color.lerp(widget.color, Colors.white, t * 0.12)!;
           final lightBright = Color.lerp(lighter, Colors.white, t * 0.12)!;
 
           return Transform.scale(

@@ -20,7 +20,7 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  final _creditService = CreditService();
+  final _creditService = CreditService.instance;
   Map<GameCategory, int>? _earned;
 
   @override

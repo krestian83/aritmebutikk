@@ -7,6 +7,9 @@ import 'credit_service.dart';
 
 /// Manages the list of player profiles stored in SharedPreferences.
 class ProfileService {
+  ProfileService._();
+  static final instance = ProfileService._();
+
   static const _key = 'player_profiles';
 
   /// Returns all saved profile names.
@@ -41,8 +44,8 @@ class ProfileService {
     profiles.removeWhere((p) => p.toLowerCase() == name.toLowerCase());
     await _save(profiles);
 
-    await CreditService().deletePlayerData(name);
-    await AvatarService().deletePlayerData(name);
+    await CreditService.instance.deletePlayerData(name);
+    await AvatarService.instance.deletePlayerData(name);
   }
 
   Future<void> _save(List<String> profiles) async {

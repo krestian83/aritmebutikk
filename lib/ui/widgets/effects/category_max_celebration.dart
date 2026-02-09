@@ -237,5 +237,5 @@ class _RainPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_RainPainter old) => true;
+  bool shouldRepaint(_RainPainter old) => old.progress != progress;
 }

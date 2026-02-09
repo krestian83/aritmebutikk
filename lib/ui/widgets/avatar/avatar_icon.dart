@@ -12,18 +12,14 @@ class AvatarIcon extends StatefulWidget {
   final String playerName;
   final double size;
 
-  const AvatarIcon({
-    super.key,
-    required this.playerName,
-    this.size = 40,
-  });
+  const AvatarIcon({super.key, required this.playerName, this.size = 40});
 
   @override
   State<AvatarIcon> createState() => _AvatarIconState();
 }
 
 class _AvatarIconState extends State<AvatarIcon> {
-  final _service = AvatarService();
+  final _service = AvatarService.instance;
   bool _loaded = false;
   bool _hasAvatar = false;
 

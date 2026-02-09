@@ -19,9 +19,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _profileService = ProfileService();
-  final _creditService = CreditService();
-  final _avatarService = AvatarService();
+  final _profileService = ProfileService.instance;
+  final _creditService = CreditService.instance;
+  final _avatarService = AvatarService.instance;
 
   List<String> _profiles = [];
   Map<String, int> _balances = {};
