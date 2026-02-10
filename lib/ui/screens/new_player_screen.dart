@@ -159,10 +159,28 @@ class _NewPlayerBody extends StatefulWidget {
 }
 
 class _NewPlayerBodyState extends State<_NewPlayerBody> {
+  bool _emojiActive = false;
+
   void _setLocale(AppLocale locale) {
     SoundService.instance.play('press');
     LocaleService.instance.setLocale(locale);
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.emojiFocusNode.addListener(_onEmojiFocusChange);
+  }
+
+  @override
+  void dispose() {
+    widget.emojiFocusNode.removeListener(_onEmojiFocusChange);
+    super.dispose();
+  }
+
+  void _onEmojiFocusChange() {
+    setState(() => _emojiActive = widget.emojiFocusNode.hasFocus);
   }
 
   @override
@@ -193,9 +211,7 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
               ),
             const SizedBox(height: 20),
             Text(
-              widget.isEditMode
-                  ? S.current.chooseYourEmoji
-                  : S.current.whatsYourName,
+              S.current.chooseYourEmoji,
               style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w800,
@@ -204,8 +220,17 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
             ),
             const SizedBox(height: 24),
             _buildEmojiPicker(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
             if (!widget.isEditMode) ...[
+              Text(
+                S.current.whatsYourName,
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.menuTeal,
+                ),
+              ),
+              const SizedBox(height: 16),
               _buildNameField(),
               if (widget.errorText != null) ...[
                 const SizedBox(height: 8),
@@ -253,20 +278,25 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
       children: [
         GestureDetector(
           onTap: widget.onEmojiTap,
-          child: Container(
-            width: 100,
-            height: 100,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: _emojiActive ? 110 : 100,
+            height: _emojiActive ? 110 : 100,
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
               border: Border.all(
-                color: AppColors.menuTeal.withValues(alpha: 0.3),
-                width: 3,
+                color: _emojiActive
+                    ? AppColors.menuTeal
+                    : AppColors.menuTeal.withValues(alpha: 0.3),
+                width: _emojiActive ? 4 : 3,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.menuTeal.withValues(alpha: 0.15),
-                  blurRadius: 12,
+                  color: _emojiActive
+                      ? AppColors.menuTeal.withValues(alpha: 0.35)
+                      : AppColors.menuTeal.withValues(alpha: 0.15),
+                  blurRadius: _emojiActive ? 20 : 12,
                   offset: const Offset(0, 4),
                 ),
               ],
@@ -278,14 +308,19 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
         Positioned(
           bottom: 0,
           right: 0,
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: AppColors.menuTeal,
+              color: _emojiActive ? AppColors.menuOrange : AppColors.menuTeal,
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 2),
             ),
-            child: const Icon(Icons.edit, size: 14, color: Colors.white),
+            child: Icon(
+              _emojiActive ? Icons.keyboard : Icons.edit,
+              size: 14,
+              color: Colors.white,
+            ),
           ),
         ),
         // Hidden text field for emoji keyboard input.
@@ -327,7 +362,7 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
       child: TextField(
         controller: widget.nameController,
         focusNode: widget.focusNode,
-        autofocus: true,
+        autofocus: false,
         textAlign: TextAlign.center,
         textCapitalization: TextCapitalization.words,
         style: const TextStyle(

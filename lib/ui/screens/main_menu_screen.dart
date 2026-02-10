@@ -102,7 +102,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               _buildStoreButton(),
                               const SizedBox(height: 14),
                               _buildParentButton(),
-                              const SizedBox(height: 80),
+                              const SizedBox(height: 48),
                             ],
                           ),
                         ),

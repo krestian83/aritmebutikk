@@ -64,7 +64,13 @@ class ProfileCard extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
-      child: Text(avatarEmoji, style: const TextStyle(fontSize: 32)),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          avatarEmoji,
+          style: const TextStyle(fontSize: 32, height: 1.15),
+        ),
+      ),
     );
   }
 
