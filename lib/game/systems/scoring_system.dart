@@ -12,9 +12,11 @@ class ScoringSystem {
   /// Returns the points earned.
   int awardCorrect({int difficultyMultiplier = 1}) {
     streak.value++;
-    // 10% bonus per streak level.
+    // 10% bonus per streak level, capped at 2x base.
     final streakBonus = 1.0 + (streak.value - 1) * 0.1;
-    final points = (_basePoints * difficultyMultiplier * streakBonus).round();
+    final base = _basePoints * difficultyMultiplier;
+    final maxPoints = base * 2;
+    final points = (base * streakBonus).round().clamp(0, maxPoints);
     score.value += points;
     return points;
   }
@@ -36,7 +38,9 @@ class ScoringSystem {
   /// awarding it).
   int awardWouldBe({int difficultyMultiplier = 1}) {
     final streakBonus = 1.0 + (streak.value) * 0.1;
-    return (_basePoints * difficultyMultiplier * streakBonus).round();
+    final base = _basePoints * difficultyMultiplier;
+    final maxPoints = base * 2;
+    return (base * streakBonus).round().clamp(0, maxPoints);
   }
 
   /// Whether the player has earned a time bonus (5+ streak).

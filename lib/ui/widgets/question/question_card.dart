@@ -13,7 +13,7 @@ class QuestionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
@@ -21,29 +21,25 @@ class QuestionCard extends StatelessWidget {
           colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.neonCyan, width: 2.5),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.8),
+          width: 3,
+        ),
         boxShadow: [
-          // Inner glow (neon effect).
           BoxShadow(
-            color: AppColors.neonCyan.withValues(alpha: 0.6),
-            blurRadius: 4,
-            spreadRadius: 0,
-          ),
-          BoxShadow(
-            color: AppColors.neonCyan.withValues(alpha: 0.3),
-            blurRadius: 12,
+            color: Colors.white.withValues(alpha: 0.6),
+            blurRadius: 16,
             spreadRadius: 2,
           ),
           BoxShadow(
-            color: AppColors.neonCyan.withValues(alpha: 0.15),
-            blurRadius: 24,
+            color: Colors.white.withValues(alpha: 0.3),
+            blurRadius: 30,
             spreadRadius: 4,
           ),
-          // Card shadow.
           BoxShadow(
-            color: AppColors.cardGradientStart.withValues(alpha: 0.3),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
+            color: AppColors.cardGradientStart.withValues(alpha: 0.5),
+            blurRadius: 24,
+            offset: const Offset(0, 10),
           ),
         ],
       ),

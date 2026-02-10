@@ -134,13 +134,13 @@ class _MainMenuScreenState extends State<MainMenuScreen>
         const Text(
           'Aritmetikk',
           style: TextStyle(
-            fontSize: 36,
+            fontSize: 45,
             fontWeight: FontWeight.w800,
             color: AppColors.cardGradientStart,
           ),
         ),
         Positioned(
-          top: -22,
+          top: -28,
           left: 0,
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -149,7 +149,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                 opacity: 0,
                 child: Text(
                   'Aritm',
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800),
+                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.w800),
                 ),
               ),
               AnimatedBuilder(

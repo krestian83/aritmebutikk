@@ -9,7 +9,6 @@ import '../../game/services/sound_service.dart';
 import '../../game/systems/question_generator.dart';
 import '../../game/systems/scoring_system.dart';
 import '../widgets/answer/answer_grid.dart';
-import '../widgets/avatar/avatar_icon.dart';
 import '../widgets/background/animated_background.dart';
 import '../widgets/effects/category_max_celebration.dart';
 import '../widgets/effects/confetti_overlay.dart';
@@ -236,15 +235,13 @@ class _GameScreenState extends State<GameScreen> {
                 ),
                 tooltip: 'Avslutt og lagre poeng',
               ),
-              AvatarIcon(playerName: widget.playerName, size: 32),
-              const SizedBox(width: 8),
               Expanded(child: ScorePill(score: _scoring.score)),
               const SizedBox(width: 48),
             ],
           ),
           const SizedBox(height: 8),
           _buildDifficultyToggle(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 28),
           ShakeWidget(
             key: _questionCardKey,
             child: QuestionCard(
