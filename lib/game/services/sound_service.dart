@@ -13,9 +13,7 @@ class SoundService {
   SoundService._();
   static final instance = SoundService._();
 
-  final AudioPlayer _correctPlayer = AudioPlayer();
   final AudioPlayer _wrongPlayer = AudioPlayer();
-  final AudioPlayer _tapPlayer = AudioPlayer();
   final AudioPlayer _levelUpPlayer = AudioPlayer();
   final AudioPlayer _warningPlayer = AudioPlayer();
   final AudioPlayer _pressPlayer = AudioPlayer();
@@ -26,9 +24,7 @@ class SoundService {
     if (_initialized) return;
     _initialized = true;
 
-    _correctPlayer.setReleaseMode(ReleaseMode.stop);
     _wrongPlayer.setReleaseMode(ReleaseMode.stop);
-    _tapPlayer.setReleaseMode(ReleaseMode.stop);
     _levelUpPlayer.setReleaseMode(ReleaseMode.stop);
     _warningPlayer.setReleaseMode(ReleaseMode.stop);
     _pressPlayer.setReleaseMode(ReleaseMode.stop);
@@ -40,12 +36,8 @@ class SoundService {
     if (!AudioState.instance.soundEnabled) return;
     _init();
     switch (name) {
-      case 'correct':
-        await _playCorrect();
       case 'wrong':
         await _playWrong();
-      case 'tap':
-        await _playTap();
       case 'levelup':
         await _playLevelUp();
       case 'warning':
@@ -57,17 +49,6 @@ class SoundService {
     }
   }
 
-  Future<void> _playCorrect() async {
-    if (!kIsWeb) HapticFeedback.mediumImpact();
-    try {
-      _correctPlayer.stop();
-      _correctPlayer.play(
-        AssetSource('audio/correct.mp3'),
-        volume: 0.7 * AudioState.masterVolume,
-      );
-    } catch (_) {}
-  }
-
   Future<void> _playWrong() async {
     if (!kIsWeb) HapticFeedback.vibrate();
     try {
@@ -75,17 +56,6 @@ class SoundService {
       _wrongPlayer.play(
         AssetSource('audio/wrong.mp3'),
         volume: 0.3 * AudioState.masterVolume,
-      );
-    } catch (_) {}
-  }
-
-  Future<void> _playTap() async {
-    if (!kIsWeb) HapticFeedback.lightImpact();
-    try {
-      _tapPlayer.stop();
-      _tapPlayer.play(
-        AssetSource('audio/tap.mp3'),
-        volume: 0.5 * AudioState.masterVolume,
       );
     } catch (_) {}
   }
@@ -144,9 +114,7 @@ class SoundService {
   }
 
   void dispose() {
-    _correctPlayer.dispose();
     _wrongPlayer.dispose();
-    _tapPlayer.dispose();
     _levelUpPlayer.dispose();
     _warningPlayer.dispose();
     _pressPlayer.dispose();

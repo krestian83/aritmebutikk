@@ -101,13 +101,12 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                 child: Column(
                   children: [
                     const SizedBox(height: 48),
+                    _buildTitle(),
                     const Text(
                       '\u2795\u2796\u2716\u2797',
-                      style: TextStyle(fontSize: 48),
+                      style: TextStyle(fontSize: 36),
                     ),
-                    const SizedBox(height: 8),
-                    _buildTitle(),
-                    const Spacer(flex: 2),
+                    const Spacer(),
                     _buildProfileCard(),
                     const Spacer(),
                     _buildPlayButton(),
@@ -134,7 +133,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
         const Text(
           'Aritmetikk',
           style: TextStyle(
-            fontSize: 45,
+            fontSize: 64,
             fontWeight: FontWeight.w800,
             color: AppColors.cardGradientStart,
           ),
@@ -149,7 +148,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                 opacity: 0,
                 child: Text(
                   'Aritm',
-                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.w800),
+                  style: TextStyle(fontSize: 64, fontWeight: FontWeight.w800),
                 ),
               ),
               AnimatedBuilder(
@@ -166,7 +165,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                 child: Text(
                   '(bu)',
                   style: TextStyle(
-                    fontSize: 16.5,
+                    fontSize: 23,
                     fontWeight: FontWeight.w500,
                     color: AppColors.cardGradientEnd.withValues(alpha: 0.7),
                   ),
