@@ -17,7 +17,7 @@ class MuteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 16,
-      bottom: 48,
+      bottom: 16,
       child: ValueListenableBuilder<MuteMode>(
         valueListenable: AudioState.instance.notifier,
         builder: (context, mode, _) {
@@ -33,8 +33,8 @@ class MuteButton extends StatelessWidget {
           return GestureDetector(
             onTap: _onTap,
             child: Container(
-              width: 40,
-              height: 40,
+              width: 32,
+              height: 32,
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.85),
                 shape: BoxShape.circle,
