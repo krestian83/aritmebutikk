@@ -1,4 +1,3 @@
-import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/l10n/locale_service.dart';
@@ -9,6 +8,7 @@ import '../../game/services/credit_service.dart';
 import '../../game/services/profile_service.dart';
 import '../../game/services/sound_service.dart';
 import '../widgets/background/animated_background.dart';
+import '../widgets/common/flag_button.dart';
 import '../widgets/profile/profile_card.dart';
 import 'main_menu_screen.dart';
 import 'new_player_screen.dart';
@@ -73,13 +73,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _openNewPlayer({bool showBack = true}) async {
     final name = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (_) => NewPlayerScreen(showBack: showBack),
-      ),
+      MaterialPageRoute(builder: (_) => NewPlayerScreen(showBack: showBack)),
     );
     if (name != null && mounted) {
       _selectProfile(name);
-    } else {
+    } else if (mounted) {
       // Reload in case user backed out.
       _loading = true;
       _load();
@@ -178,13 +176,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         children: [
-          _FlagButton(
+          FlagButton(
             countryCode: 'GB',
             selected: current == AppLocale.en,
             onTap: () => _setLocale(AppLocale.en),
           ),
           const SizedBox(width: 6),
-          _FlagButton(
+          FlagButton(
             countryCode: 'NO',
             selected: current == AppLocale.nb,
             onTap: () => _setLocale(AppLocale.nb),
@@ -265,49 +263,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: AppColors.menuTextBrown.withValues(alpha: 0.15),
             ),
             elevation: 4,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FlagButton extends StatelessWidget {
-  final String countryCode;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _FlagButton({
-    required this.countryCode,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 27.0;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: selected
-                ? AppColors.menuTeal
-                : AppColors.menuTextBrown.withValues(alpha: 0.15),
-            width: selected ? 2.5 : 1,
-          ),
-        ),
-        child: ClipOval(
-          child: SizedBox(
-            width: size,
-            height: size,
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: CountryFlag.fromCountryCode(countryCode),
-            ),
           ),
         ),
       ),

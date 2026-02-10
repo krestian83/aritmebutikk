@@ -39,9 +39,10 @@ class _ArithmeticAppState extends State<ArithmeticApp>
     switch (state) {
       case AppLifecycleState.paused:
       case AppLifecycleState.inactive:
+        SoundService.instance.stopAll();
         unawaited(MusicService.instance.stop());
       case AppLifecycleState.resumed:
-        unawaited(MusicService.instance.start());
+        unawaited(MusicService.instance.resume());
       case _:
         break;
     }

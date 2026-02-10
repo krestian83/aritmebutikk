@@ -93,6 +93,12 @@ class S {
       _nb ? 'PIN-kodene er ikke like.' : "PINs don't match.";
   String get wrongPin => _nb ? 'Feil PIN-kode.' : 'Wrong PIN code.';
 
+  // ── Mute button ─────────────────────────────────────────
+
+  String get muteMusic => _nb ? 'Demp musikk' : 'Mute music';
+  String get muteAll => _nb ? 'Demp alt' : 'Mute all';
+  String get unmuteAudio => _nb ? 'Sl\u00E5 p\u00E5 lyd' : 'Turn on sound';
+
   // ── Game screen ──────────────────────────────────────────
 
   String get quitAndSave =>

@@ -12,9 +12,9 @@ class MusicService {
   static final instance = MusicService._();
 
   static const _tracks = [
-    'music/Study_Time_Fun_2026-02-07T220130.mp3',
-    'music/Lofi_Study_Flow_2026-02-10T152947.mp3',
-    'music/Lofi_Study_Flow_2026-02-10T153428.mp3',
+    'music/study_time_fun.mp3',
+    'music/lofi_study_flow_1.mp3',
+    'music/lofi_study_flow_2.mp3',
   ];
 
   final _random = Random();
@@ -67,7 +67,24 @@ class MusicService {
     }
   }
 
-  /// Pauses the music. Call [start] to resume.
+  /// Resumes the paused track (or starts fresh if nothing was
+  /// playing yet).
+  Future<void> resume() async {
+    if (!_started) return;
+    if (!AudioState.instance.musicEnabled) return;
+    if (_playing) return;
+    _playing = true;
+    try {
+      await _player?.resume();
+      debugPrint('[Music] resumed track $_currentIndex');
+    } catch (e) {
+      _playing = false;
+      debugPrint('[Music] resume error: $e');
+    }
+  }
+
+  /// Pauses the music. Call [resume] to continue or [start]
+  /// to pick a new track.
   Future<void> stop() async {
     _playing = false;
     try {
@@ -79,7 +96,7 @@ class MusicService {
   void applyMuteState() {
     if (!_started) return;
     if (AudioState.instance.musicEnabled) {
-      if (!_playing) start();
+      if (!_playing) resume();
     } else {
       stop();
     }

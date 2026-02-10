@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/l10n/strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../game/services/audio_state.dart';
 import '../../../game/services/music_service.dart';
@@ -17,16 +18,16 @@ class MuteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 16,
-      bottom: 16,
+      bottom: 24,
       child: ValueListenableBuilder<MuteMode>(
         valueListenable: AudioState.instance.notifier,
         builder: (context, mode, _) {
           final (icon, tooltip) = switch (mode) {
-            MuteMode.allOn => (Icons.volume_up_rounded, 'Demp musikk'),
-            MuteMode.musicOff => (Icons.music_off_rounded, 'Demp alt'),
+            MuteMode.allOn => (Icons.volume_up_rounded, S.current.muteMusic),
+            MuteMode.musicOff => (Icons.music_off_rounded, S.current.muteAll),
             MuteMode.allOff => (
               Icons.volume_off_rounded,
-              'Sl\u00E5 p\u00E5 lyd',
+              S.current.unmuteAudio,
             ),
           };
 

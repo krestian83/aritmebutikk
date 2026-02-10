@@ -1,4 +1,3 @@
-import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:fluttermoji/fluttermojiCustomizer.dart';
@@ -10,6 +9,7 @@ import '../../game/services/avatar_service.dart';
 import '../../game/services/profile_service.dart';
 import '../../game/services/sound_service.dart';
 import '../widgets/background/animated_background.dart';
+import '../widgets/common/flag_button.dart';
 
 /// Two-step new-player flow: name entry, then avatar editor.
 ///
@@ -174,13 +174,13 @@ class _NameStepState extends State<_NameStep> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _FlagButton(
+                FlagButton(
                   countryCode: 'GB',
                   selected: current == AppLocale.en,
                   onTap: () => _setLocale(AppLocale.en),
                 ),
                 const SizedBox(width: 8),
-                _FlagButton(
+                FlagButton(
                   countryCode: 'NO',
                   selected: current == AppLocale.nb,
                   onTap: () => _setLocale(AppLocale.nb),
@@ -315,49 +315,6 @@ class _NameStepState extends State<_NameStep> {
               ),
             ],
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FlagButton extends StatelessWidget {
-  final String countryCode;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _FlagButton({
-    required this.countryCode,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 27.0;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: selected
-                ? AppColors.menuTeal
-                : AppColors.menuTextBrown.withValues(alpha: 0.15),
-            width: selected ? 2.5 : 1,
-          ),
-        ),
-        child: ClipOval(
-          child: SizedBox(
-            width: size,
-            height: size,
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: CountryFlag.fromCountryCode(countryCode),
-            ),
-          ),
         ),
       ),
     );

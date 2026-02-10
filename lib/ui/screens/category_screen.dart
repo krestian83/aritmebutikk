@@ -161,7 +161,10 @@ class _CategoryCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(category.icon, style: const TextStyle(fontSize: 28)),
+                Text(
+                  category.icon,
+                  style: const TextStyle(fontSize: 28),
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(

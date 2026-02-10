@@ -1,5 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show debugPrint, kIsWeb;
 import 'package:flutter/services.dart';
 
 import 'audio_state.dart';
@@ -15,7 +15,6 @@ class SoundService {
 
   final AudioPlayer _wrongPlayer = AudioPlayer();
   final AudioPlayer _levelUpPlayer = AudioPlayer();
-  final AudioPlayer _warningPlayer = AudioPlayer();
   final AudioPlayer _pressPlayer = AudioPlayer();
   final AudioPlayer _successPlayer = AudioPlayer();
   bool _initialized = false;
@@ -26,7 +25,6 @@ class SoundService {
 
     _wrongPlayer.setReleaseMode(ReleaseMode.stop);
     _levelUpPlayer.setReleaseMode(ReleaseMode.stop);
-    _warningPlayer.setReleaseMode(ReleaseMode.stop);
     _pressPlayer.setReleaseMode(ReleaseMode.stop);
     _successPlayer.setReleaseMode(ReleaseMode.stop);
   }
@@ -43,8 +41,6 @@ class SoundService {
         await _playWrong();
       case 'levelup':
         await _playLevelUp();
-      case 'warning':
-        await _playWarning();
       case 'press':
         await _playPress();
       case 'success':
@@ -81,7 +77,9 @@ class SoundService {
         AssetSource('audio/wrong.mp3'),
         volume: 0.3 * AudioState.masterVolume,
       );
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[SFX] wrong error: $e');
+    }
   }
 
   Future<void> _playLevelUp() async {
@@ -91,17 +89,9 @@ class SoundService {
         AssetSource('audio/levelup.mp3'),
         volume: 0.6 * AudioState.masterVolume,
       );
-    } catch (_) {}
-  }
-
-  Future<void> _playWarning() async {
-    try {
-      _warningPlayer.stop();
-      _warningPlayer.play(
-        AssetSource('audio/warning.mp3'),
-        volume: 0.3 * AudioState.masterVolume,
-      );
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[SFX] levelup error: $e');
+    }
   }
 
   Future<void> _playPress() async {
@@ -111,7 +101,9 @@ class SoundService {
         AssetSource('audio/press.mp3'),
         volume: 0.16 * AudioState.masterVolume,
       );
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[SFX] press error: $e');
+    }
   }
 
   Future<void> _playSuccess() async {
@@ -121,13 +113,24 @@ class SoundService {
         AssetSource('audio/success.mp3'),
         volume: 0.476 * AudioState.masterVolume,
       );
+    } catch (e) {
+      debugPrint('[SFX] success error: $e');
+    }
+  }
+
+  /// Stops all SFX players so nothing replays on app resume.
+  void stopAll() {
+    try {
+      _wrongPlayer.stop();
+      _levelUpPlayer.stop();
+      _pressPlayer.stop();
+      _successPlayer.stop();
     } catch (_) {}
   }
 
   void dispose() {
     _wrongPlayer.dispose();
     _levelUpPlayer.dispose();
-    _warningPlayer.dispose();
     _pressPlayer.dispose();
     _successPlayer.dispose();
   }
