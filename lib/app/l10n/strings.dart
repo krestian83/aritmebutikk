@@ -38,7 +38,8 @@ class S {
   String get parentMenu => _nb ? 'Foreldremeny' : 'Parent Menu';
   String get newPlayer => _nb ? 'Ny spiller' : 'New player';
   String get done => _nb ? 'Ferdig' : 'Done';
-  String get createAvatar => _nb ? 'Lag avatar' : 'Create avatar';
+  String get chooseEmoji => _nb ? 'Velg emoji' : 'Choose emoji';
+  String get chooseYourEmoji => _nb ? 'Velg din emoji!' : 'Choose your emoji!';
   String get back => _nb ? 'Tilbake' : 'Back';
   String get cancel => _nb ? 'Avbryt' : 'Cancel';
   String get delete => _nb ? 'Slett' : 'Delete';
@@ -64,15 +65,13 @@ class S {
   String deleteProfileTitle(String name) =>
       _nb ? 'Slette $name?' : 'Delete $name?';
   String get deleteProfileBody => _nb
-      ? 'Alle poeng og avatar blir borte.'
-      : 'All points and avatar will be gone.';
+      ? 'Alle poeng og emoji blir borte.'
+      : 'All points and emoji will be gone.';
 
   // ── New player screen ────────────────────────────────────
 
   String get whatsYourName => _nb ? 'Hva heter du?' : "What's your name?";
   String get enterYourName => _nb ? 'Skriv inn navnet ditt' : 'Enter your name';
-  String get createYourAvatar =>
-      _nb ? 'Lag din avatar!' : 'Create your avatar!';
   String get enterAName => _nb ? 'Skriv inn et navn' : 'Enter a name';
   String get nameAlreadyTaken =>
       _nb ? 'Navnet er allerede i bruk' : 'Name is already taken';
@@ -212,32 +211,4 @@ class S {
   String get defScreenTime15 => _nb ? '15 min skjermtid' : '15 min screen time';
   String get defScreenTime30 => _nb ? '30 min skjermtid' : '30 min screen time';
   String get defScreenTime60 => _nb ? '1 time skjermtid' : '1 hour screen time';
-
-  // ── Avatar customizer attribute titles ─────────────────
-
-  String get avatarHairstyle => _nb ? 'Frisyre' : 'Hairstyle';
-  String get avatarHairColor => _nb ? 'H\u00E5rfarge' : 'Hair color';
-  String get avatarBeard => _nb ? 'Skjegg' : 'Beard';
-  String get avatarBeardColor => _nb ? 'Skjeggfarge' : 'Beard color';
-  String get avatarOutfit => _nb ? 'Antrekk' : 'Outfit';
-  String get avatarOutfitColor => _nb ? 'Antrekkfarge' : 'Outfit color';
-  String get avatarEyes => _nb ? '\u00D8yne' : 'Eyes';
-  String get avatarEyebrows => _nb ? '\u00D8yenbryn' : 'Eyebrows';
-  String get avatarMouth => _nb ? 'Munn' : 'Mouth';
-  String get avatarSkin => _nb ? 'Hud' : 'Skin';
-  String get avatarAccessories => _nb ? 'Tilbeh\u00F8r' : 'Accessories';
-
-  List<String> get avatarAttributeTitles => [
-    avatarHairstyle,
-    avatarHairColor,
-    avatarBeard,
-    avatarBeardColor,
-    avatarOutfit,
-    avatarOutfitColor,
-    avatarEyes,
-    avatarEyebrows,
-    avatarMouth,
-    avatarSkin,
-    avatarAccessories,
-  ];
 }

@@ -52,12 +52,60 @@ class _LogoPainter extends CustomPainter {
 
   _LogoPainter({required this.progress});
 
+  // Cached Paints.
+  static final Paint _cartPaint = Paint()
+    ..color = AppColors.menuTeal
+    ..style = PaintingStyle.stroke
+    ..strokeCap = StrokeCap.round
+    ..strokeJoin = StrokeJoin.round;
+
+  static final Paint _wheelPaint = Paint()..color = AppColors.menuOrange;
+
+  static final Paint _ball0Paint = Paint();
+  static final Paint _ball1Paint = Paint();
+  static final Paint _ball2Paint = Paint();
+  static final Paint _sparklePaint = Paint();
+  static final Paint _starPaint = Paint();
+
+  // Cached Paths.
+  static final Path _cartPath = Path();
+  static final Path _starPath = Path();
+
+  // Cached TextPainters for the three ball labels.
+  static TextPainter? _tp7;
+  static TextPainter? _tp3;
+  static TextPainter? _tpX;
+  static double _lastFontSize = 0;
+
+  static TextPainter _buildTp(String text, double fontSize) {
+    return TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w800,
+          color: Colors.white,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+  }
+
+  static void _ensureTextPainters(double fontSize) {
+    if (_lastFontSize == fontSize) return;
+    _lastFontSize = fontSize;
+    _tp7 = _buildTp('7', fontSize);
+    _tp3 = _buildTp('3', fontSize);
+    _tpX = _buildTp('\u00D7', fontSize);
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     final s = size.width / 120;
     final t = progress * 2 * pi;
 
-    // Cart tremble offset (integer freqs for seamless loop).
+    _ensureTextPainters(16 * s);
+
     final trembleX = sin(t * 2) * 0.6 * s;
     final trembleY = cos(t * 3) * 0.4 * s;
 
@@ -69,11 +117,44 @@ class _LogoPainter extends CustomPainter {
 
     canvas.restore();
 
-    // Each ball uses two integer freqs (dx, dy) for seamless loop.
-    _drawBall(canvas, s, t, 54, 48, 13, AppColors.menuTeal, '7', 3, 2);
-    _drawBall(canvas, s, t, 78, 44, 13, AppColors.menuOrange, '3', 2, 3);
     _drawBall(
-      canvas, s, t, 66, 62, 11, AppColors.menuTeal, '\u00D7', 4, 3,
+      canvas,
+      s,
+      t,
+      54,
+      48,
+      13,
+      AppColors.menuTeal,
+      _tp7!,
+      _ball0Paint,
+      3,
+      2,
+    );
+    _drawBall(
+      canvas,
+      s,
+      t,
+      78,
+      44,
+      13,
+      AppColors.menuOrange,
+      _tp3!,
+      _ball1Paint,
+      2,
+      3,
+    );
+    _drawBall(
+      canvas,
+      s,
+      t,
+      66,
+      62,
+      11,
+      AppColors.menuTeal,
+      _tpX!,
+      _ball2Paint,
+      4,
+      3,
       opacity: 0.7,
     );
 
@@ -82,14 +163,10 @@ class _LogoPainter extends CustomPainter {
   }
 
   void _drawCart(Canvas canvas, double s) {
-    final paint = Paint()
-      ..color = AppColors.menuTeal
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 5.5 * s
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
+    _cartPaint.strokeWidth = 5.5 * s;
 
-    final path = Path()
+    _cartPath.reset();
+    _cartPath
       ..moveTo(22 * s, 30 * s)
       ..lineTo(30 * s, 30 * s)
       ..lineTo(42 * s, 72 * s)
@@ -97,14 +174,13 @@ class _LogoPainter extends CustomPainter {
       ..lineTo(98 * s, 42 * s)
       ..lineTo(38 * s, 42 * s);
 
-    canvas.drawPath(path, paint);
+    canvas.drawPath(_cartPath, _cartPaint);
   }
 
   void _drawWheels(Canvas canvas, double s, double t) {
     final dx = sin(t * 2) * 0.5 * s;
-    final paint = Paint()..color = AppColors.menuOrange;
-    canvas.drawCircle(Offset(48 * s + dx, 84 * s), 7 * s, paint);
-    canvas.drawCircle(Offset(82 * s + dx, 84 * s), 7 * s, paint);
+    canvas.drawCircle(Offset(48 * s + dx, 84 * s), 7 * s, _wheelPaint);
+    canvas.drawCircle(Offset(82 * s + dx, 84 * s), 7 * s, _wheelPaint);
   }
 
   void _drawBall(
@@ -115,7 +191,8 @@ class _LogoPainter extends CustomPainter {
     double cy,
     double r,
     Color color,
-    String label,
+    TextPainter tp,
+    Paint paint,
     int freqX,
     int freqY, {
     double opacity = 0.9,
@@ -125,22 +202,10 @@ class _LogoPainter extends CustomPainter {
 
     final x = cx * s + dx;
     final y = cy * s + dy;
-    final rs = r * s;
 
-    final paint = Paint()..color = color.withValues(alpha: opacity);
-    canvas.drawCircle(Offset(x, y), rs, paint);
+    paint.color = color.withValues(alpha: opacity);
+    canvas.drawCircle(Offset(x, y), r * s, paint);
 
-    final tp = TextPainter(
-      text: TextSpan(
-        text: label,
-        style: TextStyle(
-          fontSize: 16 * s,
-          fontWeight: FontWeight.w800,
-          color: Colors.white,
-        ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
     tp.paint(canvas, Offset(x - tp.width / 2, y - tp.height / 2));
   }
 
@@ -149,8 +214,8 @@ class _LogoPainter extends CustomPainter {
       final v = 0.5 + 0.5 * sin(t * freq);
       final a = 0.2 + 0.3 * v;
       final sc = 0.7 + 0.3 * v;
-      final paint = Paint()..color = c.withValues(alpha: a);
-      canvas.drawCircle(Offset(cx * s, cy * s), r * s * sc, paint);
+      _sparklePaint.color = c.withValues(alpha: a);
+      canvas.drawCircle(Offset(cx * s, cy * s), r * s * sc, _sparklePaint);
     }
 
     sparkle(100, 28, 3, AppColors.menuOrange, 3);
@@ -160,9 +225,10 @@ class _LogoPainter extends CustomPainter {
 
   void _drawStar(Canvas canvas, double s, double t) {
     final a = 0.2 + 0.3 * (0.5 + 0.5 * sin(t * 2));
-    final paint = Paint()..color = AppColors.menuOrange.withValues(alpha: a);
+    _starPaint.color = AppColors.menuOrange.withValues(alpha: a);
 
-    final path = Path()
+    _starPath.reset();
+    _starPath
       ..moveTo(94 * s, 18 * s)
       ..lineTo(96 * s, 12 * s)
       ..lineTo(98 * s, 18 * s)
@@ -173,7 +239,7 @@ class _LogoPainter extends CustomPainter {
       ..lineTo(88 * s, 20 * s)
       ..close();
 
-    canvas.drawPath(path, paint);
+    canvas.drawPath(_starPath, _starPaint);
   }
 
   @override

@@ -28,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   List<String> _profiles = [];
   Map<String, int> _balances = {};
-  Map<String, String?> _avatarSvgs = {};
+  Map<String, String> _emojis = {};
   bool _loading = true;
 
   @override
@@ -50,23 +50,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     final balances = <String, int>{};
-    final svgs = <String, String?>{};
+    final emojis = <String, String>{};
 
     for (final name in profiles) {
       balances[name] = await _creditService.getBalance(name);
-      svgs[name] = await _avatarService.getAvatarSvg(name);
-    }
-
-    // Restore the previously active player to avoid side effects.
-    if (AvatarService.currentPlayer != null) {
-      await _avatarService.loadPlayer(AvatarService.currentPlayer!);
+      emojis[name] = await _avatarService.getEmoji(name);
     }
 
     if (!mounted) return;
     setState(() {
       _profiles = profiles;
       _balances = balances;
-      _avatarSvgs = svgs;
+      _emojis = emojis;
       _loading = false;
     });
   }
@@ -78,7 +73,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (name != null && mounted) {
       _selectProfile(name);
     } else if (mounted) {
-      // Reload in case user backed out.
       _loading = true;
       _load();
     }
@@ -227,7 +221,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return ProfileCard(
           name: name,
           balance: _balances[name] ?? 0,
-          avatarSvg: _avatarSvgs[name],
+          avatarEmoji: _emojis[name] ?? AvatarService.defaultEmoji,
           onTap: () => _selectProfile(name),
           onEdit: () => _editAvatar(name),
           onDelete: () => _deleteProfile(name),

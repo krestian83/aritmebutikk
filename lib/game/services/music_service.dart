@@ -67,8 +67,8 @@ class MusicService {
     }
   }
 
-  /// Resumes the paused track (or starts fresh if nothing was
-  /// playing yet).
+  /// Resumes the paused track. Does nothing if music was
+  /// never started or is already playing.
   Future<void> resume() async {
     if (!_started) return;
     if (!AudioState.instance.musicEnabled) return;
@@ -96,7 +96,7 @@ class MusicService {
   void applyMuteState() {
     if (!_started) return;
     if (AudioState.instance.musicEnabled) {
-      if (!_playing) resume();
+      if (!_playing) start();
     } else {
       stop();
     }

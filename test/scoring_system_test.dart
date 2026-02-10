@@ -17,24 +17,33 @@ void main() {
       // Build a long streak to exceed the cap.
       for (var i = 0; i < 20; i++) {
         final points = scoring.awardCorrect(difficultyMultiplier: 1);
-        expect(points, lessThanOrEqualTo(20),
-            reason: 'Streak $i: earned $points, should be <= 20');
+        expect(
+          points,
+          lessThanOrEqualTo(20),
+          reason: 'Streak $i: earned $points, should be <= 20',
+        );
       }
     });
 
     test('medium (2x) caps at 40 per question', () {
       for (var i = 0; i < 20; i++) {
         final points = scoring.awardCorrect(difficultyMultiplier: 2);
-        expect(points, lessThanOrEqualTo(40),
-            reason: 'Streak $i: earned $points, should be <= 40');
+        expect(
+          points,
+          lessThanOrEqualTo(40),
+          reason: 'Streak $i: earned $points, should be <= 40',
+        );
       }
     });
 
     test('hard (3x) caps at 60 per question', () {
       for (var i = 0; i < 20; i++) {
         final points = scoring.awardCorrect(difficultyMultiplier: 3);
-        expect(points, lessThanOrEqualTo(60),
-            reason: 'Streak $i: earned $points, should be <= 60');
+        expect(
+          points,
+          lessThanOrEqualTo(60),
+          reason: 'Streak $i: earned $points, should be <= 60',
+        );
       }
     });
 

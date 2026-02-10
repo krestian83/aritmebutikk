@@ -72,7 +72,7 @@ class SoundService {
 
   Future<void> _playWrong() async {
     try {
-      _wrongPlayer.stop();
+      await _wrongPlayer.stop();
       _wrongPlayer.play(
         AssetSource('audio/wrong.mp3'),
         volume: 0.3 * AudioState.masterVolume,
@@ -84,7 +84,7 @@ class SoundService {
 
   Future<void> _playLevelUp() async {
     try {
-      _levelUpPlayer.stop();
+      await _levelUpPlayer.stop();
       _levelUpPlayer.play(
         AssetSource('audio/levelup.mp3'),
         volume: 0.6 * AudioState.masterVolume,
@@ -96,7 +96,7 @@ class SoundService {
 
   Future<void> _playPress() async {
     try {
-      _pressPlayer.stop();
+      await _pressPlayer.stop();
       _pressPlayer.play(
         AssetSource('audio/press.mp3'),
         volume: 0.16 * AudioState.masterVolume,
@@ -108,7 +108,7 @@ class SoundService {
 
   Future<void> _playSuccess() async {
     try {
-      _successPlayer.stop();
+      await _successPlayer.stop();
       _successPlayer.play(
         AssetSource('audio/success.mp3'),
         volume: 0.476 * AudioState.masterVolume,

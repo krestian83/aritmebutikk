@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/l10n/strings.dart';
 import '../../app/theme/app_colors.dart';
-import '../../game/services/avatar_service.dart';
 import '../../game/services/credit_service.dart';
 import '../../game/services/sound_service.dart';
 import '../widgets/avatar/avatar_icon.dart';
@@ -26,9 +25,7 @@ class MainMenuScreen extends StatefulWidget {
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
   final _creditService = CreditService.instance;
-  final _avatarService = AvatarService.instance;
   int? _balance;
-  bool _hasAvatar = false;
 
   @override
   void initState() {
@@ -38,12 +35,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   Future<void> _loadData() async {
     final balance = await _creditService.getBalance(widget.playerName);
-    final hasAvatar = await _avatarService.hasAvatar(widget.playerName);
     if (!mounted) return;
-    setState(() {
-      _balance = balance;
-      _hasAvatar = hasAvatar;
-    });
+    setState(() => _balance = balance);
   }
 
   void _startGame() {
@@ -89,16 +82,13 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   LayoutBuilder(
                     builder: (context, constraints) {
                       return SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(
                             minHeight: constraints.maxHeight,
                           ),
                           child: Column(
-                            mainAxisAlignment:
-                                MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const SizedBox(height: 48),
                               _buildTitle(),
@@ -112,7 +102,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               _buildStoreButton(),
                               const SizedBox(height: 14),
                               _buildParentButton(),
-                              const SizedBox(height: 48),
+                              const SizedBox(height: 80),
                             ],
                           ),
                         ),
@@ -188,32 +178,30 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_hasAvatar) ...[
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFFF5E6D8), Color(0xFFE8D5C4)],
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFFF5E6D8), Color(0xFFE8D5C4)],
+                ),
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.menuTextBrown.withValues(alpha: 0.12),
+                    blurRadius: 12,
+                    offset: const Offset(0, 2),
                   ),
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.menuTextBrown.withValues(alpha: 0.12),
-                      blurRadius: 12,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: ClipOval(
-                  child: AvatarIcon(playerName: widget.playerName, size: 67),
-                ),
+                ],
               ),
-              const SizedBox(height: 12),
-            ],
+              child: ClipOval(
+                child: AvatarIcon(playerName: widget.playerName, size: 67),
+              ),
+            ),
+            const SizedBox(height: 12),
             Text(
               widget.playerName,
               style: GoogleFonts.nunito(
@@ -319,36 +307,40 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   Widget _buildParentButton() {
     return SizedBox(
       width: double.infinity,
-      child: GestureDetector(
-        onTap: _openParentMenu,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.35),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.menuTextBrown.withValues(alpha: 0.15),
-              width: 2,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.lock_outline,
-                size: 18,
-                color: AppColors.menuTextBrown,
+      child: Semantics(
+        button: true,
+        label: S.current.parentMenu,
+        child: GestureDetector(
+          onTap: _openParentMenu,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.35),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                width: 2,
               ),
-              const SizedBox(width: 8),
-              Text(
-                S.current.parentMenu,
-                style: GoogleFonts.nunito(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.lock_outline,
+                  size: 18,
                   color: AppColors.menuTextBrown,
                 ),
-              ),
-            ],
+                const SizedBox(width: 8),
+                Text(
+                  S.current.parentMenu,
+                  style: GoogleFonts.nunito(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.menuTextBrown,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -379,31 +371,34 @@ class _MenuButtonState extends State<_MenuButton> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) {
-        setState(() => _pressed = false);
-        widget.onPressed();
-      },
-      onTapCancel: () => setState(() => _pressed = false),
-      child: AnimatedScale(
-        scale: _pressed ? 0.97 : 1.0,
-        duration: const Duration(milliseconds: 120),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          decoration: BoxDecoration(
-            gradient: widget.gradient,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: widget.shadowColor,
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              ),
-            ],
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) {
+          setState(() => _pressed = false);
+          widget.onPressed();
+        },
+        onTapCancel: () => setState(() => _pressed = false),
+        child: AnimatedScale(
+          scale: _pressed ? 0.97 : 1.0,
+          duration: const Duration(milliseconds: 120),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            decoration: BoxDecoration(
+              gradient: widget.gradient,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: widget.shadowColor,
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            child: widget.child,
           ),
-          alignment: Alignment.center,
-          child: widget.child,
         ),
       ),
     );

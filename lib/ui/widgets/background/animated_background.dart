@@ -111,9 +111,10 @@ class _BackgroundPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // Pastel gradient background.
     final bgPaint = Paint()
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
+        stops: [0.0, 0.35, 0.65, 1.0],
         colors: [
           AppColors.menuBgTop,
           AppColors.menuBgMid,

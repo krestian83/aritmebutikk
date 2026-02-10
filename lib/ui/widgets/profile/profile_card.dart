@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../app/l10n/strings.dart';
 import '../../../app/theme/app_colors.dart';
 
-/// A card displaying a player profile with avatar, name,
+/// A card displaying a player profile with emoji avatar, name,
 /// balance, and action icons.
 class ProfileCard extends StatelessWidget {
   final String name;
   final int balance;
-  final String? avatarSvg;
+  final String avatarEmoji;
   final VoidCallback onTap;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -18,7 +17,7 @@ class ProfileCard extends StatelessWidget {
     super.key,
     required this.name,
     required this.balance,
-    required this.avatarSvg,
+    required this.avatarEmoji,
     required this.onTap,
     required this.onEdit,
     required this.onDelete,
@@ -64,10 +63,8 @@ class ProfileCard extends StatelessWidget {
         color: Colors.grey.shade200,
         shape: BoxShape.circle,
       ),
-      clipBehavior: Clip.antiAlias,
-      child: avatarSvg != null
-          ? SvgPicture.string(avatarSvg!, fit: BoxFit.cover)
-          : const Icon(Icons.person, size: 32, color: Colors.grey),
+      alignment: Alignment.center,
+      child: Text(avatarEmoji, style: const TextStyle(fontSize: 32)),
     );
   }
 

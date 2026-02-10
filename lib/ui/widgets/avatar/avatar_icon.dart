@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../game/services/avatar_service.dart';
-import 'avatar_widget.dart';
 
-/// Self-loading avatar icon that loads the player's fluttermoji
-/// from [AvatarService] before displaying.
+/// Displays the player's emoji avatar at a given [size].
 ///
-/// Renders as an empty [SizedBox] if the player has no saved
-/// avatar, so screens don't need to check separately.
+/// Always renders (with a default fallback emoji), so screens
+/// don't need to check whether an avatar exists.
 class AvatarIcon extends StatefulWidget {
   final String playerName;
   final double size;
@@ -19,9 +17,7 @@ class AvatarIcon extends StatefulWidget {
 }
 
 class _AvatarIconState extends State<AvatarIcon> {
-  final _service = AvatarService.instance;
-  bool _loaded = false;
-  bool _hasAvatar = false;
+  String _emoji = AvatarService.defaultEmoji;
 
   @override
   void initState() {
@@ -33,35 +29,22 @@ class _AvatarIconState extends State<AvatarIcon> {
   void didUpdateWidget(AvatarIcon oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.playerName != widget.playerName) {
-      _loaded = false;
-      _hasAvatar = false;
       _load();
     }
   }
 
   Future<void> _load() async {
-    final exists = await _service.hasAvatar(widget.playerName);
-    if (!exists) {
-      if (!mounted) return;
-      setState(() {
-        _loaded = true;
-        _hasAvatar = false;
-      });
-      return;
-    }
-    await _service.loadPlayer(widget.playerName);
+    final emoji = await AvatarService.instance.getEmoji(widget.playerName);
     if (!mounted) return;
-    setState(() {
-      _loaded = true;
-      _hasAvatar = true;
-    });
+    setState(() => _emoji = emoji);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_loaded || !_hasAvatar) {
-      return const SizedBox.shrink();
-    }
-    return AvatarWidget(size: widget.size);
+    return SizedBox(
+      width: widget.size,
+      height: widget.size,
+      child: FittedBox(child: Text(_emoji)),
+    );
   }
 }
