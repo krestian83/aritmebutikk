@@ -201,6 +201,12 @@ class S {
   String get suggSleepover => 'Sleepover';
   String get suggNewBook => _nb ? 'Ny bok' : 'New book';
 
+  // ── Default store item names ─────────────────────────────
+
+  String get defScreenTime15 => _nb ? '15 min skjermtid' : '15 min screen time';
+  String get defScreenTime30 => _nb ? '30 min skjermtid' : '30 min screen time';
+  String get defScreenTime60 => _nb ? '1 time skjermtid' : '1 hour screen time';
+
   // ── Avatar customizer attribute titles ─────────────────
 
   String get avatarHairstyle => _nb ? 'Frisyre' : 'Hairstyle';

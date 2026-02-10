@@ -30,7 +30,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
   Future<void> _load() async {
     final items = await _service.loadItems();
     if (!mounted) return;
-    setState(() => _items = items);
+    setState(() => _items = items.map((e) => e.localized).toList());
   }
 
   List<String> get _categories {

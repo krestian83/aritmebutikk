@@ -48,7 +48,7 @@ class _StoreScreenState extends State<StoreScreen>
     if (!mounted) return;
     setState(() {
       _balance = balance;
-      _items = items;
+      _items = items.map((e) => e.localized).toList();
       _ledger = ledger;
     });
   }
