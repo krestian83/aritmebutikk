@@ -214,25 +214,13 @@ class _MainMenuScreenState extends State<MainMenuScreen>
               AvatarIcon(playerName: widget.playerName, size: 67),
               const SizedBox(height: 8),
             ],
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  widget.playerName,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.cardGradientStart,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Icon(
-                  Icons.swap_horiz,
-                  size: 20,
-                  color: AppColors.cardGradientStart
-                      .withValues(alpha: 0.5),
-                ),
-              ],
+            Text(
+              widget.playerName,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: AppColors.cardGradientStart,
+              ),
             ),
             if (_balance != null) ...[
               const SizedBox(height: 4),

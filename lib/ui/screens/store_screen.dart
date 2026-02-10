@@ -100,7 +100,7 @@ class _StoreScreenState extends State<StoreScreen>
                 indicatorColor: AppColors.cardGradientStart,
                 tabs: const [
                   Tab(text: 'Butikk'),
-                  Tab(text: 'Logg'),
+                  Tab(text: 'Kvitteringer'),
                 ],
               ),
               Expanded(

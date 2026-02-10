@@ -239,9 +239,9 @@ class _GameScreenState extends State<GameScreen> {
               const SizedBox(width: 48),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
           _buildDifficultyToggle(),
-          const SizedBox(height: 28),
+          const SizedBox(height: 10),
           ShakeWidget(
             key: _questionCardKey,
             child: QuestionCard(
