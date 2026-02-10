@@ -104,8 +104,8 @@ class AvatarService {
     try {
       return await _getAvatarSvgUnsafe(playerName);
     } finally {
-      _svgLock = null;
       completer.complete();
+      _svgLock = null;
     }
   }
 

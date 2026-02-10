@@ -1,6 +1,6 @@
 {
-    "name": "arithmetic",
-    "short_name": "arithmetic",
+    "name": "MathMarket",
+    "short_name": "MathMarket",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../../app/l10n/strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../game/models/game_category.dart';
 import 'confetti_particle.dart';
@@ -24,17 +25,6 @@ class CategoryMaxCelebration extends StatefulWidget {
 
 class _CategoryMaxCelebrationState extends State<CategoryMaxCelebration>
     with SingleTickerProviderStateMixin {
-  static const _messages = [
-    'Fantastisk! Du har mestret',
-    'Utrolig! Full pott i',
-    'Kjempebra! Du klarte alle poeng i',
-    'Wow! Alle poeng samlet i',
-    'Strålende! Du er mester i',
-    'Helt rett! Maks poeng i',
-    'Imponerende! Du knuste',
-    'Superstjerne! Du fullførte',
-  ];
-
   late final AnimationController _controller;
   late final List<ConfettiParticle> _particles;
   late final String _message;
@@ -43,7 +33,8 @@ class _CategoryMaxCelebrationState extends State<CategoryMaxCelebration>
   @override
   void initState() {
     super.initState();
-    _message = _messages[_random.nextInt(_messages.length)];
+    final messages = S.current.celebrationMessages;
+    _message = messages[_random.nextInt(messages.length)];
 
     _controller =
         AnimationController(
@@ -141,7 +132,7 @@ class _CategoryMaxCelebrationState extends State<CategoryMaxCelebration>
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Trykk for å fortsette',
+                      S.current.tapToContinue,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white.withValues(alpha: 0.7),

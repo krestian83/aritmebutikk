@@ -42,18 +42,14 @@ class QuestionGenerator {
         final b = _randRange(config.minOperand, config.maxOperand);
         return (a, b, a * b);
       case '÷':
-        // Both divisor and answer stay within [2, maxOperand] to
-        // avoid trivial ÷1 and x÷x=1 patterns. Re-roll if the
-        // dividend exceeds the configured cap.
+        // Divisor from [2, maxOperand]; quotient from [2, cap/divisor]
+        // so dividend stays within maxDividend and we avoid trivial
+        // ÷1 and x÷x=1 patterns.
         final cap = config.maxDividend;
         final lo = max(2, config.minOperand);
-        int b = lo, answer = lo;
-        var rolls = 0;
-        do {
-          b = _randRange(lo, config.maxOperand);
-          answer = _randRange(lo, config.maxOperand);
-          rolls++;
-        } while (cap > 0 && b * answer > cap && rolls < 100);
+        final b = _randRange(lo, config.maxOperand);
+        final maxQuotient = cap > 0 ? max(lo, cap ~/ b) : config.maxOperand;
+        final answer = _randRange(lo, maxQuotient);
         return (b * answer, b, answer);
       default:
         return (1, 1, 2);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app/l10n/strings.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/models/ledger_entry.dart';
 import '../../game/models/store_item.dart';
@@ -57,10 +58,7 @@ class _StoreScreenState extends State<StoreScreen>
     if (_balance < item.cost) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Ikke nok poeng! Trenger ${item.cost}, '
-            'har $_balance.',
-          ),
+          content: Text(S.current.notEnoughPoints(item.cost, _balance)),
           backgroundColor: AppColors.timerRed,
         ),
       );
@@ -78,7 +76,7 @@ class _StoreScreenState extends State<StoreScreen>
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Kj\u00F8pt ${item.name}!'),
+        content: Text(S.current.boughtItem(item.name)),
         backgroundColor: AppColors.green,
       ),
     );
@@ -98,9 +96,9 @@ class _StoreScreenState extends State<StoreScreen>
                 labelColor: AppColors.cardGradientStart,
                 unselectedLabelColor: Colors.grey,
                 indicatorColor: AppColors.cardGradientStart,
-                tabs: const [
-                  Tab(text: 'Butikk'),
-                  Tab(text: 'Kvitteringer'),
+                tabs: [
+                  Tab(text: S.current.store),
+                  Tab(text: S.current.receipts),
                 ],
               ),
               Expanded(
@@ -131,11 +129,11 @@ class _StoreScreenState extends State<StoreScreen>
               color: AppColors.cardGradientStart,
             ),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
-              'Butikk',
+              S.current.store,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
                 color: AppColors.cardGradientStart,
@@ -172,7 +170,7 @@ class _StoreScreenState extends State<StoreScreen>
           const Text('\u2B50', style: TextStyle(fontSize: 24)),
           const SizedBox(width: 10),
           Text(
-            '$_balance poeng',
+            S.current.pointsAmount(_balance),
             style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
@@ -193,7 +191,7 @@ class _StoreScreenState extends State<StoreScreen>
     if (_items!.isEmpty) {
       return Center(
         child: Text(
-          'Ingen varer i butikken.',
+          S.current.noItemsInStore,
           style: TextStyle(
             fontSize: 18,
             color: AppColors.cardGradientStart.withValues(alpha: 0.6),
@@ -223,7 +221,7 @@ class _StoreScreenState extends State<StoreScreen>
     if (_ledger!.isEmpty) {
       return Center(
         child: Text(
-          'Ingen kj\u00F8p enn\u00E5.',
+          S.current.noPurchasesYet,
           style: TextStyle(
             fontSize: 18,
             color: AppColors.cardGradientStart.withValues(alpha: 0.6),
@@ -289,7 +287,7 @@ class _StoreItemCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${item.cost} poeng',
+                  S.current.pointsAmount(item.cost),
                   style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
                 ),
               ],
@@ -307,9 +305,9 @@ class _StoreItemCard extends StatelessWidget {
               ),
               side: BorderSide(color: AppColors.outline, width: 1),
             ),
-            child: const Text(
-              'Kj\u00F8p',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+            child: Text(
+              S.current.buy,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
             ),
           ),
         ],

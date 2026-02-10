@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app/l10n/strings.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/models/store_item.dart';
 import '../../game/models/store_suggestion.dart';
@@ -81,22 +82,19 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Slett vare?',
-          style: TextStyle(
+        title: Text(
+          S.current.deleteItemTitle,
+          style: const TextStyle(
             fontWeight: FontWeight.w700,
             color: AppColors.cardGradientStart,
           ),
         ),
-        content: Text(
-          'Er du sikker pa at du vil slette '
-          '"${item.name}"?',
-        ),
+        content: Text(S.current.deleteItemConfirm(item.name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
             child: Text(
-              'Avbryt',
+              S.current.cancel,
               style: TextStyle(color: Colors.grey.shade500),
             ),
           ),
@@ -110,7 +108,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               ),
               side: BorderSide(color: AppColors.outline, width: 1),
             ),
-            child: const Text('Slett'),
+            child: Text(S.current.delete),
           ),
         ],
       ),
@@ -126,22 +124,19 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Tilbakestill?',
-          style: TextStyle(
+        title: Text(
+          S.current.resetTitle,
+          style: const TextStyle(
             fontWeight: FontWeight.w700,
             color: AppColors.cardGradientStart,
           ),
         ),
-        content: const Text(
-          'Dette fjerner alle endringer og '
-          'tilbakestiller til standardvarene.',
-        ),
+        content: Text(S.current.resetDescription),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
             child: Text(
-              'Avbryt',
+              S.current.cancel,
               style: TextStyle(color: Colors.grey.shade500),
             ),
           ),
@@ -155,7 +150,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               ),
               side: BorderSide(color: AppColors.outline, width: 1),
             ),
-            child: const Text('Tilbakestill'),
+            child: Text(S.current.reset),
           ),
         ],
       ),
@@ -187,9 +182,9 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
           side: BorderSide(color: AppColors.outline, width: 1),
         ),
         icon: const Icon(Icons.add),
-        label: const Text(
-          'Legg til vare',
-          style: TextStyle(fontWeight: FontWeight.w600),
+        label: Text(
+          S.current.addItem,
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -210,11 +205,11 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               color: AppColors.cardGradientStart,
             ),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
-              'Rediger butikk',
+              S.current.editStore,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
                 color: AppColors.cardGradientStart,
@@ -229,10 +224,10 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
             onSelected: (val) {
               if (val == 'reset') _resetDefaults();
             },
-            itemBuilder: (_) => const [
+            itemBuilder: (_) => [
               PopupMenuItem(
                 value: 'reset',
-                child: Text('Tilbakestill standardvarer'),
+                child: Text(S.current.resetDefaults),
               ),
             ],
           ),
@@ -266,8 +261,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
           padding: const EdgeInsets.symmetric(vertical: 32),
           child: Center(
             child: Text(
-              'Ingen varer enna.\n'
-              'Legg til fra forslagene under!',
+              S.current.noItemsYet,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -318,9 +312,9 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
       children: [
         const Divider(),
         const SizedBox(height: 4),
-        const Text(
-          'Forslag',
-          style: TextStyle(
+        Text(
+          S.current.suggestions,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w800,
             color: AppColors.cardGradientStart,
@@ -328,7 +322,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
         ),
         const SizedBox(height: 4),
         Text(
-          'Trykk for a legge til raskt',
+          S.current.tapToAddQuickly,
           style: TextStyle(fontSize: 13, color: Colors.grey.shade500),
         ),
         const SizedBox(height: 10),
@@ -410,7 +404,7 @@ class _EditorItemCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${item.cost} poeng',
+                  S.current.pointsAmount(item.cost),
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                 ),
               ],

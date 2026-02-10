@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../app/l10n/strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../game/services/store_item_service.dart';
 
@@ -58,14 +59,14 @@ class _PinDialogState extends State<PinDialog> {
   Future<void> _submit() async {
     final pin = _pinController.text.trim();
     if (pin.length != 4) {
-      setState(() => _error = 'PIN ma vaere 4 siffer.');
+      setState(() => _error = S.current.pinMustBe4Digits);
       return;
     }
 
     if (_isNewPin) {
       final confirm = _confirmController.text.trim();
       if (pin != confirm) {
-        setState(() => _error = 'PIN-kodene er ikke like.');
+        setState(() => _error = S.current.pinsDoNotMatch);
         return;
       }
       await _service.setPin(pin);
@@ -77,7 +78,7 @@ class _PinDialogState extends State<PinDialog> {
       if (ok) {
         Navigator.of(context).pop(true);
       } else {
-        setState(() => _error = 'Feil PIN-kode.');
+        setState(() => _error = S.current.wrongPin);
         _pinController.clear();
       }
     }
@@ -94,7 +95,7 @@ class _PinDialogState extends State<PinDialog> {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text(
-        _isNewPin ? 'Opprett foreldrekode' : 'Skriv inn foreldrekode',
+        _isNewPin ? S.current.createParentCode : S.current.enterParentCode,
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 20,
@@ -109,7 +110,7 @@ class _PinDialogState extends State<PinDialog> {
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
-                'Velg en 4-sifret kode som bare du vet.',
+                S.current.pinInstruction,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
               ),
@@ -123,7 +124,7 @@ class _PinDialogState extends State<PinDialog> {
             const SizedBox(height: 12),
             _buildPinField(
               controller: _confirmController,
-              label: 'Bekreft PIN',
+              label: S.current.confirmPin,
               autofocus: false,
             ),
           ],
@@ -143,7 +144,10 @@ class _PinDialogState extends State<PinDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text('Avbryt', style: TextStyle(color: Colors.grey.shade500)),
+          child: Text(
+            S.current.cancel,
+            style: TextStyle(color: Colors.grey.shade500),
+          ),
         ),
         ElevatedButton(
           onPressed: _submit,
@@ -155,7 +159,7 @@ class _PinDialogState extends State<PinDialog> {
             ),
             side: BorderSide(color: AppColors.outline, width: 1),
           ),
-          child: Text(_isNewPin ? 'Lagre' : 'OK'),
+          child: Text(_isNewPin ? S.current.save : 'OK'),
         ),
       ],
     );

@@ -1,7 +1,6 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
+import '../../app/l10n/strings.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/services/avatar_service.dart';
 import '../../game/services/credit_service.dart';
@@ -24,28 +23,16 @@ class MainMenuScreen extends StatefulWidget {
   State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
 
-class _MainMenuScreenState extends State<MainMenuScreen>
-    with SingleTickerProviderStateMixin {
+class _MainMenuScreenState extends State<MainMenuScreen> {
   final _creditService = CreditService.instance;
   final _avatarService = AvatarService.instance;
-  late final AnimationController _wiggleCtrl;
   int? _balance;
   bool _hasAvatar = false;
 
   @override
   void initState() {
     super.initState();
-    _wiggleCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2500),
-    )..repeat();
     _loadData();
-  }
-
-  @override
-  void dispose() {
-    _wiggleCtrl.dispose();
-    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -127,54 +114,13 @@ class _MainMenuScreenState extends State<MainMenuScreen>
   }
 
   Widget _buildTitle() {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        const Text(
-          'Aritmetikk',
-          style: TextStyle(
-            fontSize: 64,
-            fontWeight: FontWeight.w800,
-            color: AppColors.cardGradientStart,
-          ),
-        ),
-        Positioned(
-          top: -28,
-          left: 0,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Opacity(
-                opacity: 0,
-                child: Text(
-                  'Aritm',
-                  style: TextStyle(fontSize: 64, fontWeight: FontWeight.w800),
-                ),
-              ),
-              AnimatedBuilder(
-                animation: _wiggleCtrl,
-                builder: (_, child) {
-                  final t = _wiggleCtrl.value;
-                  final dy = math.sin(t * 2 * math.pi) * 3;
-                  final angle = math.sin(t * 2 * math.pi) * 0.06;
-                  return Transform.translate(
-                    offset: Offset(0, dy),
-                    child: Transform.rotate(angle: angle, child: child),
-                  );
-                },
-                child: Text(
-                  '(bu)',
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.cardGradientEnd.withValues(alpha: 0.7),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+    return Text(
+      S.current.appName,
+      style: const TextStyle(
+        fontSize: 64,
+        fontWeight: FontWeight.w800,
+        color: AppColors.cardGradientStart,
+      ),
     );
   }
 
@@ -241,13 +187,10 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      '\u2B50',
-                      style: TextStyle(fontSize: 13),
-                    ),
+                    const Text('\u2B50', style: TextStyle(fontSize: 13)),
                     const SizedBox(width: 6),
                     Text(
-                      '$_balance poeng',
+                      S.current.pointsAmount(_balance!),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
@@ -279,9 +222,9 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           side: const BorderSide(color: AppColors.outline),
           elevation: 4,
         ),
-        child: const Text(
-          'Spill',
-          style: TextStyle(
+        child: Text(
+          S.current.play,
+          style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
@@ -306,9 +249,9 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           side: const BorderSide(color: AppColors.outline),
           elevation: 4,
         ),
-        child: const Text(
-          'Butikk',
-          style: TextStyle(
+        child: Text(
+          S.current.store,
+          style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
@@ -324,9 +267,9 @@ class _MainMenuScreenState extends State<MainMenuScreen>
       child: OutlinedButton.icon(
         onPressed: _openParentMenu,
         icon: const Icon(Icons.lock_outline, size: 18),
-        label: const Text(
-          'Foreldremeny',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        label: Text(
+          S.current.parentMenu,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.grey.shade600,

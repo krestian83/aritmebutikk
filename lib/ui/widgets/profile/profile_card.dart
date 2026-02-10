@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../app/l10n/strings.dart';
 import '../../../app/theme/app_colors.dart';
 
 /// A card displaying a player profile with avatar, name,
@@ -89,7 +90,7 @@ class ProfileCard extends StatelessWidget {
             const Text('\u2B50', style: TextStyle(fontSize: 13)),
             const SizedBox(width: 4),
             Text(
-              '$balance poeng',
+              S.current.pointsAmount(balance),
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,

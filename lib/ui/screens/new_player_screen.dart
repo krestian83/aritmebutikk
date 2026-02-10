@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:fluttermoji/fluttermojiCustomizer.dart';
 
+import '../../app/l10n/strings.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/services/avatar_service.dart';
 import '../../game/services/profile_service.dart';
@@ -58,13 +59,13 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
   Future<bool> _validateAndSaveName() async {
     final name = _nameController.text.trim();
     if (name.isEmpty) {
-      setState(() => _errorText = 'Skriv inn et navn');
+      setState(() => _errorText = S.current.enterAName);
       return false;
     }
 
     final added = await _profileService.addProfile(name);
     if (!added) {
-      setState(() => _errorText = 'Navnet er allerede i bruk');
+      setState(() => _errorText = S.current.nameAlreadyTaken);
       return false;
     }
 
@@ -158,9 +159,9 @@ class _NameStep extends StatelessWidget {
               color: AppColors.cardGradientStart,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Hva heter du?',
-              style: TextStyle(
+            Text(
+              S.current.whatsYourName,
+              style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w800,
                 color: AppColors.cardGradientStart,
@@ -192,7 +193,7 @@ class _NameStep extends StatelessWidget {
                   color: AppColors.cardGradientStart,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Skriv inn navnet ditt',
+                  hintText: S.current.enterYourName,
                   hintStyle: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
@@ -233,9 +234,9 @@ class _NameStep extends StatelessWidget {
                   side: const BorderSide(color: AppColors.outline),
                   elevation: 4,
                 ),
-                child: const Text(
-                  'Ferdig',
-                  style: TextStyle(
+                child: Text(
+                  S.current.done,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1,
@@ -249,9 +250,12 @@ class _NameStep extends StatelessWidget {
               child: OutlinedButton.icon(
                 onPressed: onCreateAvatar,
                 icon: const Icon(Icons.face, size: 20),
-                label: const Text(
-                  'Lag avatar',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                label: Text(
+                  S.current.createAvatar,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.cardGradientStart,
@@ -267,7 +271,7 @@ class _NameStep extends StatelessWidget {
             TextButton(
               onPressed: onBack,
               child: Text(
-                'Tilbake',
+                S.current.back,
                 style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
               ),
             ),
@@ -296,9 +300,9 @@ class _AvatarStep extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Lag din avatar!',
-              style: TextStyle(
+            Text(
+              S.current.createYourAvatar,
+              style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w800,
                 color: AppColors.cardGradientStart,
@@ -312,7 +316,11 @@ class _AvatarStep extends StatelessWidget {
             const SizedBox(height: 12),
             SizedBox(
               height: 320,
-              child: FluttermojiCustomizer(autosave: true, scaffoldHeight: 320),
+              child: FluttermojiCustomizer(
+                autosave: true,
+                scaffoldHeight: 320,
+                attributeTitles: S.current.avatarAttributeTitles,
+              ),
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -329,9 +337,9 @@ class _AvatarStep extends StatelessWidget {
                   side: const BorderSide(color: AppColors.outline),
                   elevation: 4,
                 ),
-                child: const Text(
-                  'Ferdig',
-                  style: TextStyle(
+                child: Text(
+                  S.current.done,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1,

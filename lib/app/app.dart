@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../game/services/music_service.dart';
 import '../game/services/sound_service.dart';
 import '../ui/screens/profile_screen.dart';
+import 'l10n/locale_service.dart';
+import 'l10n/strings.dart';
 import 'theme/app_theme.dart';
 
 /// Root application widget.
@@ -21,6 +23,7 @@ class _ArithmeticAppState extends State<ArithmeticApp>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    LocaleService.instance.load();
   }
 
   @override
@@ -49,11 +52,16 @@ class _ArithmeticAppState extends State<ArithmeticApp>
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTapDown: (_) => unawaited(MusicService.instance.start()),
-      child: MaterialApp(
-        title: 'Aritme(bu)tikk',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.theme,
-        home: const ProfileScreen(),
+      child: ValueListenableBuilder<AppLocale>(
+        valueListenable: LocaleService.instance.locale,
+        builder: (_, _, _) {
+          return MaterialApp(
+            title: S.current.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.theme,
+            home: const ProfileScreen(),
+          );
+        },
       ),
     );
   }

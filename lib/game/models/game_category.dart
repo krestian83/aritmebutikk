@@ -1,3 +1,4 @@
+import '../../app/l10n/strings.dart';
 import '../config/level_config.dart';
 
 /// The four arithmetic categories.
@@ -8,10 +9,10 @@ enum GameCategory {
   division;
 
   String get label => switch (this) {
-    addition => 'Addisjon',
-    subtraction => 'Subtraksjon',
-    multiplication => 'Ganging',
-    division => 'Deling',
+    addition => S.current.addition,
+    subtraction => S.current.subtraction,
+    multiplication => S.current.multiplication,
+    division => S.current.division,
   };
 
   String get icon => switch (this) {
@@ -40,9 +41,9 @@ enum Difficulty {
   hard;
 
   String get label => switch (this) {
-    easy => 'Lett',
-    medium => 'Middels',
-    hard => 'Vanskelig',
+    easy => S.current.easy,
+    medium => S.current.medium,
+    hard => S.current.hard,
   };
 
   /// Points multiplier: easy 1x, medium 2x, hard 3x.
@@ -58,78 +59,78 @@ LevelConfig configFor(GameCategory category, Difficulty difficulty) {
   return switch ((category, difficulty)) {
     // ── Addition ──
     (GameCategory.addition, Difficulty.easy) => const LevelConfig(
-      name: 'Addisjon - Lett',
+      name: 'Addition - Easy',
       operators: ['+'],
       minOperand: 1,
       maxOperand: 10,
     ),
     (GameCategory.addition, Difficulty.medium) => const LevelConfig(
-      name: 'Addisjon - Middels',
+      name: 'Addition - Medium',
       operators: ['+'],
       minOperand: 11,
       maxOperand: 50,
     ),
     (GameCategory.addition, Difficulty.hard) => const LevelConfig(
-      name: 'Addisjon - Vanskelig',
+      name: 'Addition - Hard',
       operators: ['+'],
       minOperand: 51,
       maxOperand: 200,
     ),
     // ── Subtraction ──
     (GameCategory.subtraction, Difficulty.easy) => const LevelConfig(
-      name: 'Subtraksjon - Lett',
+      name: 'Subtraction - Easy',
       operators: ['-'],
       minOperand: 1,
       maxOperand: 10,
     ),
     (GameCategory.subtraction, Difficulty.medium) => const LevelConfig(
-      name: 'Subtraksjon - Middels',
+      name: 'Subtraction - Medium',
       operators: ['-'],
       minOperand: 11,
       maxOperand: 50,
     ),
     (GameCategory.subtraction, Difficulty.hard) => const LevelConfig(
-      name: 'Subtraksjon - Vanskelig',
+      name: 'Subtraction - Hard',
       operators: ['-'],
       minOperand: 51,
       maxOperand: 100,
     ),
     // ── Multiplication ──
     (GameCategory.multiplication, Difficulty.easy) => const LevelConfig(
-      name: 'Ganging - Lett',
+      name: 'Multiplication - Easy',
       operators: ['\u00D7'],
       minOperand: 1,
       maxOperand: 5,
     ),
     (GameCategory.multiplication, Difficulty.medium) => const LevelConfig(
-      name: 'Ganging - Middels',
+      name: 'Multiplication - Medium',
       operators: ['\u00D7'],
       minOperand: 6,
       maxOperand: 10,
     ),
     (GameCategory.multiplication, Difficulty.hard) => const LevelConfig(
-      name: 'Ganging - Vanskelig',
+      name: 'Multiplication - Hard',
       operators: ['\u00D7'],
       minOperand: 11,
       maxOperand: 15,
     ),
     // ── Division ──
     (GameCategory.division, Difficulty.easy) => const LevelConfig(
-      name: 'Deling - Lett',
+      name: 'Division - Easy',
       operators: ['\u00F7'],
       minOperand: 1,
       maxOperand: 5,
       maxDividend: 25,
     ),
     (GameCategory.division, Difficulty.medium) => const LevelConfig(
-      name: 'Deling - Middels',
+      name: 'Division - Medium',
       operators: ['\u00F7'],
       minOperand: 6,
       maxOperand: 12,
       maxDividend: 80,
     ),
     (GameCategory.division, Difficulty.hard) => const LevelConfig(
-      name: 'Deling - Vanskelig',
+      name: 'Division - Hard',
       operators: ['\u00F7'],
       minOperand: 13,
       maxOperand: 20,

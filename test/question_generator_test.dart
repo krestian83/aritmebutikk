@@ -37,8 +37,10 @@ void main() {
       for (var i = 0; i < n; i++) {
         final q = generator.generate(config);
         if (category == GameCategory.division) {
-          lo = min(lo, min(q.operandB, q.correctAnswer));
-          hi = max(hi, max(q.operandB, q.correctAnswer));
+          // Only track divisor range; quotient is derived from
+          // maxDividend / divisor and intentionally differs.
+          lo = min(lo, q.operandB);
+          hi = max(hi, q.operandB);
         } else {
           lo = min(lo, min(q.operandA, q.operandB));
           hi = max(hi, max(q.operandA, q.operandB));
@@ -127,43 +129,36 @@ void main() {
             if (category == GameCategory.division) {
               expect(
                 q.operandB,
-                inInclusiveRange(
-                  max(2, config.minOperand),
-                  config.maxOperand,
-                ),
+                inInclusiveRange(max(2, config.minOperand), config.maxOperand),
                 reason: 'divisor out of range: ${q.displayText}',
               );
+              // Quotient upper bound depends on dividend cap
+              // and actual divisor, mirroring the generator logic.
+              final lo = max(2, config.minOperand);
+              final maxQ = config.maxDividend > 0
+                  ? max(lo, config.maxDividend ~/ q.operandB)
+                  : config.maxOperand;
               expect(
                 q.correctAnswer,
-                inInclusiveRange(
-                  max(2, config.minOperand),
-                  config.maxOperand,
-                ),
+                inInclusiveRange(lo, maxQ),
                 reason: 'quotient out of range: ${q.displayText}',
               );
               if (config.maxDividend > 0) {
                 expect(
                   q.operandA,
                   lessThanOrEqualTo(config.maxDividend),
-                  reason:
-                      'dividend exceeds cap: ${q.displayText}',
+                  reason: 'dividend exceeds cap: ${q.displayText}',
                 );
               }
             } else {
               expect(
                 q.operandA,
-                inInclusiveRange(
-                  config.minOperand,
-                  config.maxOperand,
-                ),
+                inInclusiveRange(config.minOperand, config.maxOperand),
                 reason: 'operandA out of range: ${q.displayText}',
               );
               expect(
                 q.operandB,
-                inInclusiveRange(
-                  config.minOperand,
-                  config.maxOperand,
-                ),
+                inInclusiveRange(config.minOperand, config.maxOperand),
                 reason: 'operandB out of range: ${q.displayText}',
               );
             }

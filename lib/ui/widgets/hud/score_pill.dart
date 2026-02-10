@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/l10n/strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_theme.dart';
 
@@ -56,7 +57,10 @@ class _ScorePillState extends State<ScorePill> {
                 tween: IntTween(begin: from, end: value),
                 duration: const Duration(milliseconds: 300),
                 builder: (context, val, _) {
-                  return Text('Poeng: $val', style: AppTheme.pillStyle);
+                  return Text(
+                    '${S.current.pointsColon} $val',
+                    style: AppTheme.pillStyle,
+                  );
                 },
               ),
             ],

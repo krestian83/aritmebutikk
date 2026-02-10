@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../app/l10n/strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../game/models/store_item.dart';
 import '../../../game/models/store_suggestion.dart';
@@ -116,7 +117,7 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text(
-        _isEditing ? 'Rediger vare' : 'Ny vare',
+        _isEditing ? S.current.editItem : S.current.newItem,
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 20,
@@ -152,7 +153,10 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('Avbryt', style: TextStyle(color: Colors.grey.shade500)),
+          child: Text(
+            S.current.cancel,
+            style: TextStyle(color: Colors.grey.shade500),
+          ),
         ),
         ElevatedButton(
           onPressed: _submit,
@@ -164,7 +168,7 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
             ),
             side: BorderSide(color: AppColors.outline, width: 1),
           ),
-          child: Text(_isEditing ? 'Lagre' : 'Legg til'),
+          child: Text(_isEditing ? S.current.save : S.current.addButton),
         ),
       ],
     );
@@ -174,9 +178,9 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
     return TextFormField(
       controller: _nameCtrl,
       textCapitalization: TextCapitalization.sentences,
-      decoration: _inputDecoration('Navn'),
+      decoration: _inputDecoration(S.current.nameField),
       validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Navn er pakrevd' : null,
+          (v == null || v.trim().isEmpty) ? S.current.nameRequired : null,
     );
   }
 
@@ -185,9 +189,9 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
       controller: _iconCtrl,
       textAlign: TextAlign.center,
       style: const TextStyle(fontSize: 24),
-      decoration: _inputDecoration('Ikon'),
+      decoration: _inputDecoration(S.current.iconField),
       validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Ikon er pakrevd' : null,
+          (v == null || v.trim().isEmpty) ? S.current.iconRequired : null,
     );
   }
 
@@ -196,10 +200,10 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
       controller: _costCtrl,
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      decoration: _inputDecoration('Poeng'),
+      decoration: _inputDecoration(S.current.costField),
       validator: (v) {
         final n = int.tryParse(v ?? '');
-        if (n == null || n <= 0) return 'Maa vaere > 0';
+        if (n == null || n <= 0) return S.current.mustBePositive;
         return null;
       },
     );
@@ -210,7 +214,10 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
       ...widget.categories.map(
         (c) => DropdownMenuItem(value: c, child: Text(c)),
       ),
-      const DropdownMenuItem(value: '__new__', child: Text('+ Ny kategori')),
+      DropdownMenuItem(
+        value: '__new__',
+        child: Text(S.current.newCategoryOption),
+      ),
     ];
 
     final current = _isNewCategory
@@ -222,7 +229,7 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
     return DropdownButtonFormField<String>(
       initialValue: current,
       items: items,
-      decoration: _inputDecoration('Kategori'),
+      decoration: _inputDecoration(S.current.categoryField),
       onChanged: (val) {
         setState(() {
           if (val == '__new__') {
@@ -234,9 +241,9 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
         });
       },
       validator: (v) {
-        if (v == null || v.isEmpty) return 'Velg kategori';
+        if (v == null || v.isEmpty) return S.current.selectCategoryDropdown;
         if (v == '__new__' && _newCategoryCtrl.text.trim().isEmpty) {
-          return 'Skriv inn ny kategori';
+          return S.current.enterNewCategory;
         }
         return null;
       },
@@ -247,9 +254,9 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
     return TextFormField(
       controller: _newCategoryCtrl,
       textCapitalization: TextCapitalization.sentences,
-      decoration: _inputDecoration('Ny kategori'),
+      decoration: _inputDecoration(S.current.newCategoryLabel),
       validator: (v) =>
-          (v == null || v.trim().isEmpty) ? 'Skriv inn kategori' : null,
+          (v == null || v.trim().isEmpty) ? S.current.enterNewCategory : null,
     );
   }
 

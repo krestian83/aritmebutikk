@@ -32,7 +32,10 @@ class SoundService {
   }
 
   /// Plays a named sound effect with optional haptic feedback.
+  ///
+  /// Haptics always fire regardless of mute state.
   Future<void> play(String name) async {
+    _fireHaptic(name);
     if (!AudioState.instance.soundEnabled) return;
     _init();
     switch (name) {
@@ -49,8 +52,29 @@ class SoundService {
     }
   }
 
+  void _fireHaptic(String name) {
+    if (kIsWeb) return;
+    switch (name) {
+      case 'wrong':
+        HapticFeedback.vibrate();
+      case 'levelup':
+        HapticFeedback.heavyImpact();
+        Future.delayed(
+          const Duration(milliseconds: 150),
+          () => HapticFeedback.heavyImpact(),
+        );
+        Future.delayed(
+          const Duration(milliseconds: 300),
+          () => HapticFeedback.heavyImpact(),
+        );
+      case 'press':
+        HapticFeedback.lightImpact();
+      case 'success':
+        HapticFeedback.mediumImpact();
+    }
+  }
+
   Future<void> _playWrong() async {
-    if (!kIsWeb) HapticFeedback.vibrate();
     try {
       _wrongPlayer.stop();
       _wrongPlayer.play(
@@ -61,17 +85,6 @@ class SoundService {
   }
 
   Future<void> _playLevelUp() async {
-    if (!kIsWeb) {
-      HapticFeedback.heavyImpact();
-      Future.delayed(
-        const Duration(milliseconds: 150),
-        () => HapticFeedback.heavyImpact(),
-      );
-      Future.delayed(
-        const Duration(milliseconds: 300),
-        () => HapticFeedback.heavyImpact(),
-      );
-    }
     try {
       _levelUpPlayer.stop();
       _levelUpPlayer.play(
@@ -92,23 +105,21 @@ class SoundService {
   }
 
   Future<void> _playPress() async {
-    if (!kIsWeb) HapticFeedback.lightImpact();
     try {
       _pressPlayer.stop();
       _pressPlayer.play(
         AssetSource('audio/press.mp3'),
-        volume: 0.2 * AudioState.masterVolume,
+        volume: 0.16 * AudioState.masterVolume,
       );
     } catch (_) {}
   }
 
   Future<void> _playSuccess() async {
-    if (!kIsWeb) HapticFeedback.mediumImpact();
     try {
       _successPlayer.stop();
       _successPlayer.play(
         AssetSource('audio/success.mp3'),
-        volume: 0.7 * AudioState.masterVolume,
+        volume: 0.476 * AudioState.masterVolume,
       );
     } catch (_) {}
   }

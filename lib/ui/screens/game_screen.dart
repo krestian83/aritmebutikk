@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app/l10n/strings.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/config/level_config.dart';
 import '../../game/models/game_category.dart';
@@ -34,7 +35,7 @@ class GameScreen extends StatefulWidget {
   State<GameScreen> createState() => _GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen> {
+class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   final _questionGenerator = QuestionGenerator();
   final _scoring = ScoringSystem();
   final _sound = SoundService.instance;
@@ -54,9 +55,13 @@ class _GameScreenState extends State<GameScreen> {
   /// Credits already banked for this category before the session.
   int _previouslyEarned = 0;
 
+  /// Score value already persisted, so we don't double-save.
+  int _lastSavedScore = 0;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _scoring.reset();
     _loadPreviousEarned();
     _nextQuestion();
@@ -115,14 +120,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   Future<void> _triggerMaxCelebration() async {
-    final earned = _scoring.score.value;
-    if (earned > 0) {
-      await _creditService.addCredits(
-        widget.playerName,
-        earned,
-        widget.category,
-      );
-    }
+    await _saveUnsavedCredits();
     if (!mounted) return;
     _sound.play('levelup');
     setState(() => _showMaxCelebration = true);
@@ -152,20 +150,33 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _quitToMenu() async {
     _sound.play('press');
-    final earned = _scoring.score.value;
-    if (earned > 0) {
-      await _creditService.addCredits(
-        widget.playerName,
-        earned,
-        widget.category,
-      );
-    }
+    await _saveUnsavedCredits();
     if (!mounted) return;
     Navigator.of(context).pop();
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      _saveUnsavedCredits();
+    }
+  }
+
+  Future<void> _saveUnsavedCredits() async {
+    final unsaved = _scoring.score.value - _lastSavedScore;
+    if (unsaved <= 0) return;
+    final actual = await _creditService.addCredits(
+      widget.playerName,
+      unsaved,
+      widget.category,
+    );
+    _lastSavedScore += actual;
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _scoring.dispose();
     super.dispose();
   }
@@ -233,7 +244,7 @@ class _GameScreenState extends State<GameScreen> {
                   Icons.arrow_back_rounded,
                   color: AppColors.cardGradientStart,
                 ),
-                tooltip: 'Avslutt og lagre poeng',
+                tooltip: S.current.quitAndSave,
               ),
               Expanded(child: ScorePill(score: _scoring.score)),
               const SizedBox(width: 48),

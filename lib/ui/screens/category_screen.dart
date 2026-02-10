@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app/l10n/strings.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/models/game_category.dart';
 import '../../game/services/credit_service.dart';
@@ -103,11 +104,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
               color: AppColors.cardGradientStart,
             ),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
-              'Velg kategori',
+              S.current.selectCategory,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w800,
                 color: AppColors.cardGradientStart,
@@ -195,7 +196,7 @@ class _CategoryCard extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8),
                 child: Center(
                   child: Text(
-                    'Maks poeng opptjent!',
+                    S.current.maxPointsEarned,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -209,7 +210,7 @@ class _CategoryCard extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 10),
                 child: Center(
                   child: Text(
-                    'Trykk for \u00e5 spille',
+                    S.current.tapToPlay,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

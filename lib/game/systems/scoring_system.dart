@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 
 /// Manages score, streak, and scoring logic.
@@ -29,7 +31,7 @@ class ScoringSystem {
       difficultyMultiplier: difficultyMultiplier,
     );
     final penalty = (wouldHaveEarned / 2).round();
-    score.value = (score.value - penalty).clamp(0, score.value);
+    score.value = max(0, score.value - penalty);
     streak.value = 0;
     return penalty;
   }
