@@ -86,7 +86,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
           S.current.deleteItemTitle,
           style: const TextStyle(
             fontWeight: FontWeight.w700,
-            color: AppColors.cardGradientStart,
+            color: AppColors.menuTeal,
           ),
         ),
         content: Text(S.current.deleteItemConfirm(item.name)),
@@ -106,7 +106,10 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              side: BorderSide(color: AppColors.outline, width: 1),
+              side: BorderSide(
+                color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                width: 1,
+              ),
             ),
             child: Text(S.current.delete),
           ),
@@ -128,7 +131,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
           S.current.resetTitle,
           style: const TextStyle(
             fontWeight: FontWeight.w700,
-            color: AppColors.cardGradientStart,
+            color: AppColors.menuTeal,
           ),
         ),
         content: Text(S.current.resetDescription),
@@ -148,7 +151,10 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              side: BorderSide(color: AppColors.outline, width: 1),
+              side: BorderSide(
+                color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                width: 1,
+              ),
             ),
             child: Text(S.current.reset),
           ),
@@ -175,11 +181,14 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _addItem(),
-        backgroundColor: AppColors.cardGradientStart,
+        backgroundColor: AppColors.menuTeal,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppColors.outline, width: 1),
+          side: BorderSide(
+            color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+            width: 1,
+          ),
         ),
         icon: const Icon(Icons.add),
         label: Text(
@@ -202,7 +211,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
             },
             icon: const Icon(
               Icons.arrow_back_rounded,
-              color: AppColors.cardGradientStart,
+              color: AppColors.menuTextBrown,
             ),
           ),
           Expanded(
@@ -212,15 +221,12 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
-                color: AppColors.cardGradientStart,
+                color: AppColors.menuTextBrown,
               ),
             ),
           ),
           PopupMenuButton<String>(
-            icon: const Icon(
-              Icons.more_vert,
-              color: AppColors.cardGradientStart,
-            ),
+            icon: const Icon(Icons.more_vert, color: AppColors.menuTextBrown),
             onSelected: (val) {
               if (val == 'reset') _resetDefaults();
             },
@@ -239,7 +245,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
   Widget _buildBody() {
     if (_items == null) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.cardGradientStart),
+        child: CircularProgressIndicator(color: AppColors.menuTeal),
       );
     }
 
@@ -265,7 +271,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                color: AppColors.cardGradientStart.withValues(alpha: 0.6),
+                color: AppColors.menuTeal.withValues(alpha: 0.6),
               ),
             ),
           ),
@@ -283,7 +289,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color: AppColors.cardGradientStart,
+              color: AppColors.menuTeal,
             ),
           ),
         ),
@@ -317,7 +323,7 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: AppColors.cardGradientStart,
+            color: AppColors.menuTeal,
           ),
         ),
         const SizedBox(height: 4),
@@ -348,7 +354,9 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
                   label: Text(s.name),
                   labelStyle: const TextStyle(fontSize: 13),
                   backgroundColor: Colors.white.withValues(alpha: 0.85),
-                  side: BorderSide(color: AppColors.outline),
+                  side: BorderSide(
+                    color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                  ),
                   onPressed: () => _addItem(suggestion: s),
                 ),
             ],
@@ -378,10 +386,12 @@ class _EditorItemCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.outline),
+        border: Border.all(
+          color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.cardGradientStart.withValues(alpha: 0.08),
+            color: AppColors.menuTeal.withValues(alpha: 0.08),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -400,7 +410,7 @@ class _EditorItemCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.cardGradientStart,
+                    color: AppColors.menuTextDark,
                   ),
                 ),
                 Text(
@@ -413,7 +423,7 @@ class _EditorItemCard extends StatelessWidget {
           IconButton(
             onPressed: onEdit,
             icon: const Icon(Icons.edit, size: 20),
-            color: AppColors.cardGradientStart,
+            color: AppColors.menuTeal,
             visualDensity: VisualDensity.compact,
           ),
           IconButton(

@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'app_colors.dart';
+
 /// App-wide theme configuration.
 abstract final class AppTheme {
   static ThemeData get theme {
-    final textTheme = GoogleFonts.baloo2TextTheme();
+    final textTheme = GoogleFonts.nunitoTextTheme();
     return ThemeData(
       useMaterial3: true,
       textTheme: textTheme,
-      colorSchemeSeed: const Color(0xFF0050D0),
+      colorSchemeSeed: AppColors.menuTeal,
       brightness: Brightness.light,
     );
   }
 
-  static final questionStyle = GoogleFonts.baloo2(
+  static final questionStyle = GoogleFonts.nunito(
     fontSize: 48,
     fontWeight: FontWeight.w600,
     color: Colors.white,
     letterSpacing: 2,
   );
 
-  static final answerStyle = GoogleFonts.baloo2(
+  static final answerStyle = GoogleFonts.nunito(
     fontSize: 40,
     fontWeight: FontWeight.w600,
     color: Colors.white,
@@ -29,15 +31,15 @@ abstract final class AppTheme {
     ],
   );
 
-  static final pillStyle = GoogleFonts.baloo2(
+  static final pillStyle = GoogleFonts.nunito(
     fontSize: 18,
     fontWeight: FontWeight.w700,
     color: Colors.white,
   );
 
-  static final levelStyle = GoogleFonts.baloo2(
+  static final levelStyle = GoogleFonts.nunito(
     fontSize: 14,
     fontWeight: FontWeight.w700,
-    color: const Color(0xFF0060E0),
+    color: AppColors.menuTeal,
   );
 }

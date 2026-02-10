@@ -122,7 +122,7 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: AppColors.cardGradientStart,
+          color: AppColors.menuTeal,
         ),
       ),
       content: SingleChildScrollView(
@@ -161,12 +161,15 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
         ElevatedButton(
           onPressed: _submit,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.cardGradientStart,
+            backgroundColor: AppColors.menuTeal,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            side: BorderSide(color: AppColors.outline, width: 1),
+            side: BorderSide(
+              color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+              width: 1,
+            ),
           ),
           child: Text(_isEditing ? S.current.save : S.current.addButton),
         ),
@@ -268,10 +271,7 @@ class _ItemFormDialogState extends State<ItemFormDialog> {
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(
-          color: AppColors.cardGradientStart,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: AppColors.menuTeal, width: 2),
       ),
     );
   }

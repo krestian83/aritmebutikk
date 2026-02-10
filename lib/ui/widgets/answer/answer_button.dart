@@ -80,7 +80,9 @@ class _AnswerButtonState extends State<AnswerButton>
                   end: Alignment.bottomRight,
                   colors: [lightBright, bright],
                 ),
-                border: Border.all(color: AppColors.outline),
+                border: Border.all(
+                  color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: widget.color.withValues(alpha: 0.5),

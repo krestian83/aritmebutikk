@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _profiles = [];
         _loading = false;
       });
-      _openNewPlayer();
+      _openNewPlayer(showBack: false);
       return;
     }
 
@@ -71,10 +71,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  Future<void> _openNewPlayer() async {
-    final name = await Navigator.of(
-      context,
-    ).push<String>(MaterialPageRoute(builder: (_) => const NewPlayerScreen()));
+  Future<void> _openNewPlayer({bool showBack = true}) async {
+    final name = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (_) => NewPlayerScreen(showBack: showBack),
+      ),
+    );
     if (name != null && mounted) {
       _selectProfile(name);
     } else {
@@ -194,7 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
-                color: AppColors.cardGradientStart,
+                color: AppColors.menuTextDark,
               ),
             ),
           ),
@@ -212,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
-            color: AppColors.cardGradientStart.withValues(alpha: 0.6),
+            color: AppColors.menuTextBrown.withValues(alpha: 0.6),
           ),
         ),
       );
@@ -253,13 +255,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.cardGradientStart,
+            backgroundColor: AppColors.menuTeal,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 14),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            side: const BorderSide(color: AppColors.outline),
+            side: BorderSide(
+              color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+            ),
             elevation: 4,
           ),
         ),
@@ -291,8 +295,8 @@ class _FlagButton extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(
             color: selected
-                ? AppColors.cardGradientStart
-                : AppColors.outline,
+                ? AppColors.menuTeal
+                : AppColors.menuTextBrown.withValues(alpha: 0.15),
             width: selected ? 2.5 : 1,
           ),
         ),

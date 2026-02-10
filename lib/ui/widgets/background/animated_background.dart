@@ -58,11 +58,11 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
 
   _FloatingShape _createShape() {
     final colors = [
-      AppColors.shapeCyan.withValues(alpha: 0.4),
-      AppColors.shapeOrange.withValues(alpha: 0.3),
-      AppColors.shapeBlue.withValues(alpha: 0.35),
-      AppColors.neonCyan.withValues(alpha: 0.2),
-      AppColors.orange.withValues(alpha: 0.25),
+      AppColors.menuTeal.withValues(alpha: 0.15),
+      AppColors.menuTealLight.withValues(alpha: 0.12),
+      AppColors.menuOrange.withValues(alpha: 0.10),
+      AppColors.menuOrangeLight.withValues(alpha: 0.08),
+      AppColors.menuTealDark.withValues(alpha: 0.10),
     ];
     return _FloatingShape(
       x: _random.nextDouble(),
@@ -114,7 +114,12 @@ class _BackgroundPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [AppColors.bgTop, AppColors.bgMiddle, AppColors.bgBottom],
+        colors: [
+          AppColors.menuBgTop,
+          AppColors.menuBgMid,
+          AppColors.menuBgLow,
+          AppColors.menuBgBottom,
+        ],
       ).createShader(Offset.zero & size);
     canvas.drawRect(Offset.zero & size, bgPaint);
 

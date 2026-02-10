@@ -1,7 +1,9 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:fluttermoji/fluttermojiCustomizer.dart';
 
+import '../../app/l10n/locale_service.dart';
 import '../../app/l10n/strings.dart';
 import '../../app/theme/app_colors.dart';
 import '../../game/services/avatar_service.dart';
@@ -15,8 +17,9 @@ import '../widgets/background/animated_background.dart';
 /// straight to avatar editing for an existing player.
 class NewPlayerScreen extends StatefulWidget {
   final String? editName;
+  final bool showBack;
 
-  const NewPlayerScreen({super.key, this.editName});
+  const NewPlayerScreen({super.key, this.editName, this.showBack = true});
 
   @override
   State<NewPlayerScreen> createState() => _NewPlayerScreenState();
@@ -118,6 +121,7 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
                     errorText: _errorText,
                     onFinish: _finishWithoutAvatar,
                     onCreateAvatar: _goToAvatar,
+                    canGoBack: widget.showBack,
                     onBack: () => Navigator.of(context).pop(),
                   ),
           ),
@@ -127,12 +131,13 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
   }
 }
 
-class _NameStep extends StatelessWidget {
+class _NameStep extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final String? errorText;
   final VoidCallback onFinish;
   final VoidCallback onCreateAvatar;
+  final bool canGoBack;
   final VoidCallback onBack;
 
   const _NameStep({
@@ -142,29 +147,55 @@ class _NameStep extends StatelessWidget {
     required this.errorText,
     required this.onFinish,
     required this.onCreateAvatar,
+    required this.canGoBack,
     required this.onBack,
   });
 
   @override
+  State<_NameStep> createState() => _NameStepState();
+}
+
+class _NameStepState extends State<_NameStep> {
+  void _setLocale(AppLocale locale) {
+    SoundService.instance.play('press');
+    LocaleService.instance.setLocale(locale);
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final current = LocaleService.instance.locale.value;
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.person_add,
-              size: 64,
-              color: AppColors.cardGradientStart,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _FlagButton(
+                  countryCode: 'GB',
+                  selected: current == AppLocale.en,
+                  onTap: () => _setLocale(AppLocale.en),
+                ),
+                const SizedBox(width: 8),
+                _FlagButton(
+                  countryCode: 'NO',
+                  selected: current == AppLocale.nb,
+                  onTap: () => _setLocale(AppLocale.nb),
+                ),
+              ],
             ),
+            const SizedBox(height: 20),
+            const Icon(Icons.person_add, size: 64, color: AppColors.menuTeal),
             const SizedBox(height: 16),
             Text(
               S.current.whatsYourName,
               style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w800,
-                color: AppColors.cardGradientStart,
+                color: AppColors.menuTeal,
               ),
             ),
             const SizedBox(height: 24),
@@ -172,32 +203,34 @@ class _NameStep extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.outline),
+                border: Border.all(
+                  color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.cardGradientStart.withValues(alpha: 0.15),
+                    color: AppColors.menuTeal.withValues(alpha: 0.15),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
               child: TextField(
-                controller: controller,
-                focusNode: focusNode,
+                controller: widget.controller,
+                focusNode: widget.focusNode,
                 autofocus: true,
                 textAlign: TextAlign.center,
                 textCapitalization: TextCapitalization.words,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.cardGradientStart,
+                  color: AppColors.menuTeal,
                 ),
                 decoration: InputDecoration(
                   hintText: S.current.enterYourName,
                   hintStyle: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.cardGradientStart.withValues(alpha: 0.4),
+                    color: AppColors.menuTeal.withValues(alpha: 0.4),
                   ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
@@ -205,13 +238,13 @@ class _NameStep extends StatelessWidget {
                     vertical: 16,
                   ),
                 ),
-                onSubmitted: (_) => onFinish(),
+                onSubmitted: (_) => widget.onFinish(),
               ),
             ),
-            if (errorText != null) ...[
+            if (widget.errorText != null) ...[
               const SizedBox(height: 8),
               Text(
-                errorText!,
+                widget.errorText!,
                 style: const TextStyle(
                   color: AppColors.coral,
                   fontSize: 14,
@@ -223,7 +256,7 @@ class _NameStep extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: onFinish,
+                onPressed: widget.onFinish,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.green,
                   foregroundColor: Colors.white,
@@ -231,7 +264,9 @@ class _NameStep extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  side: const BorderSide(color: AppColors.outline),
+                  side: BorderSide(
+                    color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                  ),
                   elevation: 4,
                 ),
                 child: Text(
@@ -248,7 +283,7 @@ class _NameStep extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: onCreateAvatar,
+                onPressed: widget.onCreateAvatar,
                 icon: const Icon(Icons.face, size: 20),
                 label: Text(
                   S.current.createAvatar,
@@ -258,8 +293,10 @@ class _NameStep extends StatelessWidget {
                   ),
                 ),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.cardGradientStart,
-                  side: const BorderSide(color: AppColors.outline),
+                  foregroundColor: AppColors.menuTeal,
+                  side: BorderSide(
+                    color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -267,15 +304,60 @@ class _NameStep extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
-            TextButton(
-              onPressed: onBack,
-              child: Text(
-                S.current.back,
-                style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+            if (widget.canGoBack) ...[
+              const SizedBox(height: 12),
+              TextButton(
+                onPressed: widget.onBack,
+                child: Text(
+                  S.current.back,
+                  style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                ),
               ),
-            ),
+            ],
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FlagButton extends StatelessWidget {
+  final String countryCode;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _FlagButton({
+    required this.countryCode,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const size = 27.0;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: selected
+                ? AppColors.menuTeal
+                : AppColors.menuTextBrown.withValues(alpha: 0.15),
+            width: selected ? 2.5 : 1,
+          ),
+        ),
+        child: ClipOval(
+          child: SizedBox(
+            width: size,
+            height: size,
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: CountryFlag.fromCountryCode(countryCode),
+            ),
+          ),
         ),
       ),
     );
@@ -305,7 +387,7 @@ class _AvatarStep extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w800,
-                color: AppColors.cardGradientStart,
+                color: AppColors.menuTeal,
               ),
             ),
             const SizedBox(height: 16),
@@ -334,7 +416,9 @@ class _AvatarStep extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  side: const BorderSide(color: AppColors.outline),
+                  side: BorderSide(
+                    color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                  ),
                   elevation: 4,
                 ),
                 child: Text(

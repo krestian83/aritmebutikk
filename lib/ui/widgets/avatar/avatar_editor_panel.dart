@@ -49,17 +49,13 @@ class AvatarEditorPanel extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: AppColors.cardGradientStart,
+            color: AppColors.menuTeal,
           ),
         ),
         const Spacer(),
         GestureDetector(
           onTap: onClose,
-          child: const Icon(
-            Icons.close,
-            size: 24,
-            color: AppColors.cardGradientStart,
-          ),
+          child: const Icon(Icons.close, size: 24, color: AppColors.menuTeal),
         ),
       ],
     );

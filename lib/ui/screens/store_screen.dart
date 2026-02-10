@@ -93,9 +93,9 @@ class _StoreScreenState extends State<StoreScreen>
               _buildBalanceBanner(),
               TabBar(
                 controller: _tabController,
-                labelColor: AppColors.cardGradientStart,
+                labelColor: AppColors.menuTeal,
                 unselectedLabelColor: Colors.grey,
-                indicatorColor: AppColors.cardGradientStart,
+                indicatorColor: AppColors.menuTeal,
                 tabs: [
                   Tab(text: S.current.store),
                   Tab(text: S.current.receipts),
@@ -126,7 +126,7 @@ class _StoreScreenState extends State<StoreScreen>
             },
             icon: const Icon(
               Icons.arrow_back_rounded,
-              color: AppColors.cardGradientStart,
+              color: AppColors.menuTextBrown,
             ),
           ),
           Expanded(
@@ -136,7 +136,7 @@ class _StoreScreenState extends State<StoreScreen>
               style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
-                color: AppColors.cardGradientStart,
+                color: AppColors.menuTextBrown,
               ),
             ),
           ),
@@ -152,13 +152,15 @@ class _StoreScreenState extends State<StoreScreen>
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
+          colors: [AppColors.menuTeal, AppColors.menuTealDark],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.outline, width: 1),
+        border: Border.all(
+          color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.cardGradientStart.withValues(alpha: 0.3),
+            color: AppColors.menuTeal.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -185,7 +187,7 @@ class _StoreScreenState extends State<StoreScreen>
   Widget _buildStore() {
     if (_items == null) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.cardGradientStart),
+        child: CircularProgressIndicator(color: AppColors.menuTeal),
       );
     }
     if (_items!.isEmpty) {
@@ -194,7 +196,7 @@ class _StoreScreenState extends State<StoreScreen>
           S.current.noItemsInStore,
           style: TextStyle(
             fontSize: 18,
-            color: AppColors.cardGradientStart.withValues(alpha: 0.6),
+            color: AppColors.menuTextBrown.withValues(alpha: 0.6),
           ),
         ),
       );
@@ -215,7 +217,7 @@ class _StoreScreenState extends State<StoreScreen>
   Widget _buildLedger() {
     if (_ledger == null) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.cardGradientStart),
+        child: CircularProgressIndicator(color: AppColors.menuTeal),
       );
     }
     if (_ledger!.isEmpty) {
@@ -224,7 +226,7 @@ class _StoreScreenState extends State<StoreScreen>
           S.current.noPurchasesYet,
           style: TextStyle(
             fontSize: 18,
-            color: AppColors.cardGradientStart.withValues(alpha: 0.6),
+            color: AppColors.menuTextBrown.withValues(alpha: 0.6),
           ),
         ),
       );
@@ -259,10 +261,12 @@ class _StoreItemCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: canAfford ? 0.95 : 0.6),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outline),
+        border: Border.all(
+          color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.cardGradientStart.withValues(alpha: 0.08),
+            color: AppColors.menuTeal.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -282,7 +286,7 @@ class _StoreItemCard extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: canAfford
-                        ? AppColors.cardGradientStart
+                        ? AppColors.menuTextDark
                         : Colors.grey.shade500,
                   ),
                 ),
@@ -296,14 +300,16 @@ class _StoreItemCard extends StatelessWidget {
           ElevatedButton(
             onPressed: canAfford ? onBuy : null,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.cardGradientStart,
+              backgroundColor: AppColors.menuTeal,
               foregroundColor: Colors.white,
               disabledBackgroundColor: Colors.grey.shade300,
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
-              side: BorderSide(color: AppColors.outline, width: 1),
+              side: BorderSide(
+                color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+              ),
             ),
             child: Text(
               S.current.buy,
@@ -329,7 +335,9 @@ class _LedgerRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.outline),
+        border: Border.all(
+          color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+        ),
       ),
       child: Row(
         children: [
@@ -342,7 +350,7 @@ class _LedgerRow extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.cardGradientStart,
+                    color: AppColors.menuTextDark,
                   ),
                 ),
                 const SizedBox(height: 2),

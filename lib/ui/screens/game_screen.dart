@@ -242,7 +242,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                 onPressed: _quitToMenu,
                 icon: const Icon(
                   Icons.arrow_back_rounded,
-                  color: AppColors.cardGradientStart,
+                  color: AppColors.menuTextBrown,
                 ),
                 tooltip: S.current.quitAndSave,
               ),
@@ -276,7 +276,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: AppColors.cardGradientEnd,
+                color: AppColors.menuTeal,
               ),
             ),
           ),
@@ -325,10 +325,12 @@ class _DifficultyChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: selected
-              ? AppColors.cardGradientStart
+              ? AppColors.menuTeal
               : Colors.white.withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.outline),
+          border: Border.all(
+            color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -338,7 +340,7 @@ class _DifficultyChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: selected ? Colors.white : AppColors.cardGradientStart,
+                color: selected ? Colors.white : AppColors.menuTeal,
               ),
             ),
             Text(
@@ -348,7 +350,7 @@ class _DifficultyChip extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: selected
                     ? Colors.white70
-                    : AppColors.cardGradientStart.withValues(alpha: 0.6),
+                    : AppColors.menuTeal.withValues(alpha: 0.6),
               ),
             ),
           ],

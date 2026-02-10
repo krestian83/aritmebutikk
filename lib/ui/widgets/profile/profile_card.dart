@@ -33,10 +33,12 @@ class ProfileCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.outline),
+          border: Border.all(
+            color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+          ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.cardGradientStart.withValues(alpha: 0.15),
+              color: AppColors.menuTeal.withValues(alpha: 0.15),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -79,7 +81,7 @@ class ProfileCard extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: AppColors.cardGradientStart,
+            color: AppColors.menuTextDark,
           ),
           overflow: TextOverflow.ellipsis,
         ),
@@ -127,7 +129,7 @@ class _ActionIcon extends StatelessWidget {
   const _ActionIcon({
     required this.icon,
     required this.onTap,
-    this.color = AppColors.cardGradientStart,
+    this.color = AppColors.menuTeal,
   });
 
   @override

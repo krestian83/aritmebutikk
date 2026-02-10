@@ -61,7 +61,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     child: _earned == null
                         ? const Center(
                             child: CircularProgressIndicator(
-                              color: AppColors.cardGradientStart,
+                              color: AppColors.menuTeal,
                             ),
                           )
                         : ListView(
@@ -101,7 +101,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             },
             icon: const Icon(
               Icons.arrow_back_rounded,
-              color: AppColors.cardGradientStart,
+              color: AppColors.menuTextBrown,
             ),
           ),
           Expanded(
@@ -111,7 +111,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w800,
-                color: AppColors.cardGradientStart,
+                color: AppColors.menuTextBrown,
               ),
             ),
           ),
@@ -145,10 +145,12 @@ class _CategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.92),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.outline),
+          border: Border.all(
+            color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+          ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.cardGradientStart.withValues(alpha: 0.1),
+              color: AppColors.menuTeal.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 3),
             ),
@@ -167,7 +169,7 @@ class _CategoryCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.cardGradientStart,
+                      color: AppColors.menuTextDark,
                     ),
                   ),
                 ),
@@ -188,7 +190,7 @@ class _CategoryCard extends StatelessWidget {
                 value: earned / category.maxCredits,
                 minHeight: 6,
                 backgroundColor: Colors.grey.shade200,
-                color: maxedOut ? AppColors.green : AppColors.cardGradientStart,
+                color: maxedOut ? AppColors.green : AppColors.menuTeal,
               ),
             ),
             if (maxedOut)
@@ -214,7 +216,7 @@ class _CategoryCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.cardGradientStart.withValues(alpha: 0.6),
+                      color: AppColors.menuTeal.withValues(alpha: 0.6),
                     ),
                   ),
                 ),

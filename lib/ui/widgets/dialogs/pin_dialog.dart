@@ -88,7 +88,7 @@ class _PinDialogState extends State<PinDialog> {
   Widget build(BuildContext context) {
     if (_loading) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.cardGradientStart),
+        child: CircularProgressIndicator(color: AppColors.menuTeal),
       );
     }
 
@@ -100,7 +100,7 @@ class _PinDialogState extends State<PinDialog> {
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: AppColors.cardGradientStart,
+          color: AppColors.menuTeal,
         ),
       ),
       content: Column(
@@ -152,12 +152,15 @@ class _PinDialogState extends State<PinDialog> {
         ElevatedButton(
           onPressed: _submit,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.cardGradientStart,
+            backgroundColor: AppColors.menuTeal,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            side: BorderSide(color: AppColors.outline, width: 1),
+            side: BorderSide(
+              color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+              width: 1,
+            ),
           ),
           child: Text(_isNewPin ? S.current.save : 'OK'),
         ),
@@ -182,7 +185,7 @@ class _PinDialogState extends State<PinDialog> {
         fontSize: 24,
         fontWeight: FontWeight.w700,
         letterSpacing: 12,
-        color: AppColors.cardGradientStart,
+        color: AppColors.menuTeal,
       ),
       decoration: InputDecoration(
         labelText: label,
@@ -195,10 +198,7 @@ class _PinDialogState extends State<PinDialog> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: AppColors.cardGradientStart,
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: AppColors.menuTeal, width: 2),
         ),
       ),
       onSubmitted: (_) => _submit(),

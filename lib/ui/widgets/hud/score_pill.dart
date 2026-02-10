@@ -35,13 +35,15 @@ class _ScorePillState extends State<ScorePill> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [AppColors.pillBlue, Color(0xFF2070E8)],
+              colors: [AppColors.menuTeal, AppColors.menuTealLight],
             ),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.outline, width: 1),
+            border: Border.all(
+              color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+            ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.pillBlue.withValues(alpha: 0.4),
+                color: AppColors.menuTeal.withValues(alpha: 0.4),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),

@@ -18,7 +18,7 @@ class QuestionCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.cardGradientStart, AppColors.cardGradientEnd],
+          colors: [AppColors.menuTeal, AppColors.menuTealLight],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
@@ -37,7 +37,7 @@ class QuestionCard extends StatelessWidget {
             spreadRadius: 4,
           ),
           BoxShadow(
-            color: AppColors.cardGradientStart.withValues(alpha: 0.5),
+            color: AppColors.menuTeal.withValues(alpha: 0.5),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),

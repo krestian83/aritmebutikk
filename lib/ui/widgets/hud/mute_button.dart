@@ -38,7 +38,9 @@ class MuteButton extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.85),
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.outline),
+                border: Border.all(
+                  color: AppColors.menuTextBrown.withValues(alpha: 0.15),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -53,7 +55,7 @@ class MuteButton extends StatelessWidget {
                   icon,
                   size: 20,
                   color: mode == MuteMode.allOn
-                      ? AppColors.cardGradientStart
+                      ? AppColors.menuTeal
                       : Colors.grey.shade500,
                 ),
               ),
