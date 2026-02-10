@@ -176,18 +176,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         children: [
-          const SizedBox(width: 80),
-          Expanded(
-            child: Text(
-              S.current.selectPlayer,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: AppColors.cardGradientStart,
-              ),
-            ),
-          ),
           _FlagButton(
             countryCode: 'GB',
             selected: current == AppLocale.en,
@@ -199,6 +187,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             selected: current == AppLocale.nb,
             onTap: () => _setLocale(AppLocale.nb),
           ),
+          Expanded(
+            child: Text(
+              S.current.selectPlayer,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+                color: AppColors.cardGradientStart,
+              ),
+            ),
+          ),
+          const SizedBox(width: 80),
         ],
       ),
     );
@@ -281,22 +281,29 @@ class _FlagButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const size = 27.0;
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: size,
+        height: size,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
+          shape: BoxShape.circle,
           border: Border.all(
-            color: selected ? AppColors.cardGradientStart : AppColors.outline,
+            color: selected
+                ? AppColors.cardGradientStart
+                : AppColors.outline,
             width: selected ? 2.5 : 1,
           ),
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(6),
+        child: ClipOval(
           child: SizedBox(
-            width: 36,
-            height: 24,
-            child: CountryFlag.fromCountryCode(countryCode),
+            width: size,
+            height: size,
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: CountryFlag.fromCountryCode(countryCode),
+            ),
           ),
         ),
       ),

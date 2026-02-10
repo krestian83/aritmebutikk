@@ -17,7 +17,7 @@ class MuteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       right: 16,
-      bottom: 16,
+      bottom: 48,
       child: ValueListenableBuilder<MuteMode>(
         valueListenable: AudioState.instance.notifier,
         builder: (context, mode, _) {

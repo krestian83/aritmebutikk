@@ -89,9 +89,13 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   children: [
                     const SizedBox(height: 48),
                     _buildTitle(),
-                    const Text(
-                      '\u2795\u2796\u2716\u2797',
-                      style: TextStyle(fontSize: 36),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: const Text(
+                        '\u2795\u2796\u2716\u2797',
+                        maxLines: 1,
+                        style: TextStyle(fontSize: 36),
+                      ),
                     ),
                     const Spacer(),
                     _buildProfileCard(),
@@ -105,6 +109,20 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ],
                 ),
               ),
+              Positioned(
+                left: 8,
+                top: 8,
+                child: IconButton(
+                  onPressed: () {
+                    SoundService.instance.play('press');
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: AppColors.cardGradientStart,
+                  ),
+                ),
+              ),
               const MuteButton(),
             ],
           ),
@@ -114,12 +132,16 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   }
 
   Widget _buildTitle() {
-    return Text(
-      S.current.appName,
-      style: const TextStyle(
-        fontSize: 64,
-        fontWeight: FontWeight.w800,
-        color: AppColors.cardGradientStart,
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        S.current.appName,
+        maxLines: 1,
+        style: const TextStyle(
+          fontSize: 64,
+          fontWeight: FontWeight.w800,
+          color: AppColors.cardGradientStart,
+        ),
       ),
     );
   }
