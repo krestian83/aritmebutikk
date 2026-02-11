@@ -246,7 +246,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                 ),
                 tooltip: S.current.quitAndSave,
               ),
-              Expanded(child: ScorePill(score: _scoring.score)),
+              Expanded(
+                child: Center(
+                  child: ScorePill(score: _scoring.score),
+                ),
+              ),
+              const SizedBox(width: 48),
             ],
           ),
           const SizedBox(height: 24),
