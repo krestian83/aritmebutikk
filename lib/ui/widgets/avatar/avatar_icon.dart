@@ -41,10 +41,18 @@ class _AvatarIconState extends State<AvatarIcon> {
 
   @override
   Widget build(BuildContext context) {
+    final emojiSize = widget.size * 0.74;
+
     return SizedBox(
       width: widget.size,
       height: widget.size,
-      child: FittedBox(child: Text(_emoji)),
+      child: Center(
+        child: Text(
+          _emoji,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: emojiSize),
+        ),
+      ),
     );
   }
 }
