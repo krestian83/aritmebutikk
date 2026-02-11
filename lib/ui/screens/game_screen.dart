@@ -50,6 +50,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   bool _buttonsEnabled = true;
   bool _showConfetti = false;
   bool _showMaxCelebration = false;
+  bool _isCompletingCategory = false;
   int? _popupPoints;
 
   /// Credits already banked for this category before the session.
@@ -81,7 +82,9 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   }
 
   void _onAnswerSelected(int answer) {
-    if (!_buttonsEnabled || _currentQuestion == null) return;
+    if (_isCompletingCategory || !_buttonsEnabled || _currentQuestion == null) {
+      return;
+    }
 
     final correct = answer == _currentQuestion!.correctAnswer;
 
@@ -101,17 +104,17 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
       difficultyMultiplier: _difficulty.pointsMultiplier,
     );
 
-    setState(() {
-      _showConfetti = true;
-      _popupPoints = points;
-    });
-
     // Check if session score has reached the category cap.
     final totalProjected = _previouslyEarned + _scoring.score.value;
     if (totalProjected >= widget.category.maxCredits) {
       _triggerMaxCelebration();
       return;
     }
+
+    setState(() {
+      _showConfetti = true;
+      _popupPoints = points;
+    });
 
     Future.delayed(const Duration(milliseconds: 600), () {
       if (!mounted) return;
@@ -120,10 +123,18 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _triggerMaxCelebration() async {
+    if (_isCompletingCategory || _showMaxCelebration) return;
+    _isCompletingCategory = true;
+
     await _saveUnsavedCredits();
     if (!mounted) return;
+
     _sound.play('levelup');
-    setState(() => _showMaxCelebration = true);
+    setState(() {
+      _showConfetti = false;
+      _popupPoints = null;
+      _showMaxCelebration = true;
+    });
   }
 
   void _onWrongAnswer() {
