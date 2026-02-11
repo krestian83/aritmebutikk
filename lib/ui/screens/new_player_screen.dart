@@ -28,8 +28,6 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
   final _avatarService = AvatarService.instance;
   final _nameController = TextEditingController();
   final _focusNode = FocusNode();
-  final _emojiController = TextEditingController();
-  final _emojiFocusNode = FocusNode();
 
   String? _errorText;
   String _playerName = '';
@@ -50,8 +48,6 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
   void dispose() {
     _nameController.dispose();
     _focusNode.dispose();
-    _emojiController.dispose();
-    _emojiFocusNode.dispose();
     super.dispose();
   }
 
@@ -82,19 +78,26 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
     Navigator.of(context).pop(_playerName);
   }
 
-  void _openEmojiInput() {
-    _emojiController.clear();
-    _emojiFocusNode.requestFocus();
-  }
+  static const _emojiChoices = [
+    '😀', '😄', '😁', '😎', '🥳', '🤩', '😊', '😇',
+    '🦊', '🐶', '🐱', '🐼', '🦁', '🐸', '🐵', '🐨',
+    '🚀', '⭐', '⚽', '🎮', '🎯', '🎨', '🎧', '📚',
+    '🍎', '🍓', '🍕', '🧁', '🌈', '🔥', '💎', '🧠',
+  ];
 
-  void _onEmojiChanged(String value) {
-    if (value.isEmpty) return;
-    final characters = value.characters;
-    if (characters.isNotEmpty) {
-      setState(() => _emoji = characters.first);
-    }
-    _emojiController.clear();
-    _emojiFocusNode.unfocus();
+  Future<void> _openEmojiPicker() async {
+    SoundService.instance.play('press');
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _EmojiPickerSheet(
+        emojis: _emojiChoices,
+        selectedEmoji: _emoji,
+      ),
+    );
+
+    if (!mounted || selected == null) return;
+    setState(() => _emoji = selected);
   }
 
   @override
@@ -109,10 +112,7 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
             focusNode: _focusNode,
             errorText: _errorText,
             emoji: _emoji,
-            emojiController: _emojiController,
-            emojiFocusNode: _emojiFocusNode,
-            onEmojiTap: _openEmojiInput,
-            onEmojiChanged: _onEmojiChanged,
+            onEmojiTap: _openEmojiPicker,
             onFinish: _finish,
             canGoBack: widget.showBack,
             onBack: () => Navigator.of(context).pop(),
@@ -130,10 +130,7 @@ class _NewPlayerBody extends StatefulWidget {
   final FocusNode focusNode;
   final String? errorText;
   final String emoji;
-  final TextEditingController emojiController;
-  final FocusNode emojiFocusNode;
-  final VoidCallback onEmojiTap;
-  final ValueChanged<String> onEmojiChanged;
+  final Future<void> Function() onEmojiTap;
   final VoidCallback onFinish;
   final bool canGoBack;
   final VoidCallback onBack;
@@ -145,10 +142,7 @@ class _NewPlayerBody extends StatefulWidget {
     required this.focusNode,
     required this.errorText,
     required this.emoji,
-    required this.emojiController,
-    required this.emojiFocusNode,
     required this.onEmojiTap,
-    required this.onEmojiChanged,
     required this.onFinish,
     required this.canGoBack,
     required this.onBack,
@@ -167,21 +161,6 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
     setState(() {});
   }
 
-  @override
-  void initState() {
-    super.initState();
-    widget.emojiFocusNode.addListener(_onEmojiFocusChange);
-  }
-
-  @override
-  void dispose() {
-    widget.emojiFocusNode.removeListener(_onEmojiFocusChange);
-    super.dispose();
-  }
-
-  void _onEmojiFocusChange() {
-    setState(() => _emojiActive = widget.emojiFocusNode.hasFocus);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +256,12 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
       alignment: Alignment.center,
       children: [
         GestureDetector(
-          onTap: widget.onEmojiTap,
+          onTap: () async {
+            setState(() => _emojiActive = true);
+            await widget.onEmojiTap();
+            if (!mounted) return;
+            setState(() => _emojiActive = false);
+          },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             width: _emojiActive ? 110 : 100,
@@ -317,25 +301,9 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
               border: Border.all(color: Colors.white, width: 2),
             ),
             child: Icon(
-              _emojiActive ? Icons.keyboard : Icons.edit,
+              Icons.edit,
               size: 14,
               color: Colors.white,
-            ),
-          ),
-        ),
-        // Hidden text field for emoji keyboard input.
-        Opacity(
-          opacity: 0,
-          child: SizedBox(
-            width: 1,
-            height: 1,
-            child: TextField(
-              controller: widget.emojiController,
-              focusNode: widget.emojiFocusNode,
-              onChanged: widget.onEmojiChanged,
-              keyboardType: TextInputType.text,
-              showCursor: false,
-              decoration: const InputDecoration(border: InputBorder.none),
             ),
           ),
         ),
@@ -412,6 +380,89 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
             fontWeight: FontWeight.w700,
             letterSpacing: 1,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class _EmojiPickerSheet extends StatelessWidget {
+  final List<String> emojis;
+  final String selectedEmoji;
+
+  const _EmojiPickerSheet({
+    required this.emojis,
+    required this.selectedEmoji,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 42,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
+            Text(
+              S.current.chooseEmoji,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppColors.menuTextDark,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Flexible(
+              child: GridView.builder(
+                shrinkWrap: true,
+                itemCount: emojis.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 8,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                ),
+                itemBuilder: (context, index) {
+                  final emoji = emojis[index];
+                  final selected = emoji == selectedEmoji;
+                  return InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => Navigator.of(context).pop(emoji),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? AppColors.menuTeal.withValues(alpha: 0.12)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: selected
+                              ? AppColors.menuTeal
+                              : Colors.grey.shade300,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(emoji, style: const TextStyle(fontSize: 24)),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
