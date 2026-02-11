@@ -15,9 +15,8 @@ import '../widgets/effects/category_max_celebration.dart';
 import '../widgets/effects/confetti_overlay.dart';
 import '../widgets/effects/score_popup.dart';
 import '../widgets/effects/shake_widget.dart';
+import '../widgets/hud/mute_button.dart';
 import '../widgets/hud/score_pill.dart';
-import '../../game/services/audio_state.dart';
-import '../../game/services/music_service.dart';
 import '../widgets/question/question_card.dart';
 
 /// The main game screen. Plays a single category + difficulty
@@ -190,6 +189,7 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
           child: Stack(
             children: [
               _buildMainContent(),
+              const MuteButton(),
               if (_showConfetti)
                 Positioned.fill(
                   child: RepaintBoundary(
@@ -246,9 +246,12 @@ class _GameScreenState extends State<GameScreen> with WidgetsBindingObserver {
                 ),
                 tooltip: S.current.quitAndSave,
               ),
-              Expanded(child: ScorePill(score: _scoring.score)),
-              const SizedBox(width: 8),
-              const _InlineMuteButton(),
+              Expanded(
+                child: Center(
+                  child: ScorePill(score: _scoring.score),
+                ),
+              ),
+              const SizedBox(width: 48),
             ],
           ),
           const SizedBox(height: 24),
@@ -357,39 +360,6 @@ class _DifficultyChip extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Mute button sized to match IconButton, placed inline in the
-/// game header row so it doesn't overlap the score pill.
-class _InlineMuteButton extends StatelessWidget {
-  const _InlineMuteButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<MuteMode>(
-      valueListenable: AudioState.instance.notifier,
-      builder: (context, mode, _) {
-        final (icon, tooltip) = switch (mode) {
-          MuteMode.allOn => (Icons.volume_up_rounded, S.current.muteMusic),
-          MuteMode.musicOff => (Icons.music_off_rounded, S.current.muteAll),
-          MuteMode.allOff => (Icons.volume_off_rounded, S.current.unmuteAudio),
-        };
-        return IconButton(
-          onPressed: () {
-            AudioState.instance.cycle();
-            MusicService.instance.applyMuteState();
-          },
-          tooltip: tooltip,
-          icon: Icon(
-            icon,
-            color: mode == MuteMode.allOn
-                ? AppColors.menuTeal
-                : Colors.grey.shade500,
-          ),
-        );
-      },
     );
   }
 }

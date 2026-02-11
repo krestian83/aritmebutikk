@@ -198,7 +198,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 ],
               ),
               child: ClipOval(
-                child: AvatarIcon(playerName: widget.playerName, size: 67),
+                child: Center(
+                  child: AvatarIcon(playerName: widget.playerName, size: 67),
+                ),
               ),
             ),
             const SizedBox(height: 12),
