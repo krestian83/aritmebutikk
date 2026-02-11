@@ -1,3 +1,4 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/l10n/locale_service.dart';
@@ -78,22 +79,13 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
     Navigator.of(context).pop(_playerName);
   }
 
-  static const _emojiChoices = [
-    '😀', '😄', '😁', '😎', '🥳', '🤩', '😊', '😇',
-    '🦊', '🐶', '🐱', '🐼', '🦁', '🐸', '🐵', '🐨',
-    '🚀', '⭐', '⚽', '🎮', '🎯', '🎨', '🎧', '📚',
-    '🍎', '🍓', '🍕', '🧁', '🌈', '🔥', '💎', '🧠',
-  ];
 
   Future<void> _openEmojiPicker() async {
     SoundService.instance.play('press');
     final selected = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => _EmojiPickerSheet(
-        emojis: _emojiChoices,
-        selectedEmoji: _emoji,
-      ),
+      builder: (context) => const _EmojiPickerSheet(),
     );
 
     if (!mounted || selected == null) return;
@@ -388,13 +380,7 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
 
 
 class _EmojiPickerSheet extends StatelessWidget {
-  final List<String> emojis;
-  final String selectedEmoji;
-
-  const _EmojiPickerSheet({
-    required this.emojis,
-    required this.selectedEmoji,
-  });
+  const _EmojiPickerSheet();
 
   @override
   Widget build(BuildContext context) {
@@ -427,39 +413,35 @@ class _EmojiPickerSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            Flexible(
-              child: GridView.builder(
-                shrinkWrap: true,
-                itemCount: emojis.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 8,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                ),
-                itemBuilder: (context, index) {
-                  final emoji = emojis[index];
-                  final selected = emoji == selectedEmoji;
-                  return InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () => Navigator.of(context).pop(emoji),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: selected
-                            ? AppColors.menuTeal.withValues(alpha: 0.12)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: selected
-                              ? AppColors.menuTeal
-                              : Colors.grey.shade300,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(emoji, style: const TextStyle(fontSize: 24)),
-                      ),
-                    ),
-                  );
+            SizedBox(
+              height: 360,
+              child: EmojiPicker(
+                textEditingController: null,
+                onEmojiSelected: (_, emoji) {
+                  Navigator.of(context).pop(emoji.emoji);
                 },
+                config: Config(
+                  checkPlatformCompatibility: true,
+                  emojiViewConfig: EmojiViewConfig(
+                    emojiSizeMax: 28,
+                    columns: 8,
+                    backgroundColor: Colors.white,
+                  ),
+                  categoryViewConfig: CategoryViewConfig(
+                    initCategory: Category.SMILEYS,
+                    indicatorColor: AppColors.menuTeal,
+                    iconColor: Colors.grey.shade500,
+                    iconColorSelected: AppColors.menuTeal,
+                    categoryIcons: const CategoryIcons(),
+                  ),
+                  bottomActionBarConfig: const BottomActionBarConfig(
+                    enabled: false,
+                  ),
+                  searchViewConfig: SearchViewConfig(
+                    backgroundColor: Colors.white,
+                    hintText: S.current.chooseEmoji,
+                  ),
+                ),
               ),
             ),
           ],

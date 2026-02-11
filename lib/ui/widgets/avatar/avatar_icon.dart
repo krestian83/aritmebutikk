@@ -41,10 +41,30 @@ class _AvatarIconState extends State<AvatarIcon> {
 
   @override
   Widget build(BuildContext context) {
+    final emojiSize = widget.size * 0.78;
+
     return SizedBox(
       width: widget.size,
       height: widget.size,
-      child: FittedBox(child: Text(_emoji)),
+      child: Center(
+        child: Transform.translate(
+          offset: const Offset(0, -1),
+          child: Text(
+            _emoji,
+            textAlign: TextAlign.center,
+            textHeightBehavior: const TextHeightBehavior(
+              applyHeightToFirstAscent: false,
+              applyHeightToLastDescent: false,
+            ),
+            strutStyle: const StrutStyle(
+              forceStrutHeight: true,
+              height: 1,
+              leading: 0,
+            ),
+            style: TextStyle(fontSize: emojiSize, height: 1),
+          ),
+        ),
+      ),
     );
   }
 }
