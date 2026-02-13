@@ -19,12 +19,6 @@ class StoreSuggestion {
     return [
       // Screen time
       StoreSuggestion(
-        name: s.suggExtraBedtime,
-        icon: '\uD83D\uDECF\uFE0F',
-        defaultCost: 1500,
-        category: s.suggCatScreenTime,
-      ),
-      StoreSuggestion(
         name: s.suggOneEpisode,
         icon: '\uD83D\uDCFA',
         defaultCost: 1200,
