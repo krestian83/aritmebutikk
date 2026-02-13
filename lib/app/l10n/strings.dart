@@ -94,7 +94,7 @@ class S {
 
   // ── Mute button ─────────────────────────────────────────
 
-  String get muteMusic => _nb ? 'Demp musikk' : 'Mute music';
+  String get enableMusic => _nb ? 'Sl\u00E5 p\u00E5 musikk' : 'Enable music';
   String get muteAll => _nb ? 'Demp alt' : 'Mute all';
   String get unmuteAudio => _nb ? 'Sl\u00E5 p\u00E5 lyd' : 'Turn on sound';
 

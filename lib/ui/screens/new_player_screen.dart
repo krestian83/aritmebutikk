@@ -79,7 +79,6 @@ class _NewPlayerScreenState extends State<NewPlayerScreen> {
     Navigator.of(context).pop(_playerName);
   }
 
-
   Future<void> _openEmojiPicker() async {
     SoundService.instance.play('press');
     final selected = await showModalBottomSheet<String>(
@@ -153,93 +152,95 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
     setState(() {});
   }
 
-
   @override
   Widget build(BuildContext context) {
     final current = LocaleService.instance.locale.value;
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (!widget.isEditMode)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FlagButton(
-                    countryCode: 'GB',
-                    selected: current == AppLocale.en,
-                    onTap: () => _setLocale(AppLocale.en),
-                  ),
-                  const SizedBox(width: 8),
-                  FlagButton(
-                    countryCode: 'NO',
-                    selected: current == AppLocale.nb,
-                    onTap: () => _setLocale(AppLocale.nb),
-                  ),
-                ],
-              ),
-            const SizedBox(height: 20),
-            Text(
-              S.current.chooseYourEmoji,
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w800,
-                color: AppColors.menuTeal,
-              ),
-            ),
-            const SizedBox(height: 24),
-            _buildEmojiPicker(),
-            const SizedBox(height: 28),
-            if (!widget.isEditMode) ...[
-              Text(
-                S.current.whatsYourName,
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.menuTeal,
+    return Column(
+      children: [
+        if (!widget.isEditMode) ...[
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                FlagButton(
+                  countryCode: 'GB',
+                  selected: current == AppLocale.en,
+                  onTap: () => _setLocale(AppLocale.en),
                 ),
-              ),
-              const SizedBox(height: 16),
-              _buildNameField(),
-              if (widget.errorText != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  widget.errorText!,
-                  style: const TextStyle(
-                    color: AppColors.coral,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
+                const SizedBox(width: 6),
+                FlagButton(
+                  countryCode: 'NO',
+                  selected: current == AppLocale.nb,
+                  onTap: () => _setLocale(AppLocale.nb),
                 ),
               ],
-              const SizedBox(height: 24),
-            ] else ...[
-              Text(
-                widget.playerName,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.menuTextDark,
-                ),
+            ),
+          ),
+        ],
+        Expanded(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildEmojiPicker(),
+                  const SizedBox(height: 28),
+                  if (!widget.isEditMode) ...[
+                    Text(
+                      S.current.whatsYourName,
+                      style: const TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.menuTeal,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildNameField(),
+                    if (widget.errorText != null) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.errorText!,
+                        style: const TextStyle(
+                          color: AppColors.coral,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+                  ] else ...[
+                    Text(
+                      widget.playerName,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.menuTextDark,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                  _buildDoneButton(),
+                  if (widget.canGoBack) ...[
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: widget.onBack,
+                      child: Text(
+                        S.current.back,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
-              const SizedBox(height: 24),
-            ],
-            _buildDoneButton(),
-            if (widget.canGoBack) ...[
-              const SizedBox(height: 12),
-              TextButton(
-                onPressed: widget.onBack,
-                child: Text(
-                  S.current.back,
-                  style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-                ),
-              ),
-            ],
-          ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -292,11 +293,7 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 2),
             ),
-            child: Icon(
-              Icons.edit,
-              size: 14,
-              color: Colors.white,
-            ),
+            child: Icon(Icons.edit, size: 14, color: Colors.white),
           ),
         ),
       ],
@@ -377,7 +374,6 @@ class _NewPlayerBodyState extends State<_NewPlayerBody> {
     );
   }
 }
-
 
 class _EmojiPickerSheet extends StatelessWidget {
   const _EmojiPickerSheet();

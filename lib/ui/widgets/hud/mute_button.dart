@@ -5,7 +5,7 @@ import '../../../app/theme/app_colors.dart';
 import '../../../game/services/audio_state.dart';
 import '../../../game/services/music_service.dart';
 
-/// Small top-right button cycling: all on → music off → all off.
+/// Small top-right button cycling: soundOnly → all → muted.
 class MuteButton extends StatelessWidget {
   const MuteButton({super.key});
 
@@ -19,13 +19,16 @@ class MuteButton extends StatelessWidget {
     return Positioned(
       right: 8,
       top: 8,
-      child: ValueListenableBuilder<MuteMode>(
+      child: ValueListenableBuilder<AudioMode>(
         valueListenable: AudioState.instance.notifier,
         builder: (context, mode, _) {
           final (icon, tooltip) = switch (mode) {
-            MuteMode.allOn => (Icons.volume_up_rounded, S.current.muteMusic),
-            MuteMode.musicOff => (Icons.music_off_rounded, S.current.muteAll),
-            MuteMode.allOff => (
+            AudioMode.soundOnly => (
+              Icons.volume_up_rounded,
+              S.current.enableMusic,
+            ),
+            AudioMode.all => (Icons.music_note_rounded, S.current.muteAll),
+            AudioMode.muted => (
               Icons.volume_off_rounded,
               S.current.unmuteAudio,
             ),
@@ -55,7 +58,7 @@ class MuteButton extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: 20,
-                  color: mode == MuteMode.allOn
+                  color: mode == AudioMode.all
                       ? AppColors.menuTeal
                       : Colors.grey.shade500,
                 ),

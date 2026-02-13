@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../game/services/audio_state.dart';
 import '../game/services/music_service.dart';
 import '../game/services/sound_service.dart';
 import '../ui/screens/profile_screen.dart';
@@ -24,6 +25,9 @@ class _ArithmeticAppState extends State<ArithmeticApp>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     LocaleService.instance.load();
+    AudioState.instance.load().then((_) {
+      MusicService.instance.applyMuteState();
+    });
   }
 
   @override
@@ -50,20 +54,16 @@ class _ArithmeticAppState extends State<ArithmeticApp>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTapDown: (_) => unawaited(MusicService.instance.start()),
-      child: ValueListenableBuilder<AppLocale>(
-        valueListenable: LocaleService.instance.locale,
-        builder: (_, _, _) {
-          return MaterialApp(
-            title: S.current.appName,
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.theme,
-            home: const ProfileScreen(),
-          );
-        },
-      ),
+    return ValueListenableBuilder<AppLocale>(
+      valueListenable: LocaleService.instance.locale,
+      builder: (_, _, _) {
+        return MaterialApp(
+          title: S.current.appName,
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.theme,
+          home: const ProfileScreen(),
+        );
+      },
     );
   }
 }

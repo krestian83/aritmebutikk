@@ -9,7 +9,17 @@
       "Bash(netstat:*)",
       "Bash(git add:*)",
       "Bash(del \"C:\\\\Users\\\\krest\\\\skjerme\\\\spill\\\\arithmetic\\\\lib\\\\game\\\\services\\\\grayscale_state.dart\")",
-      "Bash(del \"C:\\\\Users\\\\krest\\\\skjerme\\\\spill\\\\arithmetic\\\\lib\\\\ui\\\\widgets\\\\hud\\\\grayscale_button.dart\")"
+      "Bash(del \"C:\\\\Users\\\\krest\\\\skjerme\\\\spill\\\\arithmetic\\\\lib\\\\ui\\\\widgets\\\\hud\\\\grayscale_button.dart\")",
+      "mcp__dart__connect_dart_tooling_daemon",
+      "mcp__dart__flutter_driver",
+      "mcp__dart__hot_reload",
+      "mcp__dart__hot_restart",
+      "Bash(powershell -Command \"Get-Process -Name ''arithmetic'' -EA 0 | Stop-Process -Force\")",
+      "Bash(git status:*)",
+      "Bash(git push:*)",
+      "mcp__dart__dart_format",
+      "Bash(dart format:*)",
+      "mcp__dart__launch_app"
     ]
   }
 }

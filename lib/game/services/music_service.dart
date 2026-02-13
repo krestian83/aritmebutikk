@@ -20,7 +20,6 @@ class MusicService {
   final _random = Random();
   AudioPlayer? _player;
   bool _playing = false;
-  bool _started = false;
   int _currentIndex = -1;
 
   /// Picks a random track index different from the current one
@@ -34,11 +33,10 @@ class MusicService {
     return next;
   }
 
-  /// Starts playback. Creates the player on first call so the
-  /// browser audio context is born inside a user gesture.
+  /// Starts playback with a random track. Creates the player
+  /// lazily so the browser audio context is born inside a user
+  /// gesture.
   Future<void> start() async {
-    _started = true;
-    if (!AudioState.instance.musicEnabled) return;
     if (_playing) return;
     _playing = true;
     try {
@@ -49,7 +47,10 @@ class MusicService {
       await _player!.play(AssetSource(_tracks[_currentIndex]));
       final vol = 0.15 * AudioState.masterVolume;
       await _player!.setVolume(vol);
-      debugPrint('[Music] playing track $_currentIndex at volume $vol');
+      debugPrint(
+        '[Music] playing track $_currentIndex'
+        ' at volume $vol',
+      );
     } catch (e) {
       _playing = false;
       debugPrint('[Music] error: $e');
@@ -68,15 +69,14 @@ class MusicService {
     }
   }
 
-  /// Resumes the paused track. Does nothing if music was
-  /// never started or is already playing.
+  /// Resumes a paused track if music is still enabled.
   Future<void> resume() async {
-    if (!_started) return;
     if (!AudioState.instance.musicEnabled) return;
+    if (_player == null) return;
     if (_playing) return;
     _playing = true;
     try {
-      await _player?.resume();
+      await _player!.resume();
       debugPrint('[Music] resumed track $_currentIndex');
     } catch (e) {
       _playing = false;
@@ -84,8 +84,7 @@ class MusicService {
     }
   }
 
-  /// Pauses the music. Call [resume] to continue or [start]
-  /// to pick a new track.
+  /// Pauses the music.
   Future<void> stop() async {
     _playing = false;
     try {
@@ -93,9 +92,8 @@ class MusicService {
     } catch (_) {}
   }
 
-  /// Called when mute state changes.
+  /// Starts or stops music based on the current audio mode.
   void applyMuteState() {
-    if (!_started) return;
     if (AudioState.instance.musicEnabled) {
       if (!_playing) start();
     } else {

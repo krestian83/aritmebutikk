@@ -50,7 +50,12 @@ class _AvatarIconState extends State<AvatarIcon> {
         child: Text(
           _emoji,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: emojiSize),
+          strutStyle: StrutStyle(
+            fontSize: emojiSize,
+            height: 1.0,
+            forceStrutHeight: true,
+          ),
+          style: TextStyle(fontSize: emojiSize, height: 1.0),
         ),
       ),
     );
