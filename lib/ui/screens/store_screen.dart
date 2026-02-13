@@ -71,6 +71,7 @@ class _StoreScreenState extends State<StoreScreen>
       item.name,
     );
     if (!success || !mounted) return;
+    SoundService.instance.play('purchase');
     await _load();
 
     if (!mounted) return;

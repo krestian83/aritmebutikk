@@ -17,6 +17,8 @@ class MusicService {
     'music/lofi_study_flow_2.mp3',
   ];
 
+  static final double _volume = 0.15 * AudioState.masterVolume;
+
   final _random = Random();
   AudioPlayer? _player;
   bool _playing = false;
@@ -43,14 +45,10 @@ class MusicService {
       _player ??= AudioPlayer()
         ..onPlayerComplete.listen((_) => _onTrackComplete());
       _currentIndex = _nextTrackIndex();
-      await _player!.setReleaseMode(ReleaseMode.release);
+      await _player!.setReleaseMode(ReleaseMode.stop);
       await _player!.play(AssetSource(_tracks[_currentIndex]));
-      final vol = 0.15 * AudioState.masterVolume;
-      await _player!.setVolume(vol);
-      debugPrint(
-        '[Music] playing track $_currentIndex'
-        ' at volume $vol',
-      );
+      await _player!.setVolume(_volume);
+      debugPrint('[Music] playing track $_currentIndex');
     } catch (e) {
       _playing = false;
       debugPrint('[Music] error: $e');
@@ -60,9 +58,14 @@ class MusicService {
   void _onTrackComplete() {
     if (!_playing) return;
     _currentIndex = _nextTrackIndex();
+    _playTrack(_currentIndex);
+  }
+
+  Future<void> _playTrack(int index) async {
     try {
-      _player!.play(AssetSource(_tracks[_currentIndex]));
-      debugPrint('[Music] next track $_currentIndex');
+      await _player!.play(AssetSource(_tracks[index]));
+      await _player!.setVolume(_volume);
+      debugPrint('[Music] next track $index');
     } catch (e) {
       _playing = false;
       debugPrint('[Music] error on next track: $e');

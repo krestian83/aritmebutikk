@@ -17,6 +17,7 @@ class SoundService {
   final AudioPlayer _levelUpPlayer = AudioPlayer();
   final AudioPlayer _pressPlayer = AudioPlayer();
   final AudioPlayer _successPlayer = AudioPlayer();
+  final AudioPlayer _purchasePlayer = AudioPlayer();
   bool _initialized = false;
 
   void _init() {
@@ -27,6 +28,7 @@ class SoundService {
     _levelUpPlayer.setReleaseMode(ReleaseMode.stop);
     _pressPlayer.setReleaseMode(ReleaseMode.stop);
     _successPlayer.setReleaseMode(ReleaseMode.stop);
+    _purchasePlayer.setReleaseMode(ReleaseMode.stop);
   }
 
   /// Plays a named sound effect with optional haptic feedback.
@@ -45,6 +47,8 @@ class SoundService {
         await _playPress();
       case 'success':
         await _playSuccess();
+      case 'purchase':
+        await _playPurchase();
     }
   }
 
@@ -66,6 +70,8 @@ class SoundService {
       case 'press':
         HapticFeedback.lightImpact();
       case 'success':
+        HapticFeedback.mediumImpact();
+      case 'purchase':
         HapticFeedback.mediumImpact();
     }
   }
@@ -118,6 +124,18 @@ class SoundService {
     }
   }
 
+  Future<void> _playPurchase() async {
+    try {
+      await _purchasePlayer.stop();
+      _purchasePlayer.play(
+        AssetSource('audio/purchase.mp3'),
+        volume: 0.5 * AudioState.masterVolume,
+      );
+    } catch (e) {
+      debugPrint('[SFX] purchase error: $e');
+    }
+  }
+
   /// Stops all SFX players so nothing replays on app resume.
   void stopAll() {
     for (final player in [
@@ -125,6 +143,7 @@ class SoundService {
       _levelUpPlayer,
       _pressPlayer,
       _successPlayer,
+      _purchasePlayer,
     ]) {
       try {
         player.stop();
@@ -139,5 +158,6 @@ class SoundService {
     _levelUpPlayer.dispose();
     _pressPlayer.dispose();
     _successPlayer.dispose();
+    _purchasePlayer.dispose();
   }
 }

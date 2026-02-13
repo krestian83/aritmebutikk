@@ -194,6 +194,8 @@ class S {
   String get suggCatTreats => _nb ? 'Godteri' : 'Treats';
   String get suggCatActivities => _nb ? 'Aktiviteter' : 'Activities';
   String get suggCatMoney => _nb ? 'Penger' : 'Money';
+  String get suggCatMisc => _nb ? 'Diverse' : 'Miscellaneous';
+  String get suggCatCreative => _nb ? 'Kreativt' : 'Creative';
 
   String get suggExtraBedtime => _nb ? 'Ekstra leggetid' : 'Extra bedtime';
   String get suggOneEpisode => _nb ? 'En episode' : 'One episode';
@@ -210,5 +212,34 @@ class S {
 
   String get defScreenTime15 => _nb ? '15 min skjermtid' : '15 min screen time';
   String get defScreenTime30 => _nb ? '30 min skjermtid' : '30 min screen time';
-  String get defScreenTime60 => _nb ? '1 time skjermtid' : '1 hour screen time';
+  String get defScreenTime60 =>
+      _nb ? '1 time skjermtid' : '1 hour screen time';
+  String get defBakeTogether =>
+      _nb ? 'Bake sammen' : 'Bake together';
+  String get defMoney => _nb ? 'Penger' : 'Money';
+  String get defNewBook => _nb ? 'Ny bok' : 'New book';
+  String get defCarMusic =>
+      _nb ? 'Velge musikk i bilen' : 'Choose car music';
+  String get defBedtimeStory =>
+      _nb ? 'Ekstra historie ved leggetid' : 'Extra bedtime story';
+  String get defBoardGameNight =>
+      _nb ? 'Brettspillkveld' : 'Board game night';
+
+  // ── Store suggestion names ─────────────────────────────
+
+  String get suggDayTrip =>
+      _nb ? 'Velge utflukt' : 'Choose a day trip';
+  String get suggArtNight =>
+      _nb ? 'Tegne/male-kveld' : 'Art night';
+  String get suggLibraryTrip =>
+      _nb ? 'Bibliotektur' : 'Library trip';
+  String get suggSwimmingPool =>
+      _nb ? 'Sv\u00F8mmehall' : 'Swimming pool';
+  String get suggLegoTogether =>
+      _nb ? 'Bygge med Lego sammen' : 'Lego building together';
+  String get suggFruitSkewers =>
+      _nb ? 'Fruktspyd' : 'Fruit skewers';
+  String get suggPancakes =>
+      _nb ? 'Pannekaker' : 'Pancakes';
+  String get suggWaffles => _nb ? 'Vafler' : 'Waffles';
 }

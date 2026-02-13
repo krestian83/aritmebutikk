@@ -77,25 +77,60 @@ class StoreSuggestion {
         category: s.suggCatActivities,
       ),
 
-      // Money
+      // Activities
       StoreSuggestion(
-        name: '5 kr',
-        icon: '\uD83E\uDE99',
+        name: s.suggDayTrip,
+        icon: '\uD83D\uDDFA\uFE0F',
+        defaultCost: 10000,
+        category: s.suggCatActivities,
+      ),
+      StoreSuggestion(
+        name: s.suggLibraryTrip,
+        icon: '\uD83D\uDCD6',
         defaultCost: 1000,
-        category: s.suggCatMoney,
+        category: s.suggCatActivities,
       ),
       StoreSuggestion(
-        name: '100 kr',
-        icon: '\uD83D\uDCB5',
-        defaultCost: 15000,
-        category: s.suggCatMoney,
+        name: s.suggSwimmingPool,
+        icon: '\uD83C\uDFCA',
+        defaultCost: 3000,
+        category: s.suggCatActivities,
       ),
       StoreSuggestion(
-        name: s.suggNewBook,
-        icon: '\uD83D\uDCDA',
-        defaultCost: 3500,
-        category: s.suggCatMoney,
+        name: s.suggLegoTogether,
+        icon: '\uD83E\uDDF1',
+        defaultCost: 1500,
+        category: s.suggCatActivities,
       ),
+
+      // Creative
+      StoreSuggestion(
+        name: s.suggArtNight,
+        icon: '\uD83C\uDFA8',
+        defaultCost: 1500,
+        category: s.suggCatCreative,
+      ),
+
+      // Treats
+      StoreSuggestion(
+        name: s.suggFruitSkewers,
+        icon: '\uD83C\uDF53',
+        defaultCost: 800,
+        category: s.suggCatTreats,
+      ),
+      StoreSuggestion(
+        name: s.suggPancakes,
+        icon: '\uD83E\uDD5E',
+        defaultCost: 1500,
+        category: s.suggCatTreats,
+      ),
+      StoreSuggestion(
+        name: s.suggWaffles,
+        icon: '\uD83E\uDDC7',
+        defaultCost: 1500,
+        category: s.suggCatTreats,
+      ),
+
     ];
   }
 }

@@ -46,9 +46,12 @@ class StoreItem {
     'default_0': (S.current.defScreenTime15, S.current.suggCatScreenTime),
     'default_1': (S.current.defScreenTime30, S.current.suggCatScreenTime),
     'default_2': (S.current.defScreenTime60, S.current.suggCatScreenTime),
-    'default_3': ('10 kr', S.current.suggCatMoney),
-    'default_4': ('20 kr', S.current.suggCatMoney),
-    'default_5': ('50 kr', S.current.suggCatMoney),
+    'default_3': (S.current.defMoney, S.current.suggCatMoney),
+    'default_6': (S.current.defBakeTogether, S.current.suggCatActivities),
+    'default_7': (S.current.defNewBook, S.current.suggCatMisc),
+    'default_8': (S.current.defCarMusic, S.current.suggCatMisc),
+    'default_9': (S.current.defBedtimeStory, S.current.suggCatMisc),
+    'default_10': (S.current.defBoardGameNight, S.current.suggCatMisc),
   };
 
   Map<String, dynamic> toJson() => {
@@ -81,6 +84,44 @@ class StoreItem {
   }
 
   static List<StoreItem> get defaults => [
+    // Miscellaneous
+    StoreItem(
+      id: 'default_7',
+      name: S.current.defNewBook,
+      icon: '\uD83D\uDCDA',
+      cost: 3500,
+      category: S.current.suggCatMisc,
+    ),
+    StoreItem(
+      id: 'default_8',
+      name: S.current.defCarMusic,
+      icon: '\uD83C\uDFB5',
+      cost: 800,
+      category: S.current.suggCatMisc,
+    ),
+    StoreItem(
+      id: 'default_9',
+      name: S.current.defBedtimeStory,
+      icon: '\uD83D\uDCD5',
+      cost: 600,
+      category: S.current.suggCatMisc,
+    ),
+    StoreItem(
+      id: 'default_10',
+      name: S.current.defBoardGameNight,
+      icon: '\uD83C\uDFB2',
+      cost: 2000,
+      category: S.current.suggCatMisc,
+    ),
+    // Activities
+    StoreItem(
+      id: 'default_6',
+      name: S.current.defBakeTogether,
+      icon: '\uD83E\uDDC1',
+      cost: 2000,
+      category: S.current.suggCatActivities,
+    ),
+    // Screen time
     StoreItem(
       id: 'default_0',
       name: S.current.defScreenTime15,
@@ -102,25 +143,12 @@ class StoreItem {
       cost: 3000,
       category: S.current.suggCatScreenTime,
     ),
+    // Money
     StoreItem(
       id: 'default_3',
-      name: '10 kr',
+      name: S.current.defMoney,
       icon: '\uD83D\uDCB0',
       cost: 2000,
-      category: S.current.suggCatMoney,
-    ),
-    StoreItem(
-      id: 'default_4',
-      name: '20 kr',
-      icon: '\uD83D\uDCB0',
-      cost: 3500,
-      category: S.current.suggCatMoney,
-    ),
-    StoreItem(
-      id: 'default_5',
-      name: '50 kr',
-      icon: '\uD83D\uDCB5',
-      cost: 8000,
       category: S.current.suggCatMoney,
     ),
   ];

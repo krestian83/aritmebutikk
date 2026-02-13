@@ -35,7 +35,9 @@ class _StoreEditorScreenState extends State<StoreEditorScreen> {
 
   List<String> get _categories {
     if (_items == null) return [];
-    return _items!.map((i) => i.category).toSet().toList()..sort();
+    final cats = _items!.map((i) => i.category).toSet();
+    cats.add(S.current.suggCatMisc);
+    return cats.toList()..sort();
   }
 
   /// Groups items by category, preserving insertion order.
