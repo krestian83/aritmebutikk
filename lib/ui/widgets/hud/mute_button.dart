@@ -5,7 +5,7 @@ import '../../../app/theme/app_colors.dart';
 import '../../../game/services/audio_state.dart';
 import '../../../game/services/music_service.dart';
 
-/// Small bottom-right button cycling: all on → music off → all off.
+/// Small top-right button cycling: all on → music off → all off.
 class MuteButton extends StatelessWidget {
   const MuteButton({super.key});
 

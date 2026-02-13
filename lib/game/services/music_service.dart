@@ -63,6 +63,7 @@ class MusicService {
       _player!.play(AssetSource(_tracks[_currentIndex]));
       debugPrint('[Music] next track $_currentIndex');
     } catch (e) {
+      _playing = false;
       debugPrint('[Music] error on next track: $e');
     }
   }

@@ -120,12 +120,18 @@ class SoundService {
 
   /// Stops all SFX players so nothing replays on app resume.
   void stopAll() {
-    try {
-      _wrongPlayer.stop();
-      _levelUpPlayer.stop();
-      _pressPlayer.stop();
-      _successPlayer.stop();
-    } catch (_) {}
+    for (final player in [
+      _wrongPlayer,
+      _levelUpPlayer,
+      _pressPlayer,
+      _successPlayer,
+    ]) {
+      try {
+        player.stop();
+      } catch (e) {
+        debugPrint('[SFX] stopAll error: $e');
+      }
+    }
   }
 
   void dispose() {

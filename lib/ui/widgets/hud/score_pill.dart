@@ -4,7 +4,7 @@ import '../../../app/l10n/strings.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_theme.dart';
 
-/// Displays the current score in a rounded purple pill with a
+/// Displays the current score in a rounded teal pill with a
 /// count-up animation when the value changes.
 class ScorePill extends StatefulWidget {
   final ValueNotifier<int> score;

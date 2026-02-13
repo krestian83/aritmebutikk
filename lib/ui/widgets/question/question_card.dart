@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_theme.dart';
 
-/// Displays the current question in a neon-glow bordered card.
+/// Displays the current question in a soft-glow bordered card.
 class QuestionCard extends StatelessWidget {
   final String questionText;
 
